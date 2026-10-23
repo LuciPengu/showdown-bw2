@@ -44,6 +44,8 @@ const session = new Session({
   },
   commands(cmds, instant) {
     choices.heard();
+    // Nothing is left to choose once the battle is over, even while its last turn is still playing.
+    if (cmds.some((c) => c.kind === 'end')) choices.stop();
     director.enqueue(cmds, instant);
     showWarnings();
   },
