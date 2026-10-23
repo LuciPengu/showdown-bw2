@@ -1,0 +1,242 @@
+|j|☆Tempest_Kec
+|j|☆lethargic fish
+|t:|1792725006
+|gametype|singles
+|player|p1|Tempest_Kec|zinnia|1040
+|player|p2|lethargic fish|bugcatcher-gen4dp|1237
+|gen|5
+|tier|[Gen 5] OU
+|rated|
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokemon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Moves Clause: Sleep-inducing moves are banned
+|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats
+|clearpoke
+|poke|p1|Honchkrow, F|item
+|poke|p1|Crobat, F|item
+|poke|p1|Mew|item
+|poke|p1|Whimsicott, M|item
+|poke|p1|Azumarill, M|item
+|poke|p1|Torkoal, F|item
+|poke|p2|Mamoswine, M|item
+|poke|p2|Ferrothorn, M|item
+|poke|p2|Tyranitar, F|item
+|poke|p2|Jellicent, F|item
+|poke|p2|Rotom-Wash|item
+|poke|p2|Breloom, M|item
+|teampreview
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by lethargic fish)
+|inactive|lethargic fish has 120 seconds left.
+|
+|t:|1792725041
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Azumarill|Azumarill, M|100/100
+|switch|p2a: Mamoswine|Mamoswine, M|100/100
+|turn|1
+|
+|t:|1792725051
+|switch|p2a: Jellicent|Jellicent, F|100/100
+|move|p1a: Azumarill|Aqua Jet|p2a: Jellicent
+|-immune|p2a: Jellicent|[from] ability: Water Absorb
+|
+|upkeep
+|turn|2
+|
+|t:|1792725059
+|switch|p1a: Whimsicott|Whimsicott, M|100/100
+|move|p2a: Jellicent|Will-O-Wisp|p1a: Whimsicott|[miss]
+|-miss|p2a: Jellicent|p1a: Whimsicott
+|
+|upkeep
+|turn|3
+|
+|t:|1792725068
+|switch|p2a: Ferrothorn|Ferrothorn, M|100/100
+|move|p1a: Whimsicott|Knock Off|p2a: Ferrothorn
+|-resisted|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|99/100
+|-damage|p1a: Whimsicott|88/100|[from] ability: Iron Barbs|[of] p2a: Ferrothorn
+|-damage|p1a: Whimsicott|72/100|[from] item: Rocky Helmet|[of] p2a: Ferrothorn
+|-enditem|p2a: Ferrothorn|Rocky Helmet|[from] move: Knock Off|[of] p1a: Whimsicott
+|
+|upkeep
+|turn|4
+|
+|t:|1792725074
+|move|p1a: Whimsicott|Hurricane|p2a: Ferrothorn|[miss]
+|-miss|p1a: Whimsicott|p2a: Ferrothorn
+|move|p2a: Ferrothorn|Spikes|p1a: Whimsicott
+|-sidestart|p1: Tempest_Kec|Spikes
+|
+|upkeep
+|turn|5
+|
+|t:|1792725086
+|move|p1a: Whimsicott|Taunt|p2a: Ferrothorn
+|-start|p2a: Ferrothorn|move: Taunt
+|cant|p2a: Ferrothorn|move: Taunt|Spikes
+|
+|upkeep
+|turn|6
+|
+|t:|1792725090
+|switch|p2a: Tyranitar|Tyranitar, F|100/100
+|-weather|Sandstorm|[from] ability: Sand Stream|[of] p2a: Tyranitar
+|move|p1a: Whimsicott|Hurricane|p2a: Tyranitar
+|-resisted|p2a: Tyranitar
+|-damage|p2a: Tyranitar|92/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Whimsicott|66/100|[from] Sandstorm
+|upkeep
+|turn|7
+|
+|t:|1792725098
+|move|p1a: Whimsicott|Grass Knot|p2a: Tyranitar
+|-supereffective|p2a: Tyranitar
+|-damage|p2a: Tyranitar|52/100
+|move|p2a: Tyranitar|Crunch|p1a: Whimsicott
+|-damage|p1a: Whimsicott|7/100
+|-unboost|p1a: Whimsicott|def|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Whimsicott|1/100|[from] Sandstorm
+|upkeep
+|turn|8
+|
+|t:|1792725103
+|switch|p2a: Ferrothorn|Ferrothorn, M|99/100
+|move|p1a: Whimsicott|Grass Knot|p2a: Ferrothorn
+|-resisted|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|93/100
+|-damage|p1a: Whimsicott|0 fnt|[from] ability: Iron Barbs|[of] p2a: Ferrothorn
+|faint|p1a: Whimsicott
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|
+|t:|1792725110
+|switch|p1a: Torkoal|Torkoal, F|100/100
+|-damage|p1a: Torkoal|88/100|[from] Spikes
+|turn|9
+|
+|t:|1792725116
+|switch|p2a: Jellicent|Jellicent, F|100/100
+|move|p1a: Torkoal|Fire Blast|p2a: Jellicent|[miss]
+|-miss|p1a: Torkoal|p2a: Jellicent
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Jellicent|94/100|[from] Sandstorm
+|-damage|p1a: Torkoal|82/100|[from] Sandstorm
+|-heal|p2a: Jellicent|100/100|[from] item: Leftovers
+|upkeep
+|turn|10
+|
+|t:|1792725125
+|switch|p1a: Honchkrow|Honchkrow, F|100/100
+|move|p2a: Jellicent|Hydro Pump|p1a: Honchkrow
+|-crit|p1a: Honchkrow
+|-damage|p1a: Honchkrow|0 fnt
+|faint|p1a: Honchkrow
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Jellicent|94/100|[from] Sandstorm
+|-heal|p2a: Jellicent|100/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1792725129
+|switch|p1a: Crobat|Crobat, F|100/100
+|turn|11
+|
+|t:|1792725134
+|move|p1a: Crobat|Brave Bird|p2a: Jellicent
+|-damage|p2a: Jellicent|65/100
+|-damage|p1a: Crobat|87/100|[from] Recoil
+|move|p2a: Jellicent|Will-O-Wisp|p1a: Crobat|[miss]
+|-miss|p2a: Jellicent|p1a: Crobat
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Crobat|81/100|[from] Sandstorm
+|-damage|p2a: Jellicent|59/100|[from] Sandstorm
+|-heal|p1a: Crobat|87/100|[from] item: Black Sludge
+|-heal|p2a: Jellicent|65/100|[from] item: Leftovers
+|upkeep
+|turn|12
+|
+|t:|1792725140
+|move|p1a: Crobat|Brave Bird|p2a: Jellicent
+|-damage|p2a: Jellicent|31/100
+|-damage|p1a: Crobat|74/100|[from] Recoil
+|move|p2a: Jellicent|Recover|p2a: Jellicent
+|-heal|p2a: Jellicent|81/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Crobat|68/100|[from] Sandstorm
+|-damage|p2a: Jellicent|75/100|[from] Sandstorm
+|-heal|p1a: Crobat|74/100|[from] item: Black Sludge
+|-heal|p2a: Jellicent|81/100|[from] item: Leftovers
+|upkeep
+|turn|13
+|
+|t:|1792725144
+|move|p1a: Crobat|Brave Bird|p2a: Jellicent
+|-damage|p2a: Jellicent|45/100
+|-damage|p1a: Crobat|61/100|[from] Recoil
+|move|p2a: Jellicent|Recover|p2a: Jellicent
+|-heal|p2a: Jellicent|96/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Crobat|55/100|[from] Sandstorm
+|-damage|p2a: Jellicent|89/100|[from] Sandstorm
+|-heal|p1a: Crobat|61/100|[from] item: Black Sludge
+|-heal|p2a: Jellicent|96/100|[from] item: Leftovers
+|upkeep
+|turn|14
+|
+|t:|1792725148
+|move|p1a: Crobat|Brave Bird|p2a: Jellicent
+|-damage|p2a: Jellicent|62/100
+|-damage|p1a: Crobat|48/100|[from] Recoil
+|move|p2a: Jellicent|Will-O-Wisp|p1a: Crobat
+|-status|p1a: Crobat|brn
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Crobat|42/100 brn|[from] Sandstorm
+|-damage|p2a: Jellicent|56/100|[from] Sandstorm
+|-heal|p1a: Crobat|48/100 brn|[from] item: Black Sludge
+|-heal|p2a: Jellicent|62/100|[from] item: Leftovers
+|-damage|p1a: Crobat|36/100 brn|[from] brn
+|upkeep
+|turn|15
+|
+|t:|1792725154
+|move|p1a: Crobat|Brave Bird|p2a: Jellicent
+|-damage|p2a: Jellicent|45/100
+|-damage|p1a: Crobat|30/100 brn|[from] Recoil
+|move|p2a: Jellicent|Recover|p2a: Jellicent
+|-heal|p2a: Jellicent|95/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Crobat|23/100 brn|[from] Sandstorm
+|-damage|p2a: Jellicent|89/100|[from] Sandstorm
+|-heal|p1a: Crobat|30/100 brn|[from] item: Black Sludge
+|-heal|p2a: Jellicent|95/100|[from] item: Leftovers
+|-damage|p1a: Crobat|17/100 brn|[from] brn
+|upkeep
+|turn|16
+|-message|Tempest_Kec forfeited.
+|
+|win|lethargic fish
+|raw|Tempest_Kec's rating: 1040 &rarr; <strong>1032</strong><br />(-8 for losing)
+|raw|lethargic fish's rating: 1237 &rarr; <strong>1249</strong><br />(+12 for winning)
+|l|☆Tempest_Kec
+|player|p1|
+|c|☆lethargic fish|gg
+

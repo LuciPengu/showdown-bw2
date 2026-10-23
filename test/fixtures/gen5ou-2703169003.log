@@ -1,0 +1,428 @@
+|j|☆Bbnetandami
+|j|☆weryj3576j
+|t:|1792728029
+|gametype|singles
+|player|p1|Bbnetandami|265|1119
+|player|p2|weryj3576j|skyla-masters|1000
+|gen|5
+|tier|[Gen 5] OU
+|rated|
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokemon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Moves Clause: Sleep-inducing moves are banned
+|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats
+|clearpoke
+|poke|p1|Tyranitar, F|item
+|poke|p1|Sigilyph, F|item
+|poke|p1|Ferrothorn, M|item
+|poke|p1|Gliscor, M|item
+|poke|p1|Jellicent, M|item
+|poke|p1|Skarmory, F|item
+|poke|p2|Tyranitar, F|item
+|poke|p2|Seismitoad, M|item
+|poke|p2|Skarmory, F|item
+|poke|p2|Latios, M|item
+|poke|p2|Magneton|item
+|poke|p2|Alakazam, F|item
+|teampreview
+|
+|t:|1792728042
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Tyranitar|Tyranitar, F|100/100
+|switch|p2a: Magneton|Magneton, shiny|100/100
+|-weather|Sandstorm|[from] ability: Sand Stream|[of] p1a: Tyranitar
+|turn|1
+|
+|t:|1792728068
+|move|p2a: Magneton|Volt Switch|p1a: Tyranitar
+|-damage|p1a: Tyranitar|86/100
+|
+|t:|1792728089
+|switch|p2a: Seismitoad|Seismitoad, M, shiny|100/100|[from] Volt Switch
+|move|p1a: Tyranitar|Stealth Rock|p2a: Seismitoad
+|-sidestart|p2: weryj3576j|move: Stealth Rock
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|2
+|
+|t:|1792728109
+|switch|p1a: Ferrothorn|Ferrothorn, M|100/100
+|move|p2a: Seismitoad|Stealth Rock|p1a: Ferrothorn
+|-sidestart|p1: Bbnetandami|move: Stealth Rock
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|3
+|
+|t:|1792728124
+|switch|p2a: Skarmory|Skarmory, F|100/100
+|-damage|p2a: Skarmory|88/100|[from] Stealth Rock
+|move|p1a: Ferrothorn|Spikes|p2a: Skarmory
+|-sidestart|p2: weryj3576j|Spikes
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|4
+|
+|t:|1792728132
+|move|p2a: Skarmory|Spikes|p1a: Ferrothorn
+|-sidestart|p1: Bbnetandami|Spikes
+|move|p1a: Ferrothorn|Leech Seed|p2a: Skarmory
+|-start|p2a: Skarmory|move: Leech Seed
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Skarmory|76/100|[from] Leech Seed|[of] p1a: Ferrothorn
+|upkeep
+|turn|5
+|
+|t:|1792728141
+|switch|p2a: Magneton|Magneton, shiny|100/100
+|-damage|p2a: Magneton|94/100|[from] Stealth Rock
+|-damage|p2a: Magneton|82/100|[from] Spikes
+|move|p1a: Ferrothorn|Spikes|p2a: Magneton
+|-sidestart|p2: weryj3576j|Spikes
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|6
+|
+|t:|1792728171
+|move|p2a: Magneton|Hidden Power|p1a: Ferrothorn
+|-supereffective|p1a: Ferrothorn
+|-damage|p1a: Ferrothorn|37/100
+|move|p1a: Ferrothorn|Leech Seed|p2a: Magneton
+|-start|p2a: Magneton|move: Leech Seed
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p1a: Ferrothorn|43/100|[from] item: Leftovers
+|-damage|p2a: Magneton|70/100|[from] Leech Seed|[of] p1a: Ferrothorn
+|-heal|p1a: Ferrothorn|52/100|[silent]
+|upkeep
+|turn|7
+|
+|t:|1792728186
+|move|p2a: Magneton|Hidden Power|p1a: Ferrothorn
+|-supereffective|p1a: Ferrothorn
+|-damage|p1a: Ferrothorn|0 fnt
+|faint|p1a: Ferrothorn
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|
+|t:|1792728203
+|switch|p1a: Sigilyph|Sigilyph, F|100/100
+|turn|8
+|
+|t:|1792728215
+|switch|p2a: Tyranitar|Tyranitar, F|100/100
+|-damage|p2a: Tyranitar|88/100|[from] Stealth Rock
+|-damage|p2a: Tyranitar|72/100|[from] Spikes
+|move|p1a: Sigilyph|Cosmic Power|p1a: Sigilyph
+|-boost|p1a: Sigilyph|def|1
+|-boost|p1a: Sigilyph|spd|1
+|
+|-weather|Sandstorm|[upkeep]
+|-status|p1a: Sigilyph|brn|[from] item: Flame Orb
+|upkeep
+|turn|9
+|
+|t:|1792728233
+|move|p1a: Sigilyph|Psycho Shift|p2a: Tyranitar
+|-status|p2a: Tyranitar|brn
+|-curestatus|p1a: Sigilyph|brn|[msg]
+|move|p2a: Tyranitar|Crunch|p1a: Sigilyph
+|-supereffective|p1a: Sigilyph
+|-damage|p1a: Sigilyph|80/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Tyranitar|59/100 brn|[from] brn
+|-status|p1a: Sigilyph|brn|[from] item: Flame Orb
+|upkeep
+|turn|10
+|
+|t:|1792728244
+|switch|p2a: Latios|Latios, M|100/100
+|-damage|p2a: Latios|88/100|[from] Stealth Rock
+|move|p1a: Sigilyph|Cosmic Power|p1a: Sigilyph
+|-boost|p1a: Sigilyph|def|1
+|-boost|p1a: Sigilyph|spd|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|82/100|[from] Sandstorm
+|upkeep
+|turn|11
+|c|☆Bbnetandami|No draco meteoring your way out of this
+|c|☆Bbnetandami|You need to learn not everything is a draco meteor
+|c|☆Bbnetandami|It’s time
+|
+|t:|1792728284
+|move|p2a: Latios|Trick|p1a: Sigilyph
+|-activate|p2a: Latios|move: Trick|[of] p1a: Sigilyph
+|-item|p1a: Sigilyph|Choice Specs|[from] move: Trick
+|-item|p2a: Latios|Flame Orb|[from] move: Trick
+|move|p1a: Sigilyph|Cosmic Power|p1a: Sigilyph
+|-boost|p1a: Sigilyph|def|1
+|-boost|p1a: Sigilyph|spd|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|76/100|[from] Sandstorm
+|-status|p2a: Latios|brn|[from] item: Flame Orb
+|upkeep
+|turn|12
+|c|☆Bbnetandami|FUCK
+|
+|t:|1792728303
+|switch|p2a: Skarmory|Skarmory, F|76/100
+|-damage|p2a: Skarmory|64/100|[from] Stealth Rock
+|move|p1a: Sigilyph|Cosmic Power|p1a: Sigilyph
+|-boost|p1a: Sigilyph|def|1
+|-boost|p1a: Sigilyph|spd|1
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|13
+|
+|t:|1792728320
+|switch|p1a: Jellicent|Jellicent, M|100/100
+|-damage|p1a: Jellicent|88/100|[from] Stealth Rock
+|-damage|p1a: Jellicent|76/100|[from] Spikes
+|move|p2a: Skarmory|Roost|p2a: Skarmory
+|-heal|p2a: Skarmory|100/100
+|-singleturn|p2a: Skarmory|move: Roost
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Jellicent|69/100|[from] Sandstorm
+|-heal|p1a: Jellicent|76/100|[from] item: Leftovers
+|upkeep
+|turn|14
+|
+|t:|1792728332
+|switch|p2a: Tyranitar|Tyranitar, F|59/100 brn
+|-damage|p2a: Tyranitar|47/100 brn|[from] Stealth Rock
+|-damage|p2a: Tyranitar|30/100 brn|[from] Spikes
+|move|p1a: Jellicent|Taunt|p2a: Tyranitar
+|-start|p2a: Tyranitar|move: Taunt
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Jellicent|69/100|[from] Sandstorm
+|-heal|p1a: Jellicent|76/100|[from] item: Leftovers
+|-damage|p2a: Tyranitar|18/100 brn|[from] brn
+|upkeep
+|turn|15
+|
+|t:|1792728364
+|switch|p1a: Gliscor|Gliscor, M|100/100
+|-damage|p1a: Gliscor|88/100|[from] Stealth Rock
+|move|p2a: Tyranitar|Crunch|p1a: Gliscor
+|-crit|p1a: Gliscor
+|-damage|p1a: Gliscor|65/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Tyranitar|5/100 brn|[from] brn
+|-status|p1a: Gliscor|tox|[from] item: Toxic Orb
+|upkeep
+|turn|16
+|
+|t:|1792728376
+|switch|p2a: Skarmory|Skarmory, F|100/100
+|-damage|p2a: Skarmory|88/100|[from] Stealth Rock
+|move|p1a: Gliscor|Substitute|p1a: Gliscor
+|-start|p1a: Gliscor|Substitute
+|-damage|p1a: Gliscor|40/100 tox
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p1a: Gliscor|52/100 tox|[from] ability: Poison Heal
+|upkeep
+|turn|17
+|
+|t:|1792728395
+|switch|p1a: Skarmory|Skarmory, F|100/100
+|-damage|p1a: Skarmory|88/100|[from] Stealth Rock
+|move|p2a: Skarmory|Spikes|p1a: Skarmory
+|-sidestart|p1: Bbnetandami|Spikes
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p1a: Skarmory|94/100|[from] item: Leftovers
+|upkeep
+|turn|18
+|
+|t:|1792728403
+|move|p2a: Skarmory|Spikes|p1a: Skarmory
+|-sidestart|p1: Bbnetandami|Spikes
+|move|p1a: Skarmory|Whirlwind|p2a: Skarmory
+|drag|p2a: Seismitoad|Seismitoad, M, shiny|100/100
+|-damage|p2a: Seismitoad|94/100|[from] Stealth Rock
+|-damage|p2a: Seismitoad|78/100|[from] Spikes
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Seismitoad|84/100|[from] item: Leftovers
+|-heal|p1a: Skarmory|100/100|[from] item: Leftovers
+|upkeep
+|turn|19
+|
+|t:|1792728419
+|move|p2a: Seismitoad|Protect|p2a: Seismitoad
+|-singleturn|p2a: Seismitoad|Protect
+|move|p1a: Skarmory|Brave Bird|p2a: Seismitoad
+|-activate|p2a: Seismitoad|move: Protect
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Seismitoad|90/100|[from] item: Leftovers
+|upkeep
+|turn|20
+|
+|t:|1792728428
+|move|p2a: Seismitoad|Scald|p1a: Skarmory
+|-damage|p1a: Skarmory|65/100
+|move|p1a: Skarmory|Whirlwind|p2a: Seismitoad
+|drag|p2a: Tyranitar|Tyranitar, F|5/100 brn
+|-damage|p2a: Tyranitar|0 fnt|[from] Stealth Rock
+|faint|p2a: Tyranitar
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p1a: Skarmory|71/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1792728431
+|switch|p2a: Magneton|Magneton, shiny|70/100
+|-damage|p2a: Magneton|63/100|[from] Stealth Rock
+|-damage|p2a: Magneton|47/100|[from] Spikes
+|turn|21
+|
+|t:|1792728448
+|move|p2a: Magneton|Thunderbolt|p1a: Skarmory
+|-supereffective|p1a: Skarmory
+|-damage|p1a: Skarmory|0 fnt
+|faint|p1a: Skarmory
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|
+|t:|1792728463
+|switch|p1a: Tyranitar|Tyranitar, F|86/100
+|-damage|p1a: Tyranitar|74/100|[from] Stealth Rock
+|-damage|p1a: Tyranitar|49/100|[from] Spikes
+|turn|22
+|
+|t:|1792728474
+|move|p2a: Magneton|Thunderbolt|p1a: Tyranitar
+|-damage|p1a: Tyranitar|28/100
+|move|p1a: Tyranitar|Crunch|p2a: Magneton
+|-resisted|p2a: Magneton
+|-damage|p2a: Magneton|22/100
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|23
+|
+|t:|1792728483
+|move|p2a: Magneton|Thunderbolt|p1a: Tyranitar
+|-damage|p1a: Tyranitar|8/100
+|move|p1a: Tyranitar|Crunch|p2a: Magneton
+|-resisted|p2a: Magneton
+|-damage|p2a: Magneton|0 fnt
+|faint|p2a: Magneton
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|
+|t:|1792728490
+|switch|p2a: Latios|Latios, M|76/100 brn
+|-damage|p2a: Latios|64/100 brn|[from] Stealth Rock
+|turn|24
+|
+|t:|1792728494
+|move|p2a: Latios|Surf|p1a: Tyranitar
+|-supereffective|p1a: Tyranitar
+|-damage|p1a: Tyranitar|0 fnt
+|faint|p1a: Tyranitar
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|58/100 brn|[from] Sandstorm
+|-damage|p2a: Latios|46/100 brn|[from] brn
+|upkeep
+|
+|t:|1792728505
+|switch|p1a: Jellicent|Jellicent, M|76/100
+|-damage|p1a: Jellicent|63/100|[from] Stealth Rock
+|-damage|p1a: Jellicent|38/100|[from] Spikes
+|turn|25
+|
+|t:|1792728512
+|move|p2a: Latios|Draco Meteor|p1a: Jellicent
+|-damage|p1a: Jellicent|0 fnt
+|-unboost|p2a: Latios|spa|2
+|faint|p1a: Jellicent
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|40/100 brn|[from] Sandstorm
+|-damage|p2a: Latios|28/100 brn|[from] brn
+|upkeep
+|c|☆Bbnetandami|Everything migHt be a draco meteor
+|
+|t:|1792728532
+|switch|p1a: Sigilyph|Sigilyph, F|80/100 brn
+|turn|26
+|
+|t:|1792728539
+|switch|p2a: Seismitoad|Seismitoad, M, shiny|90/100
+|-damage|p2a: Seismitoad|84/100|[from] Stealth Rock
+|-damage|p2a: Seismitoad|67/100|[from] Spikes
+|move|p1a: Sigilyph|Stored Power|p2a: Seismitoad
+|-damage|p2a: Seismitoad|56/100
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Seismitoad|62/100|[from] item: Leftovers
+|upkeep
+|turn|27
+|
+|t:|1792728548
+|move|p2a: Seismitoad|Protect|p2a: Seismitoad
+|-singleturn|p2a: Seismitoad|Protect
+|move|p1a: Sigilyph|Stored Power|p2a: Seismitoad
+|-activate|p2a: Seismitoad|move: Protect
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Seismitoad|68/100|[from] item: Leftovers
+|upkeep
+|turn|28
+|
+|t:|1792728555
+|move|p1a: Sigilyph|Stored Power|p2a: Seismitoad
+|-crit|p2a: Seismitoad
+|-damage|p2a: Seismitoad|47/100
+|move|p2a: Seismitoad|Scald|p1a: Sigilyph
+|-damage|p1a: Sigilyph|54/100 brn
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Seismitoad|53/100|[from] item: Leftovers
+|upkeep
+|turn|29
+|
+|t:|1792728563
+|switch|p1a: Gliscor|Gliscor, M|52/100 tox
+|-damage|p1a: Gliscor|40/100 tox|[from] Stealth Rock
+|move|p2a: Seismitoad|Scald|p1a: Gliscor
+|-supereffective|p1a: Gliscor
+|-damage|p1a: Gliscor|0 fnt
+|faint|p1a: Gliscor
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Seismitoad|59/100|[from] item: Leftovers
+|upkeep
+|-message|Bbnetandami forfeited.
+|
+|win|weryj3576j
+|raw|Bbnetandami's rating: 1119 &rarr; <strong>1086</strong><br />(-33 for losing)
+|raw|weryj3576j's rating: 1000 &rarr; <strong>1053</strong><br />(+53 for winning)
+|l|☆Bbnetandami
+|player|p1|
+

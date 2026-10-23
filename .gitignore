@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.nds
+*.sav
+savestates/
+scripts/data/

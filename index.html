@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Showdown in BW2</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Showdown in BW2</h1>
+      <p>Pokémon Showdown battles, drawn by Black 2 / White 2.</p>
+    </header>
+
+    <main>
+      <section class="sources">
+        <form id="watch-form" class="source">
+          <h2>Watch a live battle</h2>
+          <p>Paste a battle link. Hidden battles need the userscript below.</p>
+          <div class="row">
+            <input id="watch-url" type="text" placeholder="https://play.pokemonshowdown.com/battle-gen5ou-…" autocomplete="off" />
+            <button type="submit">Watch</button>
+          </div>
+        </form>
+
+        <form id="replay-form" class="source">
+          <h2>Play a replay</h2>
+          <div class="row">
+            <input id="replay-url" type="text" placeholder="https://replay.pokemonshowdown.com/gen5ou-…" autocomplete="off" />
+            <button type="submit">Play</button>
+          </div>
+        </form>
+
+        <div class="source">
+          <h2>Your own battles</h2>
+          <p>
+            Install <a href="/showdown-tap.user.js">the userscript</a> in Tampermonkey or Violentmonkey, then battle on
+            Showdown in another tab. Your newest battle shows up here, and once BW2 has taken over a battle, you can
+            pick your moves and switches in BW2's own menus.
+          </p>
+          <p class="status" id="relay-status" data-ok="false">Connecting to the relay…</p>
+        </div>
+
+        <form id="rom-form" class="source">
+          <h2>Black 2 / White 2</h2>
+          <p>Choose your ROM, or start the dev server with <code>ROM=/path/to/game.nds</code> and leave this empty.</p>
+          <div class="row">
+            <input id="rom-file" type="file" accept=".nds" />
+            <button type="submit">Start</button>
+          </div>
+          <p class="status" id="emu-status"></p>
+          <button type="button" id="take-over" class="secondary" hidden>Take over this battle</button>
+        </form>
+
+        <div class="source">
+          <h2>Speed</h2>
+          <div class="speeds" id="speeds" role="radiogroup" aria-label="Playback speed">
+            <button type="button" data-speed="0.5">0.5×</button>
+            <button type="button" data-speed="1" aria-pressed="true">1×</button>
+            <button type="button" data-speed="2">2×</button>
+            <button type="button" data-speed="4">4×</button>
+          </div>
+        </div>
+
+        <p class="status" id="source-status" data-ok="true"></p>
+        <p class="warning" id="gen-warning" hidden></p>
+        <details id="unhandled" hidden>
+          <summary>Protocol not drawn yet</summary>
+          <ul id="unhandled-list"></ul>
+        </details>
+      </section>
+
+      <section class="stage">
+        <div class="screen">
+          <div class="screen-status" id="screen-status"></div>
+          <div class="side far" id="side-far"></div>
+          <div class="side near" id="side-near"></div>
+          <div class="textbox" id="textbox"></div>
+        </div>
+        <p class="note">Preview. When BW2 is running and has taken over a battle, moves also play in the game below.</p>
+        <ol class="log" id="log"></ol>
+        <div class="emu" id="emu" hidden></div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
