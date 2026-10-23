@@ -36,7 +36,11 @@ export interface GameLink {
 
 export class EmulatorRenderer implements Renderer {
   private scene: Scene | null = null;
-  /** The player's team, written before the scene existed; the scene takes it on when made. */
+  /** The player's team in the battle on screen, from Showdown's request. */
+  private team: TeamMember[] | null = null;
+  /** Whether `team` is in BW2's party: switching to another savestate (doubles) loses it. */
+  private teamWritten = false;
+  /** The team's names, written before the scene existed; the scene takes them on when made. */
   private pendingTeam: string[] | null = null;
   /** What BW2 has on screen; kept across battles shown on the same game. */
   private screen = newScreen();
@@ -48,16 +52,25 @@ export class EmulatorRenderer implements Renderer {
 
   private makeScene(): Scene {
     const scene = this.game.newScene(this.screen);
-    if (this.pendingTeam) scene.assignTeam(0, this.game.sizePlayerParty(this.pendingTeam.length), this.pendingTeam);
+    this.scene = scene;
+    if (this.team && !this.teamWritten) this.writeTeam(this.team);
+    else if (this.pendingTeam) scene.assignTeam(0, this.game.sizePlayerParty(this.pendingTeam.length), this.pendingTeam);
     this.pendingTeam = null;
     return scene;
   }
 
   /**
    * Writes the player's whole team into BW2's party, in Showdown's order, so
-   * BW2's Pokémon menu shows it. Returns false when there's no battle.
+   * BW2's Pokémon menu shows it, now and in any battle BW2 switches to. Returns
+   * false when there's no battle to write it into yet.
    */
   setTeam(team: TeamMember[]): boolean {
+    this.team = team;
+    this.teamWritten = false;
+    return this.writeTeam(team);
+  }
+
+  private writeTeam(team: TeamMember[]): boolean {
     if (!this.game.battle()) return false;
     // As many slots as the team has, so the Pokémon menu shows no leftovers from the PWT's party.
     const side = this.game.sizePlayerParty(team.length);
@@ -70,6 +83,7 @@ export class EmulatorRenderer implements Renderer {
     });
     if (this.scene) this.scene.assignTeam(0, side, names);
     else this.pendingTeam = names;
+    this.teamWritten = true;
     return true;
   }
 
@@ -86,12 +100,14 @@ export class EmulatorRenderer implements Renderer {
   /** A new battle starts from the game's party data as it is now. */
   reset(): void {
     this.scene = null;
+    this.team = null;
     this.pendingTeam = null;
   }
 
   /** A different BW2 battle was taken over, with `perSide` Pokémon out a side: nothing of ours is on its screen. */
   newGame(perSide = 1): void {
     this.scene = null;
+    this.teamWritten = false;
     this.screen = newScreen(perSide);
   }
 
