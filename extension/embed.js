@@ -29,7 +29,10 @@
   /** Whether the app was last told it's parked in the corner (only its status shows). */
   let parked = null;
 
-  const post = (m) => frame.contentWindow?.postMessage(m, APP_ORIGIN);
+  /** Only once the app is listening: before it loads, the frame is a blank page of Showdown's own. */
+  const post = (m) => {
+    if (listening) frame.contentWindow?.postMessage(m, APP_ORIGIN);
+  };
 
   document.addEventListener('bw2:from-showdown', (e) => {
     if (history.push(e.detail) > 5000) history.shift();
@@ -40,8 +43,8 @@
     if (e.source !== frame.contentWindow || e.origin !== APP_ORIGIN) return;
     const m = e.data;
     if (m?.t === 'ready') {
-      post({ t: 'msgs', data: history });
       listening = true;
+      post({ t: 'msgs', data: history });
       lastHeight = 0; // tell it the battle scene's size again, and whether it's parked
       parked = null;
     } else if (m?.t === 'send') {
