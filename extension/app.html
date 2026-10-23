@@ -20,6 +20,10 @@
       #rom[hidden] { display: none; }
       #rom h1 { margin: 0; font-size: 15px; }
       #rom p { margin: 0; color: #b9c2cc; }
+      /* Parked in Showdown's corner: see-through, with only the status showing. */
+      html.parked, html.parked body { background: transparent; }
+      html.parked #emu { left: -10000px; }
+      html.parked #status { top: auto; bottom: 2px; right: 2px; }
     </style>
   </head>
   <body>

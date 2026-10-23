@@ -88,6 +88,7 @@ window.addEventListener('message', (e) => {
   if (m.t === 'msg' && typeof m.data === 'string') receive(m.data);
   else if (m.t === 'msgs' && Array.isArray(m.data)) m.data.forEach((d) => typeof d === 'string' && receive(d));
   else if (m.t === 'size' && m.battleHeight) document.documentElement.style.setProperty('--bh', `${m.battleHeight}px`);
+  else if (m.t === 'parked') document.documentElement.classList.toggle('parked', !!(m as { on?: boolean }).on);
 });
 
 // The touch screen shows (embed.js makes room for it) while BW2's menu is open.

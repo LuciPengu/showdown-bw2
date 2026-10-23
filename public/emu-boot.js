@@ -12,19 +12,20 @@
     document.body.textContent = 'Open this from the app.';
     return;
   }
-  // The game has to keep running while you watch your Showdown tab. RetroArch pauses a page it
-  // sees as hidden, so it's told the page is always visible. Browsers also stop animation frames
-  // in a hidden page, and throttle its timers to a tick a second or less. The core asks for each
-  // frame through this global, so while the page is really hidden, frames come from a worker's
+  // The game has to keep running while you watch your Showdown tab, or while the extension's frame
+  // is parked out of sight. RetroArch pauses a page it sees as hidden, so it's told the page is
+  // always visible. Browsers also stop animation frames in a hidden page or a frame they consider
+  // out of sight, and throttle their timers to a tick a second or less. The core asks for each frame
+  // through this global, so a frame the browser hasn't delivered in time comes from a worker's
   // timer, which isn't throttled.
-  const reallyHidden = Object.getOwnPropertyDescriptor(Document.prototype, 'hidden').get.bind(document);
   Object.defineProperty(document, 'hidden', { get: () => false });
   Object.defineProperty(document, 'visibilityState', { get: () => 'visible' });
   document.addEventListener('visibilitychange', (e) => e.stopImmediatePropagation(), true);
   window.addEventListener('blur', (e) => e.stopImmediatePropagation(), true);
   const ticker = new Worker(`${base}emu-ticker.js`);
   // Every frame asked for waits here until the browser or the worker delivers it, whichever is
-  // first: a frame asked for just before the page was hidden would otherwise never come.
+  // first: the worker takes over from a browser that's two frames late.
+  const LATE_MS = 2000 / 60;
   let waiting = [];
   const deliver = (entry, time) => {
     if (entry.done) return;
@@ -32,19 +33,16 @@
     entry.callback(time);
   };
   ticker.onmessage = () => {
-    const due = waiting;
-    waiting = [];
-    if (!reallyHidden()) {
-      waiting = due.filter((entry) => !entry.done);
-      return;
-    }
-    for (const entry of due) deliver(entry, performance.now());
+    const now = performance.now();
+    const due = waiting.filter((entry) => !entry.done && now - entry.asked >= LATE_MS);
+    waiting = waiting.filter((entry) => !entry.done && now - entry.asked < LATE_MS);
+    for (const entry of due) deliver(entry, now);
   };
   const nativeFrame = window.requestAnimationFrame.bind(window);
   window.requestAnimationFrame = (callback) => {
-    const entry = { callback, done: false };
+    const entry = { callback, done: false, asked: performance.now() };
     waiting.push(entry);
-    if (!reallyHidden()) nativeFrame((time) => deliver(entry, time));
+    nativeFrame((time) => deliver(entry, time));
     return 0;
   };
   window.EJS_player = '#game';

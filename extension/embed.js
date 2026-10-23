@@ -26,6 +26,8 @@
   let choosing = false;
   let needRom = false;
   let lastHeight = 0;
+  /** Whether the app was last told it's parked in the corner (only its status shows). */
+  let parked = null;
 
   const post = (m) => frame.contentWindow?.postMessage(m, APP_ORIGIN);
 
@@ -40,7 +42,8 @@
     if (m?.t === 'ready') {
       post({ t: 'msgs', data: history });
       listening = true;
-      lastHeight = 0; // tell it the battle scene's size again
+      lastHeight = 0; // tell it the battle scene's size again, and whether it's parked
+      parked = null;
     } else if (m?.t === 'send') {
       document.dispatchEvent(new CustomEvent('bw2:to-showdown', { detail: JSON.stringify({ room: m.room, text: m.text }) }));
     } else if (m?.t === 'room') {
@@ -59,8 +62,8 @@
   /**
    * Over the battle scene of the room the app shows, and twice as tall while
    * BW2 asks for a choice, so its touch screen shows below. With nothing to
-   * show, the frame stays running in a corner, too small to see: a hidden
-   * frame would stop drawing.
+   * show, the frame is parked in the corner as a see-through strip that shows
+   * only BW2's status.
    */
   function place() {
     if (!frame.isConnected) {
@@ -75,17 +78,20 @@
     const r = scene?.getBoundingClientRect();
     const s = frame.style;
     if (needRom) {
-      Object.assign(s, { left: 'auto', top: 'auto', right: '16px', bottom: '16px', width: '340px', height: '150px', opacity: '1', pointerEvents: 'auto' });
-      s.boxShadow = '0 4px 24px rgba(0, 0, 0, 0.5)';
-      s.borderRadius = '8px';
+      park(false);
+      Object.assign(s, { left: 'auto', top: 'auto', right: '16px', bottom: '16px', width: '340px', height: '150px', pointerEvents: 'auto' });
+      Object.assign(s, { background: '#1d2228', boxShadow: '0 4px 24px rgba(0, 0, 0, 0.5)', borderRadius: '8px' });
       return;
     }
     s.boxShadow = 'none';
     s.borderRadius = '0';
     if (!r || r.width < 50 || r.height < 50) {
-      Object.assign(s, { left: 'auto', top: 'auto', right: '0', bottom: '0', width: '2px', height: '2px', opacity: '0.01', pointerEvents: 'none' });
+      park(true);
+      Object.assign(s, { left: 'auto', top: 'auto', right: '8px', bottom: '8px', width: '420px', height: '32px', background: 'transparent', pointerEvents: 'none' });
       return;
     }
+    park(false);
+    s.background = '#000';
     const height = choosing ? Math.min(r.height * 2, window.innerHeight - r.top) : r.height;
     Object.assign(s, {
       left: `${r.left}px`,
@@ -94,13 +100,18 @@
       bottom: 'auto',
       width: `${r.width}px`,
       height: `${height}px`,
-      opacity: '1',
       pointerEvents: 'auto',
     });
     if (r.height !== lastHeight) {
       lastHeight = r.height;
       post({ t: 'size', battleHeight: r.height });
     }
+  }
+
+  function park(on) {
+    if (parked === on) return;
+    parked = on;
+    post({ t: 'parked', on });
   }
 
   place();
