@@ -33,11 +33,11 @@ export class Emulator {
     this.rom = new Uint8Array(rom.slice(0, 0x8000));
   }
 
-  /** Boots `rom` in a new frame inside `container`, replacing what was there. */
-  static boot(container: HTMLElement, rom: ArrayBuffer, onStatus: (text: string) => void): Emulator {
+  /** Boots `rom` in a new frame (the page `page`) inside `container`, replacing what was there. */
+  static boot(container: HTMLElement, rom: ArrayBuffer, onStatus: (text: string) => void, page = '/emu.html'): Emulator {
     window.__emuBoot = { rom, onStatus };
     const frame = document.createElement('iframe');
-    frame.src = '/emu.html';
+    frame.src = page;
     frame.title = 'Pokémon Black 2 / White 2';
     frame.allow = 'autoplay; fullscreen; gamepad';
     frame.className = 'emu-frame';

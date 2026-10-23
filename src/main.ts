@@ -1,39 +1,24 @@
 import { Director } from './director';
 import { SC, encodeBlock } from './bw/servercmd';
-import { Bw2Battle } from './emu/bw2';
-import { Emulator, gameCode } from './emu/emulator';
-import { BattleParties } from './emu/party';
-import { EmulatorRenderer, TeeRenderer } from './emu/renderer';
-import { type PersonalTable, loadPersonal } from './emu/rom';
-import { Scene } from './emu/scene';
-import { TrainerNames } from './emu/trainers';
+import { TeeRenderer } from './emu/renderer';
+import { Bw2Game } from './game';
 import { ChoiceBridge } from './play';
 import { PreviewRenderer } from './preview';
 import { Session } from './session';
 import { battleRoom, fetchReplay, listenToRelay, spectate } from './sources';
-import type { GameType } from './bw/commands';
 import type { Translator } from './translate';
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 
 const renderer = new PreviewRenderer([$('side-near'), $('side-far')], $('textbox'), $('screen-status'), $('log'));
-const inGame = new EmulatorRenderer(
-  {
-    battle: () => (bw2?.alive ? bw2 : null),
-    newScene: (screen) => new Scene(parties!.sides(), screen, bw2!.winBgm, perSide(bw2!.style)),
-    writeMon: (write) => parties!.write(write),
-    sizePlayerParty: (size) => {
-      parties!.resizeParty(0, size);
-      return parties!.sides()[0];
-    },
-    writeMoves: (client, partyIndex, moves) => parties!.writeMoves(client, partyIndex, moves),
-    writeTrainer: (client, name) => trainers!.write(client, name),
-    press: (button) => emulator!.press(button, 120, 300),
-    battleOver: () => void restartBattle(),
-    prepare: (gameType) => prepareBattle(gameType),
-  },
-  (message) => setStatus($('emu-status'), `BW2: ${message}`, false),
-);
+const game = new Bw2Game({
+  status: (text, ok) => setStatus($('emu-status'), text, ok),
+  clearScreen: () => director.reset(),
+  // The dev server's STATE for singles, savestates/ for the rest.
+  stateUrls: { singles: '/state', doubles: '/savestates/battle-doubles.state' },
+  emuPage: '/emu.html',
+});
+const inGame = game.renderer;
 const director = new Director(new TeeRenderer([renderer, inGame]));
 let current: Translator | null = null;
 
@@ -125,28 +110,19 @@ $('speeds').addEventListener('click', (e) => {
 
 // Playing from BW2's menus: Showdown's requests open them, and the pick goes back through the relay.
 const choices = new ChoiceBridge({
-  battle: () => (bw2?.alive ? bw2 : null),
+  battle: () => game.live(),
   renderer: inGame,
   caughtUp: () => director.idle,
-  writeActiveMoves: (position, moves) => parties?.writeMoves(0, position, moves),
+  writeActiveMoves: (position, moves) => game.parties?.writeMoves(0, position, moves),
   send: (room, text) => relay.send(room, text),
   status: (text, ok) => setStatus($('emu-status'), text, ok),
 });
 
 // The game.
-let emulator: Emulator | null = null;
-let bw2: Bw2Battle | null = null;
-let parties: BattleParties | null = null;
-let trainers: TrainerNames | null = null;
-/** The game as it was when the battle was taken over, to go back to once a battle ends. */
-let freshBattle: Uint8Array | null = null;
-/** Species data from the ROM, read before the emulator takes the ROM. */
-let personal: PersonalTable | null = null;
-const emuStatus = (text: string, ok = true) => setStatus($('emu-status'), text, ok);
-
 $('rom-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const file = $<HTMLInputElement>('rom-file').files?.[0];
+  const emuStatus = (text: string, ok = true) => setStatus($('emu-status'), text, ok);
   let rom: ArrayBuffer;
   try {
     if (file) {
@@ -160,28 +136,32 @@ $('rom-form').addEventListener('submit', async (e) => {
   } catch (err) {
     return emuStatus((err as Error).message, false);
   }
-  const code = gameCode(rom);
-  try {
-    personal = loadPersonal(new Uint8Array(rom));
-  } catch (err) {
-    return emuStatus(`Couldn't read species data from the ROM: ${(err as Error).message}`, false);
-  }
-  if (code !== 'IREO') emuStatus(`Game code ${code}: the battle addresses are for US Black 2 (IREO). Trying anyway.`, false);
-  emulator?.destroy();
-  bw2 = null;
-  parties = null;
   $('emu').hidden = false;
   $('take-over').hidden = true;
-  const emu = Emulator.boot($('emu'), rom, (text) => {
-    if (text !== 'started') return emuStatus(`Emulator: ${text}…`);
-    if (window.__emuBoot) window.__emuBoot.rom = new ArrayBuffer(0); // the core has its own copy
-    void startGame(emu);
+  const fetched = (url: string) => fetch(url).then((r) => (r.ok ? r.arrayBuffer() : null), () => null);
+  const emu = game.boot($('emu'), rom, async () => {
+    $('take-over').hidden = false;
+    const [save, state] = await Promise.all([fetched('/save'), fetched('/state')]);
+    return { save, state };
   });
-  emulator = emu;
+  if (!emu) return;
+  // For the console: window.bw.ram, .battle, .parties, .trainers follow the game.
   (window as any).bw = {
     emulator: emu,
     SC,
     encodeBlock,
+    get ram() {
+      return emu.ram();
+    },
+    get battle() {
+      return game.battle;
+    },
+    get parties() {
+      return game.parties;
+    },
+    get trainers() {
+      return game.trainers;
+    },
     /** Writes the current savestate to savestates/<name> through the dev server. */
     async keepState(name: string) {
       const res = await fetch(`/savestates/${encodeURIComponent(name)}`, { method: 'POST', body: emu.saveState() as BlobPart });
@@ -190,105 +170,4 @@ $('rom-form').addEventListener('submit', async (e) => {
   };
 });
 
-/** Finds the game's RAM, waits for the first click, then loads the dev server's save or savestate. */
-async function startGame(emu: Emulator): Promise<void> {
-  let ram = emu.ram();
-  for (let tries = 0; !ram && tries < 60 && emulator === emu; tries++) {
-    await new Promise((r) => setTimeout(r, 500));
-    ram = emu.ram();
-  }
-  if (!ram) return emuStatus("The game is running, but its RAM wasn't found in the emulator's memory.", false);
-  (window as any).bw.ram = ram;
-  emuStatus('Click the game once to start it.');
-  await emu.whenRunning();
-  if (emulator !== emu) return;
-
-  const fetched = (url: string) => fetch(url).then((r) => (r.ok ? r.arrayBuffer() : null), () => null);
-  const [save, state] = await Promise.all([fetched('/save'), fetched('/state')]);
-  if (save) emu.loadSave(new Uint8Array(save));
-  if (state) {
-    emu.loadState(new Uint8Array(state));
-    await new Promise((r) => setTimeout(r, 1000));
-  }
-  $('take-over').hidden = false;
-  if (!(await takeOverBattle(emu, false))) {
-    emuStatus(`Running${state ? ' from the savestate' : save ? ' from the save' : ''}. Get into a battle, then press Take over.`);
-  }
-}
-
-/** Attaches to the battle on screen and pauses BW2's own battle logic. */
-async function takeOverBattle(emu: Emulator, report = true, clearScreen = true): Promise<boolean> {
-  const ram = emu.ram();
-  const battle = ram && Bw2Battle.attach(ram);
-  if (!battle) {
-    if (report) emuStatus("BW2 isn't in a battle.", false);
-    return false;
-  }
-  battle.clock = () => (emu.frames() * 1000) / 60; // the DS runs at 60 frames a second
-  emuStatus('Taking over the battle…');
-  if (!battle.paused) freshBattle = emu.saveState(); // nothing of ours is in it yet
-  try {
-    await battle.takeOver((button) => emu.press(button, 120, 300));
-  } catch (err) {
-    emuStatus((err as Error).message, false);
-    return false;
-  }
-  bw2 = battle;
-  parties = new BattleParties(ram, battle.mainModule, personal!);
-  trainers = new TrainerNames(ram, battle.mainModule, battle.server);
-  inGame.newGame(perSide(battle.style));
-  if (clearScreen) director.reset(); // the next battle shown starts from this battle's party data
-  (window as any).bw.battle = battle;
-  (window as any).bw.parties = parties;
-  (window as any).bw.trainers = trainers;
-  emuStatus('BW2 is drawing: moves play in the game.', true);
-  return true;
-}
-
-/** How many Pokémon each side has out in a BW2 battle style (0 singles, 1 doubles, 2 triples, 3 rotation). */
-function perSide(style: number): number {
-  return style === 1 ? 2 : style === 2 ? 3 : 1;
-}
-
-const STYLES: Record<GameType, number> = { singles: 0, doubles: 1, triples: 2, rotation: 3 };
-/** Savestates of a battle in each style: the dev server's STATE for singles, savestates/ for the rest. */
-const STYLE_STATES: Partial<Record<GameType, string>> = { singles: '/state', doubles: '/savestates/battle-doubles.state' };
-
-/** When Showdown's battle is another style than BW2's (doubles in a singles battle), loads a savestate of one. */
-async function prepareBattle(gameType: GameType): Promise<void> {
-  const emu = emulator;
-  if (!emu || !bw2 || bw2.style === STYLES[gameType]) return;
-  const url = STYLE_STATES[gameType];
-  if (!url) throw new Error(`there's no savestate of a ${gameType} battle, so this one is drawn in the wrong style`);
-  emuStatus(`Switching BW2 to a ${gameType} battle…`);
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`no ${gameType} savestate at ${url}`);
-  emu.loadState(new Uint8Array(await res.arrayBuffer()));
-  await new Promise((r) => setTimeout(r, 1000));
-  if (!(await takeOverBattle(emu, false, false))) throw new Error(`the ${gameType} savestate isn't in a battle`);
-  if (bw2.style !== STYLES[gameType]) throw new Error(`the savestate at ${url} isn't a ${gameType} battle`);
-}
-
-/** How long BW2's result line stays up before the game goes back to a fresh battle. */
-const RESULT_MS = 4000;
-
-/**
- * After a battle ends, goes back to the battle as it was taken over, so the
- * next battle starts fresh. The game never leaves a battle, so it never saves
- * the rewritten party.
- */
-async function restartBattle(): Promise<void> {
-  const emu = emulator;
-  const state = freshBattle;
-  if (!emu || !state) return;
-  await new Promise((r) => setTimeout(r, RESULT_MS));
-  if (emulator !== emu) return;
-  emuStatus('The battle is over. Getting a fresh battle ready…');
-  emu.loadState(state);
-  await new Promise((r) => setTimeout(r, 1000));
-  if (await takeOverBattle(emu, false, false)) emuStatus('Ready for the next battle.', true);
-}
-
-$('take-over').addEventListener('click', () => {
-  if (emulator) void takeOverBattle(emulator);
-});
+$('take-over').addEventListener('click', () => void game.takeOver());
