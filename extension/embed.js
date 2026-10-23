@@ -106,8 +106,8 @@
     park(false);
     s.background = '#000';
     // Both screens while BW2 asks for a choice, or just the top one; smaller if the window is too short.
-    const room = window.innerHeight - Math.max(0, r.top) - 4;
-    const height = Math.max(120, Math.min(choosing ? r.height * 2 : r.height, room));
+    const space = window.innerHeight - Math.max(0, r.top) - 4;
+    const height = Math.max(120, Math.min(choosing ? r.height * 2 : r.height, space));
     const screenHeight = choosing ? height / 2 : height;
     Object.assign(s, {
       left: `${r.left}px`,
