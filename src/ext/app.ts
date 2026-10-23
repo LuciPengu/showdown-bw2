@@ -110,7 +110,11 @@ window.addEventListener('message', (e) => {
   if (m.t === 'msg' && typeof m.data === 'string') receive(m.data);
   else if (m.t === 'msgs' && Array.isArray(m.data)) m.data.forEach((d) => typeof d === 'string' && receive(d));
   else if (m.t === 'size' && m.battleHeight) document.documentElement.style.setProperty('--bh', `${m.battleHeight}px`);
-  else if (m.t === 'parked') document.documentElement.classList.toggle('parked', !!(m as { on?: boolean }).on);
+  else if (m.t === 'parked') {
+    parked = !!(m as { on?: boolean }).on;
+    document.documentElement.classList.toggle('parked', parked);
+    applySound();
+  }
 });
 
 // How fast the game runs (its animations and text), remembered for next time.
@@ -128,23 +132,38 @@ function applySpeed(): void {
   }
   $('speed').hidden = false;
   for (const b of $('speed').querySelectorAll<HTMLButtonElement>('button[data-speed]')) b.setAttribute('aria-pressed', String(Number(b.dataset.speed) === speed));
-  showMuted();
+  applySound();
 }
 
-/** The mute button shows whether the game's sound is off (EmulatorJS remembers it). */
-function showMuted(): void {
-  const muted = !!game.emulator?.muted;
-  $('mute').textContent = muted ? 'Unmute' : 'Mute';
-  $('mute').setAttribute('aria-pressed', String(muted));
+// The game is silent while it's parked out of sight (no battle on screen, or the battle closed),
+// and otherwise follows the mute button, which is remembered for next time.
+let parked = false;
+let userMuted = false;
+try {
+  userMuted = localStorage.getItem('muted') === '1';
+} catch {
+  // storage unavailable: sound on
 }
-$('mute').addEventListener('click', () => {
-  if (!game.emulator) return;
+function applySound(): void {
+  $('mute').textContent = userMuted ? 'Unmute' : 'Mute';
+  $('mute').setAttribute('aria-pressed', String(userMuted));
   try {
-    game.emulator.muted = !game.emulator.muted;
+    const want = userMuted || parked;
+    if (game.emulator && game.emulator.muted !== want) game.emulator.muted = want;
   } catch {
-    return; // still loading
+    // still loading
   }
-  showMuted();
+}
+// Also as the game boots, which happens out of sight, before any battle shows.
+setInterval(applySound, 500);
+$('mute').addEventListener('click', () => {
+  userMuted = !userMuted;
+  try {
+    localStorage.setItem('muted', userMuted ? '1' : '0');
+  } catch {
+    // not remembered
+  }
+  applySound();
 });
 $('speed').addEventListener('click', (e) => {
   const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-speed]');
