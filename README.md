@@ -152,7 +152,8 @@ both Pokémon.
 
 The game keeps running while its tab is hidden (say, while you watch your Showdown tab).
 `public/emu.html` tells RetroArch the page is always visible, since it pauses otherwise,
-and while the page is really hidden the core gets its frames from a timer. The bridge's
+and while the page is really hidden the core gets its frames from a worker's timer
+(timers in a hidden page itself are throttled to a tick a second or less). The bridge's
 timeouts count the game's frames, so a paused game never gets commands skipped.
 
 ## Drawing in BW2

@@ -35,16 +35,28 @@
         const ticker = new Worker(
           URL.createObjectURL(new Blob(['setInterval(() => postMessage(0), 1000 / 60);'], { type: 'text/javascript' })),
         );
+        // Every frame asked for waits here until the browser or the worker delivers it, whichever is
+        // first: a frame asked for just before the page was hidden would otherwise never come.
         let waiting = [];
+        const deliver = (entry, time) => {
+          if (entry.done) return;
+          entry.done = true;
+          entry.callback(time);
+        };
         ticker.onmessage = () => {
           const due = waiting;
           waiting = [];
-          for (const callback of due) callback(performance.now());
+          if (!reallyHidden()) {
+            waiting = due.filter((entry) => !entry.done);
+            return;
+          }
+          for (const entry of due) deliver(entry, performance.now());
         };
         const nativeFrame = window.requestAnimationFrame.bind(window);
         window.requestAnimationFrame = (callback) => {
-          if (!reallyHidden()) return nativeFrame(callback);
-          waiting.push(callback);
+          const entry = { callback, done: false };
+          waiting.push(entry);
+          if (!reallyHidden()) nativeFrame((time) => deliver(entry, time));
           return 0;
         };
         window.EJS_player = '#game';
