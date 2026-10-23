@@ -79,6 +79,8 @@ export class PreviewRenderer implements Renderer {
         this.mons.get(key(cmd.slot))?.el.remove();
         const m: Mon = { mon: cmd.mon, hp: cmd.hp, status: cmd.status, fainted: false, el: this.monElement(cmd.slot, cmd.mon) };
         this.mons.set(key(cmd.slot), m);
+        // By position, as BW2 places them: the near side's first on the left, the far side's on the right.
+        m.el.style.order = String(cmd.slot.side === 0 ? cmd.slot.pos : -cmd.slot.pos);
         this.sides[cmd.slot.side].append(m.el);
         this.drawMon(m);
         break;

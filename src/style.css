@@ -245,6 +245,22 @@ details ul {
   transform: scale(0.6);
 }
 
+/* Doubles: two Pokémon a side, each with its box over its sprite. */
+.side:has(.mon + .mon) .mon {
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.side:has(.mon + .mon) .platform {
+  width: clamp(72px, 14vw, 120px);
+}
+
+.side:has(.mon + .mon) .hpbox {
+  width: clamp(104px, 17vw, 150px);
+  font-size: 12px;
+}
+
 .mon.fainted .platform img {
   transform: translateY(40%);
   opacity: 0;
