@@ -37,6 +37,8 @@ export interface GameLink {
   battleOver(): void;
   /** Gets BW2 into a battle of this style (a savestate of one), if it isn't in one. */
   prepare(gameType: GameType): Promise<void>;
+  /** Resolves once the game can take commands (it may be going back to a fresh battle). */
+  ready(): Promise<void>;
 }
 
 export class EmulatorRenderer implements Renderer {
@@ -135,6 +137,7 @@ export class EmulatorRenderer implements Renderer {
 
   async play(cmd: Command, instant: boolean): Promise<void> {
     try {
+      await this.game.ready();
       if (cmd.kind === 'start') await this.game.prepare(cmd.gameType);
     } catch (e) {
       this.onError((e as Error).message);

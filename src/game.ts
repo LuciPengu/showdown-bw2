@@ -41,6 +41,10 @@ export class Bw2Game {
   trainers: TrainerNames | null = null;
   /** The game as it was when the battle was taken over, to go back to once a battle ends. */
   private freshBattle: Uint8Array | null = null;
+  /** Going back to a fresh battle after one ended; commands wait for it. */
+  private restarting: Promise<void> | null = null;
+  /** Ends the wait on the last battle's result early, when the next battle has begun. */
+  private hurry: (() => void) | null = null;
   /** Species data from the ROM, read before the emulator takes the ROM. */
   private personal: PersonalTable | null = null;
 
@@ -61,6 +65,7 @@ export class Bw2Game {
         writeHp: (monId, hp, maxHp) => this.parties?.setHp(monId, hp, maxHp),
         note: (text) => (host.note ? host.note(text) : console.warn(text)),
         battleOver: () => void this.restartBattle(),
+        ready: () => this.ready(),
         prepare: (gameType) => this.prepareBattle(gameType),
       },
       (message) => host.status(`BW2: ${message}`, false),
@@ -173,19 +178,38 @@ export class Bw2Game {
   }
 
   /**
+   * Resolves once the game can take a battle's commands: right away, or once
+   * it's back in a fresh battle after the last one ended, which this hurries.
+   */
+  async ready(): Promise<void> {
+    this.hurry?.();
+    await this.restarting;
+  }
+
+  /**
    * After a battle ends, goes back to the battle as it was taken over, so the
    * next battle starts fresh. The game never leaves a battle, so it never saves
-   * the rewritten party.
+   * the rewritten party. Until it's back, the next battle's commands wait
+   * (see ready): drawn into the old battle, the reload would wipe them.
    */
-  private async restartBattle(): Promise<void> {
+  private restartBattle(): void {
     const emu = this.emulator;
     const state = this.freshBattle;
-    if (!emu || !state) return;
-    await sleep(RESULT_MS);
-    if (this.emulator !== emu) return;
-    this.status('The battle is over. Getting a fresh battle ready…');
-    emu.loadState(state);
-    await sleep(1000);
-    if (await this.takeOver(false, false)) this.status('Ready for the next battle.', true);
+    if (!emu || !state || this.restarting) return;
+    this.restarting = (async () => {
+      // The result line stays up for a while, unless the next battle has already begun.
+      await new Promise<void>((resume) => {
+        this.hurry = resume;
+        setTimeout(resume, RESULT_MS);
+      });
+      this.hurry = null;
+      if (this.emulator !== emu) return;
+      this.status('The battle is over. Getting a fresh battle ready…');
+      emu.loadState(state);
+      await sleep(1000);
+      if (await this.takeOver(false, false)) this.status('Ready for the next battle.', true);
+    })().finally(() => {
+      this.restarting = null;
+    });
   }
 }
