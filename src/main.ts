@@ -19,7 +19,7 @@ const renderer = new PreviewRenderer([$('side-near'), $('side-far')], $('textbox
 const inGame = new EmulatorRenderer(
   {
     battle: () => (bw2?.alive ? bw2 : null),
-    newScene: (screen) => new Scene(parties!.sides(), screen),
+    newScene: (screen) => new Scene(parties!.sides(), screen, bw2!.winBgm),
     writeMon: (write) => parties!.write(write),
     growPlayerParty: () => {
       parties!.growParty(0);
@@ -28,6 +28,7 @@ const inGame = new EmulatorRenderer(
     writeMoves: (client, partyIndex, moves) => parties!.writeMoves(client, partyIndex, moves),
     writeTrainer: (client, name) => trainers!.write(client, name),
     press: (button) => emulator!.press(button, 120, 300),
+    battleOver: () => void restartBattle(),
   },
   (message) => setStatus($('emu-status'), `BW2: ${message}`, false),
 );
@@ -125,6 +126,8 @@ let emulator: Emulator | null = null;
 let bw2: Bw2Battle | null = null;
 let parties: BattleParties | null = null;
 let trainers: TrainerNames | null = null;
+/** The game as it was when the battle was taken over, to go back to once a battle ends. */
+let freshBattle: Uint8Array | null = null;
 /** Species data from the ROM, read before the emulator takes the ROM. */
 let personal: PersonalTable | null = null;
 const emuStatus = (text: string, ok = true) => setStatus($('emu-status'), text, ok);
@@ -202,14 +205,16 @@ async function startGame(emu: Emulator): Promise<void> {
 }
 
 /** Attaches to the battle on screen and pauses BW2's own battle logic. */
-async function takeOverBattle(emu: Emulator, report = true): Promise<boolean> {
+async function takeOverBattle(emu: Emulator, report = true, clearScreen = true): Promise<boolean> {
   const ram = emu.ram();
   const battle = ram && Bw2Battle.attach(ram);
   if (!battle) {
     if (report) emuStatus("BW2 isn't in a battle.", false);
     return false;
   }
+  battle.clock = () => (emu.frames() * 1000) / 60; // the DS runs at 60 frames a second
   emuStatus('Taking over the battle…');
+  if (!battle.paused) freshBattle = emu.saveState(); // nothing of ours is in it yet
   try {
     await battle.takeOver((button) => emu.press(button, 120, 300));
   } catch (err) {
@@ -220,12 +225,32 @@ async function takeOverBattle(emu: Emulator, report = true): Promise<boolean> {
   parties = new BattleParties(ram, battle.mainModule, personal!);
   trainers = new TrainerNames(ram, battle.mainModule, battle.server);
   inGame.newGame();
-  director.reset(); // the next battle shown starts from this battle's party data
+  if (clearScreen) director.reset(); // the next battle shown starts from this battle's party data
   (window as any).bw.battle = battle;
   (window as any).bw.parties = parties;
   (window as any).bw.trainers = trainers;
   emuStatus('BW2 is drawing: moves play in the game.', true);
   return true;
+}
+
+/** How long BW2's result line stays up before the game goes back to a fresh battle. */
+const RESULT_MS = 4000;
+
+/**
+ * After a battle ends, goes back to the battle as it was taken over, so the
+ * next battle starts fresh. The game never leaves a battle, so it never saves
+ * the rewritten party.
+ */
+async function restartBattle(): Promise<void> {
+  const emu = emulator;
+  const state = freshBattle;
+  if (!emu || !state) return;
+  await new Promise((r) => setTimeout(r, RESULT_MS));
+  if (emulator !== emu) return;
+  emuStatus('The battle is over. Getting a fresh battle ready…');
+  emu.loadState(state);
+  await new Promise((r) => setTimeout(r, 1000));
+  if (await takeOverBattle(emu, false, false)) emuStatus('Ready for the next battle.', true);
 }
 
 $('take-over').addEventListener('click', () => {

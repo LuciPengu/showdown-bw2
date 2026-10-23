@@ -28,6 +28,8 @@ export interface GameLink {
   writeTrainer(client: number, name: string): void;
   /** Presses a button in the game. */
   press(button: 'A'): Promise<void>;
+  /** The battle on screen has ended and BW2 has shown its result. */
+  battleOver(): void;
 }
 
 export class EmulatorRenderer implements Renderer {
@@ -98,6 +100,7 @@ export class EmulatorRenderer implements Renderer {
       // A menu left open (a choice that's no longer wanted) would block the game: close it first.
       if (battle.choosing) await battle.closeMenu((b) => this.game.press(b));
       await battle.play(encodeBlock(step.cmds));
+      if (cmd.kind === 'end' && !instant) this.game.battleOver();
     } catch (e) {
       this.onError((e as Error).message);
     }

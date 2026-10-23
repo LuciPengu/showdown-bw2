@@ -76,6 +76,8 @@ const STATUS_EFFECTS: Record<Status, number> = { slp: 0x256, psn: 0x257, tox: 0x
 /** Weather start animations (SC_EFFECT), replayed while it lasts. */
 const WEATHER_EFFECTS: Record<Weather, number> = { SunnyDay: 0x26b, RainDance: 0x268, Hail: 0x269, Sandstorm: 0x26a };
 const WEATHER_HIT_EFFECT = 0x290; // sand or hail hitting a Pokémon
+/** The std lines BW2 ends a trainer battle with, about the opponent's client: "Player defeated X!", lost, draw. */
+const RESULT_MSG = { win: 0x2c, lose: 0x2e, draw: 0x2f } as const;
 
 /** BtlCondition values: permanent (type 1); bad poison counts 15 turns; sleep counts down (type 2). */
 function conditionValue(status: Status): number {
@@ -130,10 +132,16 @@ export class Scene {
   private statuses = new Map<number, Status>();
   /** Slots (side * 4 + pos) whose Pokémon changed while catching up, so the screen shows the wrong one. */
   private stale = new Set<number>();
+  /** The trainers' Showdown names, near side first. */
+  private names: [string, string] = ['', ''];
+  /** What BW2 couldn't show (no line or animation mapped yet), with counts. */
+  readonly gaps = new Map<string, number>();
 
+  /** `winBgm` is the battle's victory music (from its BtlSetup), 0 for none. */
   constructor(
     private readonly sides: [Bw2Side, Bw2Side],
     private readonly screen: Screen = newScreen(),
+    private readonly winBgm = 0,
   ) {}
 
   /** Recalls the Pokémon at a slot if one is on screen. */
@@ -251,7 +259,7 @@ export class Scene {
       }
       case 'move': {
         const move = MOVE_NUMBERS[toID(cmd.move)];
-        if (!move) return;
+        if (!move) return this.gap(`move: ${cmd.move}`);
         this.lastMove = move;
         if (cmd.announce) c.push([SC.MOVE_MSG, this.monAt(cmd.user), move]);
         if (cmd.animate) {
@@ -281,8 +289,10 @@ export class Scene {
         } else if (delta !== 0) {
           c.push([SC.UPDATE_HP_GAUGE, monId]);
         }
-        const msg = cmd.from && textMessage({ kind: 'hpFrom', change: cmd.change, from: cmd.from }, monId, cmd.of && this.monAt(cmd.of));
-        if (msg) c.push(msg);
+        if (cmd.from) {
+          const msg = textMessage({ kind: 'hpFrom', change: cmd.change, from: cmd.from }, monId, cmd.of && this.monAt(cmd.of));
+          this.say(c, msg, `${cmd.change} from ${cmd.from.name}`);
+        }
         return;
       }
       case 'faint': {
@@ -309,7 +319,7 @@ export class Scene {
           this.statuses.delete(monId);
         }
         const msg = textMessage({ kind: 'status', status: cmd.status, from: cmd.from, previous }, monId);
-        if (msg) c.push(msg);
+        this.say(c, msg, cmd.status ? `status: ${cmd.status}` : `cure: ${previous ?? '?'}`);
         return;
       }
       case 'boost': {
@@ -332,13 +342,13 @@ export class Scene {
         const slots = cmd.slot ? [cmd.slot] : this.activeSlots();
         for (const slot of slots) c.push([SC.OP_RESET_STAT_STAGES, this.monAt(slot)]);
         const msg = textMessage({ kind: 'clearBoosts', all: !cmd.slot }, cmd.slot ? this.monAt(cmd.slot) : undefined);
-        if (msg) c.push(msg);
+        this.say(c, msg, cmd.slot ? 'clearboost' : 'clearallboost');
         return;
       }
       case 'ability': {
         const monId = this.monAt(cmd.slot);
         const ability = ABILITY_NUMBERS[toID(cmd.ability)];
-        if (!ability) return;
+        if (!ability) return this.gap(`ability: ${cmd.ability}`);
         if (this.popupOut !== null) c.push([SC.ABILITY_POPUP_OUT, this.popupOut]);
         c.push([SC.OP_CHANGE_ABILITY, monId, ability], [SC.ABILITY_POPUP_IN, monId]);
         this.popupOut = monId;
@@ -371,7 +381,7 @@ export class Scene {
         const status = cmd.reason as Status;
         if (status in STATUS_EFFECTS) c.push([SC.EFFECT_BY_POS, this.pos(cmd.slot), STATUS_EFFECTS[status]]);
         const msg = textMessage({ kind: 'cant', reason: cmd.reason }, this.monAt(cmd.slot));
-        if (msg) c.push(msg);
+        this.say(c, msg, `cant: ${cmd.reason}`);
         return;
       }
       case 'text': {
@@ -380,26 +390,45 @@ export class Scene {
           cmd.slot && this.monAt(cmd.slot),
           cmd.target && this.monAt(cmd.target),
         );
-        if (msg) c.push(msg);
+        // Lines Showdown makes up itself ("X forfeited.") have nothing to match in BW2.
+        if (cmd.key === 'message') return;
+        this.say(c, msg, cmd.args[0] ? `${cmd.key}: ${cmd.args[0]}` : cmd.key);
         return;
       }
       case 'sideCondition': {
         const client = this.sides[cmd.side].client;
         const msg = textMessage({ kind: 'side', condition: cmd.condition, active: cmd.active, side: cmd.side, client });
-        if (msg) c.push(msg);
+        this.say(c, msg, `side${cmd.active ? 'start' : 'end'}: ${cmd.condition}`);
         return;
       }
       case 'start':
+        this.names = [cmd.trainers[0].name, cmd.trainers[1].name];
         cmd.trainers.forEach((t, i) => {
           const name = drawable(t.name) ? t.name : i === 0 ? 'Player' : 'Opponent';
           step.trainers.push({ client: this.sides[i].client, name });
         });
         return;
-      case 'charge':
-      case 'field':
-      case 'end':
+      case 'end': {
+        const result = cmd.winner === null ? 'draw' : toID(cmd.winner) === toID(this.names[0]) ? 'win' : 'lose';
+        if (result === 'win' && this.winBgm) c.push([SC.PLAY_BGM, this.winBgm]);
+        c.push([SC.MSG_STD, RESULT_MSG[result], this.sides[1].client]);
         return;
+      }
+      case 'charge':
+        return this.gap(`charge: ${cmd.move}`);
+      case 'field':
+        return this.gap(`field${cmd.active ? 'start' : 'end'}: ${cmd.condition}`);
     }
+  }
+
+  private gap(what: string): void {
+    this.gaps.set(what, (this.gaps.get(what) ?? 0) + 1);
+  }
+
+  /** Adds a line of text, or notes that BW2 has none for it. */
+  private say(c: ServerCmd[], msg: ServerCmd | null, what: string): void {
+    if (msg) c.push(msg);
+    else this.gap(what);
   }
 
   private message(c: ServerCmd[], key: 'dragged', monId: number): void {

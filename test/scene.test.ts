@@ -127,3 +127,28 @@ describe('monSpec', () => {
     expect(monSpec({ ...mon, species: 'Rotom-Wash' }, { hp: 1, maxHp: 100 }, null)).toMatchObject({ species: 479, form: 2, hp: 1 });
   });
 });
+
+describe('the end of a battle', () => {
+  const end = (winner: string | null, winBgm = 1263) => {
+    const scene = new Scene(sides(), newScreen(), winBgm);
+    new Translator().lines(log('gen5ou-2703228634.log')).forEach((cmd) => scene.plan(cmd, true));
+    // What follows the catch-up's send-outs.
+    return scene.plan({ kind: 'end', winner }).cmds.filter(([n]) => n === SC.PLAY_BGM || n === SC.MSG_STD);
+  };
+
+  it('plays the victory music and "Player defeated X!" when the near side wins', () => {
+    expect(end('frosssted')).toEqual([
+      [SC.PLAY_BGM, 1263],
+      [SC.MSG_STD, 0x2c, 1],
+    ]);
+  });
+
+  it('says the near side lost, or drew', () => {
+    expect(end('MajesticKath')).toEqual([[SC.MSG_STD, 0x2e, 1]]);
+    expect(end(null)).toEqual([[SC.MSG_STD, 0x2f, 1]]);
+  });
+
+  it('packs the music as one halfword', () => {
+    expect([...encodeBlock([[SC.PLAY_BGM, 1263]])]).toEqual([0x00, 0x55, 0x04, 0xef]);
+  });
+});
