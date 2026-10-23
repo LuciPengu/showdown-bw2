@@ -35,6 +35,7 @@ const BM = {
   flags: 0x1b, // bits 0–4 base form, 5 transformed, 6 Illusion
   conditions: 0x1c, // u32 each; 1–5 are the major statuses
   moves: 0x104, // BattleMoveWork[4]: truth {id, pp, maxPP, ppUp, flags}, surface (same), linked
+  ability: 0x13c, // the current one (btl_pokeparam.h)
   moveCount: 0x140,
 } as const;
 const MOVE_WORK_SIZE = 0xe;
@@ -217,6 +218,27 @@ export class BattleParties {
     if (bm < 0x02000000 || bm >= 0x02400000) return;
     this.ram.write16(bm + BM.maxHp, Math.max(1, maxHp));
     this.ram.write16(bm + BM.hp, hp);
+  }
+
+  /**
+   * Takes the abilities and held items off the server's own Pokémon, which
+   * BW2's battle logic uses while it runs a battle's intro, so it shows no
+   * entry effects of its own (Intimidate, Air Balloon…). Showdown's follow.
+   */
+  quietServerMons(): void {
+    const r = this.ram;
+    const server = this.mainModule + MAIN_MODULE_SERVER_POKECON;
+    for (let c = 0; c < 4; c++) {
+      const p = server + POKECON_PARTIES + PARTY_SIZE * c;
+      const n = Math.min(r.read8(p + PARTY_COUNT), 6);
+      for (let i = 0; i < n; i++) {
+        const bm = r.read32(p + 4 * i);
+        if (bm < 0x02000000 || bm >= 0x02400000) continue;
+        r.write16(bm + BM.ability, 0);
+        r.write16(bm + BM.baseAbility, 0);
+        r.write16(bm + BM.item, 0);
+      }
+    }
   }
 
   /** Sets a party slot's moves, as the Fight menu shows them. */

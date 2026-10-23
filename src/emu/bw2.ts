@@ -140,6 +140,11 @@ export class Bw2Battle {
     }
   }
 
+  /** Stops the game's own battle logic, leaving whatever menu is open as it is. */
+  pauseLogic(): void {
+    this.ram.write8(this.server + SERVER.state, SERVER_STATE_DONE);
+  }
+
   /** Abandons whatever the client is stuck on and sets it waiting for the next command. */
   private unstick(): void {
     this.ram.write8(this.client + CLIENT.mainSeq, MAIN_SEQ_RECV_CMD);

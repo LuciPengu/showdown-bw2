@@ -24,8 +24,10 @@ roll and HP number is Showdown's, and BW2 only draws it.
 
 ## Use
 
-- Start or join any **Gen 5** battle: Random Battle, OU, Doubles OU, and so on. BW2 takes
-  over the battle scene within a few seconds.
+- Start any **Gen 5** battle: Random Battle, OU, Doubles OU, and so on. It opens like a
+  battle in the game: the trainers on screen, "would like to battle!", and both of them
+  throwing out their first Pokémon. (A battle you join half-way through starts straight
+  from where it is.)
 - When it's your turn, tap **Fight** or **Pokémon** on BW2's touch screen with your mouse
   (or use the keyboard). Your pick is sent to Showdown.
 - The buttons to the right of the game set its **speed** (1×, 1.5×, 2×, Max) and
@@ -37,7 +39,7 @@ Good to know:
 
 - Only Gen 5 battles can be drawn faithfully, in singles and doubles. BW2 has no Fairy
   type, Megas or later moves.
-- You need your own copy of the game; no ROM is included. The download includes two
+- You need your own copy of the game; no ROM is included. The download includes
   savestates of Pokémon World Tournament battles, which BW2 needs to draw battles in.
 - Tested with Chrome on macOS and the "251 Edition" of US Black 2, whose battle code is the
   same as the original game's.
@@ -90,6 +92,16 @@ Savestates need the same EmulatorJS version (4.2.3, in `public/emulatorjs`).
 | `pwt-outside.state` | Inside the PWT, by the arena doors, with a Lv 50 team (made with PWT Unlocked's `pwt new`) |
 | `battle-move-select.state` | Driftveil Tournament, round 1: Garchomp vs. Golduck at "What will Garchomp do?" |
 | `battle-doubles.state` | Rental Tournament, Double Battle, round 1: Golett and Tirtouga vs. Vanillite and Lampent at "What will Golett do?" |
+| `intro-singles.state` | Rental Tournament, Single Battle, round 1: the announcer's last line before the battle starts |
+| `intro-doubles.state` | Rental Tournament, Double Battle, round 1: the same, for doubles |
+
+A battle shown from its start begins with BW2's own intro. From `intro-*.state`, the app
+starts the battle, and as soon as BW2 has built it (before its intro shows anyone) renames
+the trainers and writes the Showdown leads into their party slots. It also takes the
+abilities and items off BW2's own copies of the Pokémon, so its logic shows no entry
+effects of its own. BW2 then plays its intro (trainers, throws, "Go! X!"), and at turn 1's
+menu the app pauses its logic and leaves the menu open for the first choice. A battle
+joined half-way uses the `battle-*.state` savestates instead.
 
 A doubles battle on Showdown switches the game to `battle-doubles.state` on its own, and
 a singles battle switches it back to the dev server's `STATE`.
@@ -101,7 +113,7 @@ takes the place of Showdown's battle scene, and its touch screen opens below whe
 your turn to choose. It needs no dev server, relay or userscript.
 
 ```sh
-npm run build:extension   # needs savestates/battle-move-select.state and battle-doubles.state
+npm run build:extension   # needs the four savestates below in savestates/
 ```
 
 The savestates aren't in the repository; take them from the release zip (its `savestates/`

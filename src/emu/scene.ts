@@ -154,6 +154,24 @@ export class Scene {
     this.nextBench = [perSide, perSide];
   }
 
+  /**
+   * A lead that BW2's own battle intro already sent out (written into its
+   * party slot beforehand): takes it on without sending it out again.
+   */
+  adoptLead(cmd: Extract<Command, { kind: 'switchIn' }>): Step {
+    const step: Step = { writes: [], trainers: [], cmds: [], hp: [] };
+    const spec = monSpec(cmd.mon, cmd.hp, cmd.status);
+    if (!spec) return step;
+    const monId = this.monAt(cmd.slot);
+    this.sides[cmd.slot.side].hp.set(monId, { hp: spec.hp, maxHp: spec.maxHp });
+    if (spec.status) this.statuses.set(monId, spec.status);
+    this.written[cmd.slot.side].set(cmd.slot.pos, cmd.mon.name);
+    this.replaced.add(this.slotKey(cmd.slot));
+    this.screen.out[this.pos(cmd.slot)] = true;
+    step.hp.push({ monId, hp: spec.hp, maxHp: spec.maxHp });
+    return step;
+  }
+
   /** Recalls the Pokémon at a slot if one is on screen. */
   private recall(c: ServerCmd[], slot: Slot): void {
     const pos = this.pos(slot);

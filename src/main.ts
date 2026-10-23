@@ -16,6 +16,7 @@ const game = new Bw2Game({
   clearScreen: () => director.reset(),
   // The dev server's STATE for singles, savestates/ for the rest.
   stateUrls: { singles: '/state', doubles: '/savestates/battle-doubles.state' },
+  introUrls: { singles: '/savestates/intro-singles.state', doubles: '/savestates/intro-doubles.state' },
   emuPage: '/emu.html',
 });
 const inGame = game.renderer;

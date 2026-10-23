@@ -17,7 +17,8 @@
   frame.src = APP;
   frame.title = 'Pokémon Black 2';
   frame.allow = 'autoplay; gamepad';
-  Object.assign(frame.style, { position: 'fixed', border: '0', background: '#000', zIndex: '40' });
+  // Above the battle room, under Showdown's popups (forfeit, team, options: z-index 20) and tooltips.
+  Object.assign(frame.style, { position: 'fixed', border: '0', background: '#000', zIndex: '15' });
   document.body.append(frame);
   frame.addEventListener('load', () => log('embed: frame loaded'));
 

@@ -1,7 +1,8 @@
 // The trainers' names BW2 prints ("PKMN Trainer X sent out Y!"). Each client's
 // BtlTrainerData (btl_main.h) points at a StrBuf sized to the name it was
-// made with, so a longer Showdown name gets a StrBuf of ours, placed in the
-// paused server's command queue, which nothing reads while it's paused.
+// made with, so a longer Showdown name gets a StrBuf of ours, placed at the far
+// end of the server's command queue: nothing reads there once the server is
+// paused, and even during a battle's intro its commands are far shorter.
 
 import type { DsRam } from './ram';
 
@@ -11,8 +12,8 @@ const TRAINER_NAME = 0x04; // StrBuf *
 /** StrBuf (gfl/strbuf.c): capacity in characters, length, a magic word, then the characters. */
 const STRBUF = { size: 0x00, length: 0x02, magic: 0x04, chars: 0x08 } as const;
 const STRBUF_MAGIC = 0xb6f8d2ec;
-const SERVER_QUEUE = 0xf0; // BtlServerCmdQueue: two u16 positions, then a 3000-byte buffer
-const OUR_STRBUFS = SERVER_QUEUE + 0x10;
+const SERVER_QUEUE = 0xf0; // BtlServerCmdQueue: two u16 positions, then a 3000-byte buffer (0xBC0 in all)
+const OUR_STRBUFS = SERVER_QUEUE + 0xbc0 - 4 * 0x40; // the last 0x100 bytes
 const OUR_STRBUF_SIZE = 0x40;
 /** The most characters a name keeps: Showdown's limit. */
 export const MAX_NAME = 18;

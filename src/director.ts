@@ -4,8 +4,12 @@
 import type { Command } from './bw/commands';
 
 export interface Renderer {
-  /** Resolves when the command has finished showing. `instant` means apply it with no animation. */
-  play(cmd: Command, instant: boolean): Promise<void>;
+  /**
+   * Resolves when the command has finished showing. `instant` means apply it
+   * with no animation. `upcoming` is what's queued after it, for a renderer
+   * that needs to look ahead (BW2's battle intro needs the leads).
+   */
+  play(cmd: Command, instant: boolean, upcoming: readonly Command[]): Promise<void>;
   reset(): void;
 }
 
@@ -45,7 +49,7 @@ export class Director {
       while (this.queue.length && gen === this.generation) {
         const { cmd, instant } = this.queue.shift()!;
         try {
-          await this.renderer.play(cmd, instant);
+          await this.renderer.play(cmd, instant, this.queue.map((q) => q.cmd));
         } catch (e) {
           console.error('renderer failed on', cmd, e);
         }

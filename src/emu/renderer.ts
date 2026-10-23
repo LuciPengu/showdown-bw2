@@ -5,7 +5,7 @@ import { SC, type ServerCmd, encodeBlock } from '../bw/servercmd';
 import type { Renderer } from '../director';
 import type { Bw2Battle } from './bw2';
 import type { BattleMove } from './party';
-import { type Bw2Side, type MonSpec, type MonWrite, Scene, type Screen, newScreen } from './scene';
+import { type Bw2Side, type MonSpec, type MonWrite, Scene, type Screen, monSpec, newScreen } from './scene';
 
 /** One of the player's own Pokémon, from Showdown's request. */
 export interface TeamMember {
@@ -39,6 +39,32 @@ export interface GameLink {
   prepare(gameType: GameType): Promise<void>;
   /** Resolves once the game can take commands (it may be going back to a fresh battle). */
   ready(): Promise<void>;
+  /**
+   * Starts a battle of this style with BW2's own intro (trainers, throws),
+   * these trainer names (near, far) and these leads. False if it can't (no
+   * savestate for the style, or the game didn't get there).
+   */
+  intro(gameType: GameType, names: [string, string], leads: Lead[]): Promise<boolean>;
+}
+
+/** A lead for BW2's intro: where it goes and who it is. */
+export interface Lead {
+  side: 0 | 1;
+  pos: number;
+  mon: MonSpec;
+}
+
+/**
+ * The leads a battle's start sends out, from the commands after it: the first
+ * switch-in at each position before turn 1. Null unless every position has one.
+ */
+export function leadsOf(upcoming: readonly Command[], perSide: number): Extract<Command, { kind: 'switchIn' }>[] | null {
+  const leads = new Map<string, Extract<Command, { kind: 'switchIn' }>>();
+  for (const cmd of upcoming) {
+    if (cmd.kind === 'turn') break;
+    if (cmd.kind === 'switchIn' && !leads.has(`${cmd.slot.side}:${cmd.slot.pos}`)) leads.set(`${cmd.slot.side}:${cmd.slot.pos}`, cmd);
+  }
+  return leads.size === perSide * 2 ? [...leads.values()] : null;
 }
 
 export class EmulatorRenderer implements Renderer {
@@ -51,6 +77,8 @@ export class EmulatorRenderer implements Renderer {
   private pendingTeam: string[] | null = null;
   /** What BW2 has on screen; kept across battles shown on the same game. */
   private screen = newScreen();
+  /** Leads BW2's intro sent out ("side:pos" → name), whose switch-ins are taken on, not played. */
+  private introLeads = new Map<string, string>();
 
   constructor(
     private readonly game: GameLink,
@@ -119,6 +147,29 @@ export class EmulatorRenderer implements Renderer {
   }
 
   /**
+   * A battle seen from its start begins with BW2's own intro: trainers on
+   * screen, their throws, "Go! X!". Joined mid-way (`instant`), or without the
+   * leads, it can't.
+   */
+  private async intro(cmd: Extract<Command, { kind: 'start' }>, instant: boolean, upcoming: readonly Command[]): Promise<boolean> {
+    this.introLeads.clear();
+    if (instant) return false;
+    const perSide = cmd.gameType === 'doubles' ? 2 : cmd.gameType === 'singles' ? 1 : 0;
+    const switchIns = perSide && leadsOf(upcoming, perSide);
+    if (!switchIns) return false;
+    const leads: Lead[] = [];
+    for (const s of switchIns) {
+      const mon = monSpec(s.mon, s.hp, s.status);
+      if (!mon) return false;
+      leads.push({ side: s.slot.side, pos: s.slot.pos, mon });
+    }
+    const names: [string, string] = [cmd.trainers[0].name, cmd.trainers[1].name];
+    if (!(await this.game.intro(cmd.gameType, names, leads))) return false;
+    for (const s of switchIns) this.introLeads.set(`${s.slot.side}:${s.slot.pos}`, s.mon.name);
+    return true;
+  }
+
+  /**
    * Showdown decides HP, so after each step the game's HP is checked against
    * Showdown's, and set to it (gauge and all) where they differ.
    */
@@ -135,15 +186,21 @@ export class EmulatorRenderer implements Renderer {
     if (fix.length && !instant && battle) await battle.play(encodeBlock(fix));
   }
 
-  async play(cmd: Command, instant: boolean): Promise<void> {
+  async play(cmd: Command, instant: boolean, upcoming: readonly Command[] = []): Promise<void> {
     try {
       await this.game.ready();
-      if (cmd.kind === 'start') await this.game.prepare(cmd.gameType);
+      if (cmd.kind === 'start' && !(await this.intro(cmd, instant, upcoming))) await this.game.prepare(cmd.gameType);
     } catch (e) {
       this.onError((e as Error).message);
     }
     const battle = this.game.battle();
     if (!battle) return;
+    if (cmd.kind === 'switchIn' && this.introLeads.get(`${cmd.slot.side}:${cmd.slot.pos}`) === cmd.mon.name) {
+      this.introLeads.delete(`${cmd.slot.side}:${cmd.slot.pos}`);
+      this.scene ??= this.makeScene();
+      await this.enforceHp(this.scene.adoptLead(cmd), instant);
+      return;
+    }
     try {
       this.scene ??= this.makeScene();
       // History drawn instantly still updates the game's battle data; the scene leaves out what would animate.
@@ -170,7 +227,7 @@ export class TeeRenderer implements Renderer {
     this.renderers.forEach((r) => r.reset());
   }
 
-  async play(cmd: Command, instant: boolean): Promise<void> {
-    await Promise.all(this.renderers.map((r) => r.play(cmd, instant)));
+  async play(cmd: Command, instant: boolean, upcoming: readonly Command[]): Promise<void> {
+    await Promise.all(this.renderers.map((r) => r.play(cmd, instant, upcoming)));
   }
 }

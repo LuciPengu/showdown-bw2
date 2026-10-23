@@ -11,7 +11,7 @@ import { build } from 'vite';
 const root = new URL('../', import.meta.url);
 const path = (p) => new URL(p, root).pathname;
 const out = (p) => path(`dist-extension/${p}`);
-const SAVESTATES = ['battle-move-select.state', 'battle-doubles.state'];
+const SAVESTATES = ['battle-move-select.state', 'battle-doubles.state', 'intro-singles.state', 'intro-doubles.state'];
 
 const missing = SAVESTATES.filter((s) => !existsSync(path(`savestates/${s}`)));
 if (missing.length) {

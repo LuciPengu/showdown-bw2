@@ -47,6 +47,7 @@ const game = new Bw2Game({
     applySpeed();
   },
   stateUrls: { singles: 'savestates/battle-move-select.state', doubles: 'savestates/battle-doubles.state' },
+  introUrls: { singles: 'savestates/intro-singles.state', doubles: 'savestates/intro-doubles.state' },
   emuPage: 'emu.html',
   note: (text) => log(text),
 });

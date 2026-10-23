@@ -6,9 +6,9 @@ import type { GameType } from './bw/commands';
 import { Bw2Battle } from './emu/bw2';
 import { Emulator, gameCode } from './emu/emulator';
 import { BattleParties } from './emu/party';
-import { EmulatorRenderer } from './emu/renderer';
+import { EmulatorRenderer, type Lead } from './emu/renderer';
 import { type PersonalTable, loadPersonal } from './emu/rom';
-import { Scene } from './emu/scene';
+import { Scene, drawable } from './emu/scene';
 import { TrainerNames } from './emu/trainers';
 
 export interface GameHost {
@@ -17,6 +17,11 @@ export interface GameHost {
   clearScreen(): void;
   /** Savestates of a battle in each style, as URLs. */
   stateUrls: Partial<Record<GameType, string>>;
+  /**
+   * Savestates from just before a battle of each style starts (the PWT's last
+   * line before it), for battles shown with BW2's own intro.
+   */
+  introUrls?: Partial<Record<GameType, string>>;
   /** The emulator frame's page. */
   emuPage: string;
   /** Something worth knowing while debugging, not worth showing the player. */
@@ -66,6 +71,7 @@ export class Bw2Game {
         note: (text) => (host.note ? host.note(text) : console.warn(text)),
         battleOver: () => void this.restartBattle(),
         ready: () => this.ready(),
+        intro: (gameType, names, leads) => this.intro(gameType, names, leads),
         prepare: (gameType) => this.prepareBattle(gameType),
       },
       (message) => host.status(`BW2: ${message}`, false),
@@ -175,6 +181,60 @@ export class Bw2Game {
     await sleep(1000);
     if (!(await this.takeOver(false, false))) throw new Error(`the ${gameType} savestate isn't in a battle`);
     if (this.battle.style !== STYLES[gameType]) throw new Error(`the savestate at ${url} isn't a ${gameType} battle`);
+  }
+
+  /**
+   * Starts a battle with BW2's own intro. From a savestate just before a PWT
+   * battle, the battle is started, and as soon as BW2 has built it (before its
+   * intro shows anyone) the trainers are renamed and the leads written into
+   * their party slots. BW2 then plays its intro (trainers, throws, "Go! X!"),
+   * and at turn 1's menu its own battle logic is paused, the menu left open
+   * for the player's first choice. False if it couldn't.
+   */
+  private async intro(gameType: GameType, names: [string, string], leads: Lead[]): Promise<boolean> {
+    const emu = this.emulator;
+    const url = this.host.introUrls?.[gameType];
+    if (!emu || !url || !this.personal) return false;
+    const res = await fetch(url).catch(() => null);
+    if (!res?.ok) return false;
+    this.status('Starting the battle…');
+    emu.loadState(new Uint8Array(await res.arrayBuffer()));
+    await sleep(300);
+    await emu.press('A', 120, 0); // past the PWT's last line, into the battle
+    const ram = emu.ram();
+    let battle: Bw2Battle | null = null;
+    for (let tries = 0; ram && !battle && tries < 600; tries++) {
+      await sleep(16);
+      battle = Bw2Battle.attach(ram);
+    }
+    if (!ram || !battle) {
+      this.status("BW2 didn't start the battle.", false);
+      return false;
+    }
+    battle.clock = () => (emu.frames() * 1000) / 60;
+    const parties = new BattleParties(ram, battle.mainModule, this.personal);
+    const trainers = new TrainerNames(ram, battle.mainModule, battle.server);
+    names.forEach((name, client) => name && drawable(name) && trainers.write(client, name));
+    parties.quietServerMons();
+    const sides = parties.sides();
+    for (const { side, pos, mon } of leads) parties.write({ client: sides[side].client, partyIndex: pos, monId: sides[side].order[pos], mon });
+    // BW2's intro plays; turn 1's menu means it's done.
+    const end = battle.clock() + 60000;
+    while (!battle.choosing) {
+      if (battle.clock() > end || !battle.alive) {
+        this.status("BW2's battle intro didn't finish.", false);
+        return false;
+      }
+      await sleep(50);
+    }
+    battle.pauseLogic();
+    this.battle = battle;
+    this.parties = parties;
+    this.trainers = trainers;
+    this.freshBattle = null; // the next battle starts from the intro again
+    this.renderer.newGame(perSide(battle.style));
+    this.status('BW2 is drawing: moves play in the game.', true);
+    return true;
   }
 
   /**
