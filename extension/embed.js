@@ -14,8 +14,13 @@
   Object.assign(frame.style, { position: 'fixed', border: '0', background: '#000', zIndex: '40' });
   document.body.append(frame);
 
-  /** Messages from Showdown before the app said it's listening. */
-  let queue = [];
+  /**
+   * Showdown's messages so far, for the app each time it starts: the page can
+   * throw the frame away while it loads (it's put back), which starts it over.
+   */
+  const history = [];
+  /** Whether the app in the frame is listening. */
+  let listening = false;
   /** The battle room the app is showing, whether its menu is open, and whether it needs a ROM. */
   let room = null;
   let choosing = false;
@@ -25,16 +30,16 @@
   const post = (m) => frame.contentWindow?.postMessage(m, APP_ORIGIN);
 
   document.addEventListener('bw2:from-showdown', (e) => {
-    if (queue) queue.push(e.detail);
-    else post({ t: 'msg', data: e.detail });
+    if (history.push(e.detail) > 5000) history.shift();
+    if (listening) post({ t: 'msg', data: e.detail });
   });
 
   window.addEventListener('message', (e) => {
     if (e.source !== frame.contentWindow || e.origin !== APP_ORIGIN) return;
     const m = e.data;
     if (m?.t === 'ready') {
-      post({ t: 'msgs', data: queue ?? [] });
-      queue = null;
+      post({ t: 'msgs', data: history });
+      listening = true;
       lastHeight = 0; // tell it the battle scene's size again
     } else if (m?.t === 'send') {
       document.dispatchEvent(new CustomEvent('bw2:to-showdown', { detail: JSON.stringify({ room: m.room, text: m.text }) }));
@@ -58,6 +63,14 @@
    * frame would stop drawing.
    */
   function place() {
+    if (!frame.isConnected) {
+      // A fresh app: it says again what it shows once it's caught up.
+      listening = false;
+      room = null;
+      choosing = false;
+      needRom = false;
+      document.body.append(frame);
+    }
     const scene = room && document.querySelector(`#room-${CSS.escape(room)} .battle`);
     const r = scene?.getBoundingClientRect();
     const s = frame.style;
