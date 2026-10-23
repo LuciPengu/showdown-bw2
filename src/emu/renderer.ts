@@ -21,8 +21,8 @@ export interface GameLink {
   newScene(screen: Screen): Scene;
   /** Rewrites a party slot's Pokémon. */
   writeMon(write: MonWrite): void;
-  /** Gives the player up to six party slots and returns their side, reread. */
-  growPlayerParty(): Bw2Side;
+  /** Gives the player `size` party slots (as many as it can) and returns their side, reread. */
+  sizePlayerParty(size: number): Bw2Side;
   writeMoves(client: number, partyIndex: number, moves: BattleMove[]): void;
   /** Renames a client's trainer. */
   writeTrainer(client: number, name: string): void;
@@ -48,7 +48,7 @@ export class EmulatorRenderer implements Renderer {
 
   private makeScene(): Scene {
     const scene = this.game.newScene(this.screen);
-    if (this.pendingTeam) scene.assignTeam(0, this.game.growPlayerParty(), this.pendingTeam);
+    if (this.pendingTeam) scene.assignTeam(0, this.game.sizePlayerParty(this.pendingTeam.length), this.pendingTeam);
     this.pendingTeam = null;
     return scene;
   }
@@ -59,7 +59,8 @@ export class EmulatorRenderer implements Renderer {
    */
   setTeam(team: TeamMember[]): boolean {
     if (!this.game.battle()) return false;
-    const side = this.game.growPlayerParty();
+    // As many slots as the team has, so the Pokémon menu shows no leftovers from the PWT's party.
+    const side = this.game.sizePlayerParty(team.length);
     const names: string[] = [];
     team.slice(0, side.order.length).forEach((member, i) => {
       this.game.writeMon({ client: side.client, partyIndex: i, monId: side.order[i], mon: member.spec });

@@ -22,8 +22,8 @@ const inGame = new EmulatorRenderer(
     battle: () => (bw2?.alive ? bw2 : null),
     newScene: (screen) => new Scene(parties!.sides(), screen, bw2!.winBgm, perSide(bw2!.style)),
     writeMon: (write) => parties!.write(write),
-    growPlayerParty: () => {
-      parties!.growParty(0);
+    sizePlayerParty: (size) => {
+      parties!.resizeParty(0, size);
       return parties!.sides()[0];
     },
     writeMoves: (client, partyIndex, moves) => parties!.writeMoves(client, partyIndex, moves),

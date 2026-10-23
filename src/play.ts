@@ -78,17 +78,19 @@ export function toChoice(
 
 /**
  * The whole /choose command for BW2's answers to a request: one part per
- * active position, in order. BW2 answers for the positions that need a choice
- * (a forced switch, or a Pokémon still standing); the rest pass.
+ * active position, in order. BW2's action menu answers once per position (an
+ * empty action for a fainted one); its forced-switch menu answers only for
+ * the positions it asked about. Positions with nothing to choose pass.
  */
 export function toChoices(actions: Bw2Action[], req: ShowdownRequest, nameAt: (partyIndex: number) => string | undefined): string | null {
   const count = Math.max(req.active?.length ?? 0, req.forceSwitch?.length ?? 0, 1);
   const needs = (i: number) =>
     req.forceSwitch ? !!req.forceSwitch[i] : !!req.active?.[i] && !req.side.pokemon[i]?.condition.endsWith(' fnt');
+  const byPosition = actions.length >= count;
   const parts: string[] = [];
   let next = 0;
   for (let i = 0; i < count; i++) {
-    const action = needs(i) ? actions[next++] : undefined;
+    const action = !needs(i) ? undefined : byPosition ? actions[i] : actions[next++];
     if (!action) {
       parts.push('pass');
       continue;

@@ -166,7 +166,8 @@ export function textMessage(req: MsgRequest, monId?: number, otherId?: number): 
       if (req.status) return set(STATUS_GAINED[req.status], mon);
       return set((req.previous && STATUS_CURED[req.previous]) ?? 0x156, mon);
     case 'clearBoosts':
-      return null; // Haze's line isn't in the decoded table yet
+      if (req.all) return std(0x65); // Haze
+      return has ? set(0xc3, mon) : null;
     case 'weatherUpkeep': {
       const id = WEATHER_UPKEEP[req.weather];
       return id === undefined ? SILENT : std(id);

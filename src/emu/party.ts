@@ -158,15 +158,21 @@ export class BattleParties {
   }
 
   /**
-   * Gives a client up to `size` party slots. A battle only builds a BattleMon
-   * per party member (the PWT gives three), so the extra slots borrow the
-   * paused server's own BattleMons, renumbered as this client's next mon IDs.
+   * Gives a client `size` party slots, or as many as it can get. A battle only
+   * builds a BattleMon per party member (the PWT gives three or four), so extra
+   * slots borrow the paused server's own BattleMons, renumbered as this
+   * client's next mon IDs. A smaller party just hides the slots past `size`.
    */
-  growParty(client: number, size = 6): number {
+  resizeParty(client: number, size = 6): number {
     const r = this.ram;
     const party = this.party(client);
     const count = r.read8(party + PARTY_COUNT);
-    if (count >= size) return count;
+    const src = r.read32(this.pokeCon + POKECON_SRC_PARTIES + 4 * client);
+    if (count >= size) {
+      r.write8(party + PARTY_COUNT, size);
+      r.write32(src + POKEPARTY.count, size);
+      return size;
+    }
     if (!this.spare) {
       this.spare = [];
       const server = this.mainModule + MAIN_MODULE_SERVER_POKECON;
@@ -180,7 +186,6 @@ export class BattleParties {
       }
     }
     // The client's own PokeParty has room for six records; the borrowed BattleMons move their records there.
-    const src = r.read32(this.pokeCon + POKECON_SRC_PARTIES + 4 * client);
     const room = Math.min(r.read32(src + POKEPARTY.capacity), 6);
     let n = count;
     while (n < size && n < room && this.spare.length) {

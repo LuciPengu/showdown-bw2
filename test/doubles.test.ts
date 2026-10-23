@@ -51,6 +51,8 @@ describe('doubles choices', () => {
   it('passes for a fainted Pokémon, and fills forced switches in order', () => {
     const fainted = { ...request, side: { ...request.side, pokemon: [mon('p1: A', true, '0 fnt'), ...request.side.pokemon.slice(1)] } };
     expect(toChoices([{ kind: 'fight', move: 337, target: 1 }], fainted, nameAt)).toBe('pass, move 2 1');
+    // BW2's action menu answers once per position, with an empty action for the fainted one.
+    expect(toChoices([{ kind: 'other', action: 0 }, { kind: 'fight', move: 337, target: 3 }], fainted, nameAt)).toBe('pass, move 2 2');
     const forced = { ...request, active: undefined, forceSwitch: [false, true] };
     expect(toChoices([{ kind: 'switch', partyIndex: 3 }], forced, nameAt)).toBe('pass, switch 4');
   });
