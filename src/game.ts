@@ -19,6 +19,8 @@ export interface GameHost {
   stateUrls: Partial<Record<GameType, string>>;
   /** The emulator frame's page. */
   emuPage: string;
+  /** Something worth knowing while debugging, not worth showing the player. */
+  note?(text: string): void;
 }
 
 /** How many Pokémon each side has out in a BW2 battle style (0 singles, 1 doubles, 2 triples, 3 rotation). */
@@ -55,6 +57,9 @@ export class Bw2Game {
         writeMoves: (client, partyIndex, moves) => this.parties!.writeMoves(client, partyIndex, moves),
         writeTrainer: (client, name) => this.trainers!.write(client, name),
         press: (button) => this.emulator!.press(button, 120, 300),
+        readHp: (monId) => this.parties?.hpOf(monId) ?? null,
+        writeHp: (monId, hp, maxHp) => this.parties?.setHp(monId, hp, maxHp),
+        note: (text) => (host.note ? host.note(text) : console.warn(text)),
         battleOver: () => void this.restartBattle(),
         prepare: (gameType) => this.prepareBattle(gameType),
       },

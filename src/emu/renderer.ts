@@ -1,7 +1,7 @@
 // Draws commands in the running BW2 game, through the scene's plan.
 
 import type { Command, GameType } from '../bw/commands';
-import { encodeBlock } from '../bw/servercmd';
+import { SC, type ServerCmd, encodeBlock } from '../bw/servercmd';
 import type { Renderer } from '../director';
 import type { Bw2Battle } from './bw2';
 import type { BattleMove } from './party';
@@ -28,6 +28,11 @@ export interface GameLink {
   writeTrainer(client: number, name: string): void;
   /** Presses a button in the game. */
   press(button: 'A'): Promise<void>;
+  /** A battle Pokémon's HP as the game has it, and setting it. */
+  readHp(monId: number): { hp: number; maxHp: number } | null;
+  writeHp(monId: number, hp: number, maxHp: number): void;
+  /** Something worth knowing while debugging, not worth showing the player. */
+  note(text: string): void;
   /** The battle on screen has ended and BW2 has shown its result. */
   battleOver(): void;
   /** Gets BW2 into a battle of this style (a savestate of one), if it isn't in one. */
@@ -111,6 +116,23 @@ export class EmulatorRenderer implements Renderer {
     this.screen = newScreen(perSide);
   }
 
+  /**
+   * Showdown decides HP, so after each step the game's HP is checked against
+   * Showdown's, and set to it (gauge and all) where they differ.
+   */
+  private async enforceHp(step: { hp: { monId: number; hp: number; maxHp: number }[] }, instant: boolean): Promise<void> {
+    const fix: ServerCmd[] = [];
+    for (const { monId, hp, maxHp } of step.hp) {
+      const game = this.game.readHp(monId);
+      if (!game || (game.hp === hp && game.maxHp === maxHp)) continue;
+      this.game.note(`HP drift: mon ${monId} had ${game.hp}/${game.maxHp} in BW2, Showdown says ${hp}/${maxHp}; set it`);
+      this.game.writeHp(monId, hp, maxHp);
+      fix.push([SC.UPDATE_HP_GAUGE, monId]);
+    }
+    const battle = this.game.battle();
+    if (fix.length && !instant && battle) await battle.play(encodeBlock(fix));
+  }
+
   async play(cmd: Command, instant: boolean): Promise<void> {
     try {
       if (cmd.kind === 'start') await this.game.prepare(cmd.gameType);
@@ -129,6 +151,7 @@ export class EmulatorRenderer implements Renderer {
       // A menu left open (a choice that's no longer wanted) would block the game: close it first.
       if (battle.choosing) await battle.closeMenu((b) => this.game.press(b));
       await battle.play(encodeBlock(step.cmds));
+      await this.enforceHp(step, instant);
       if (cmd.kind === 'end' && !instant) this.game.battleOver();
     } catch (e) {
       this.onError((e as Error).message);

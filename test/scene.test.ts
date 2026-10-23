@@ -128,6 +128,21 @@ describe('monSpec', () => {
   });
 });
 
+describe('Showdown decides HP', () => {
+  it('says what HP each hit, faint and switch-in should leave, to check the game against', () => {
+    const steps = plan('gen5ou-2703228634.log');
+    const i = steps.findIndex((s) => s.cmd.kind === 'move' && s.cmd.move === 'Foul Play');
+    const [subtract] = steps[i + 1].step.cmds;
+    const [after] = steps[i + 1].step.hp;
+    expect(after.monId).toBe(subtract[1]); // the Pokémon that was hit
+    expect(after.hp + subtract[2]).toBeLessThanOrEqual(after.maxHp);
+    const faint = steps.find((s) => s.cmd.kind === 'faint')!;
+    expect(faint.step.hp).toEqual([expect.objectContaining({ hp: 0 })]);
+    const switchIn = steps.find((s) => s.cmd.kind === 'switchIn')!;
+    expect(switchIn.step.hp).toEqual([expect.objectContaining({ hp: switchIn.step.writes[0].mon.hp, maxHp: switchIn.step.writes[0].mon.maxHp })]);
+  });
+});
+
 describe('the end of a battle', () => {
   const end = (winner: string | null, winBgm = 1263) => {
     const scene = new Scene(sides(), newScreen(), winBgm);

@@ -48,6 +48,7 @@ const game = new Bw2Game({
   },
   stateUrls: { singles: 'savestates/battle-move-select.state', doubles: 'savestates/battle-doubles.state' },
   emuPage: 'emu.html',
+  note: (text) => log(text),
 });
 const director = new Director(game.renderer);
 
@@ -57,13 +58,23 @@ const session = new Session({
     director.reset();
     choices.stop();
     toPage({ t: 'room', room });
+    teamPreview = ended = false;
+    showControls();
   },
   commands(cmds, instant) {
     choices.heard();
-    if (cmds.some((c) => c.kind === 'end')) choices.stop();
+    if (cmds.some((c) => c.kind === 'end')) {
+      choices.stop();
+      ended = true;
+      showControls();
+    }
     director.enqueue(cmds, instant);
   },
-  request: (room, req, live) => choices.onRequest(room, req, live),
+  request: (room, req, live) => {
+    teamPreview = !!req.teamPreview;
+    showControls();
+    choices.onRequest(room, req, live);
+  },
   choiceError: (room, message) => choices.onChoiceError(room, message),
 });
 
@@ -130,12 +141,14 @@ $('speed').addEventListener('click', (e) => {
   applySpeed();
 });
 
-// The touch screen shows (embed.js makes room for it) while BW2's menu is open.
-let choosing = false;
-setInterval(() => {
-  const now = !!game.live()?.choosing;
-  if (now !== choosing) toPage({ t: 'choosing', on: (choosing = now) });
-}, 250);
+// BW2's touch screen covers Showdown's own move and switch buttons, so they can't be clicked
+// by mistake. They show only where BW2 can't stand in: team preview (picked on Showdown) and
+// after the battle (rematch, close).
+let teamPreview = false;
+let ended = false;
+function showControls(): void {
+  toPage({ t: 'controls', showdown: teamPreview || ended });
+}
 
 async function start(rom: ArrayBuffer): Promise<void> {
   log(`starting with a ${rom.byteLength}-byte ROM`);

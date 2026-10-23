@@ -55,6 +55,12 @@
     nativeFrame((time) => deliver(entry, time));
     return 0;
   };
+  // EmulatorJS locks the mouse to the game on a click (melonDS takes mouse input), which hides the
+  // pointer from the rest of the page until Escape. The touch screen takes clicks where they land,
+  // so it isn't needed.
+  Element.prototype.requestPointerLock = function () {
+    return Promise.resolve();
+  };
   window.EJS_player = '#game';
   window.EJS_core = 'melonds';
   window.EJS_gameName = 'showdown-bw2.nds';

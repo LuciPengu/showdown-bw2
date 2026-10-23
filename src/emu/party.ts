@@ -204,6 +204,21 @@ export class BattleParties {
     return n;
   }
 
+  /** A battle Pokémon's HP and max HP as the game has them, by mon ID. */
+  hpOf(monId: number): { hp: number; maxHp: number } | null {
+    const bm = this.ram.read32(this.pokeCon + POKECON_MONS + 4 * monId);
+    if (bm < 0x02000000 || bm >= 0x02400000) return null;
+    return { hp: this.ram.read16(bm + BM.hp), maxHp: this.ram.read16(bm + BM.maxHp) };
+  }
+
+  /** Sets a battle Pokémon's HP and max HP, by mon ID. The gauge shows them once told to update. */
+  setHp(monId: number, hp: number, maxHp: number): void {
+    const bm = this.ram.read32(this.pokeCon + POKECON_MONS + 4 * monId);
+    if (bm < 0x02000000 || bm >= 0x02400000) return;
+    this.ram.write16(bm + BM.maxHp, Math.max(1, maxHp));
+    this.ram.write16(bm + BM.hp, hp);
+  }
+
   /** Sets a party slot's moves, as the Fight menu shows them. */
   writeMoves(client: number, partyIndex: number, moves: BattleMove[]): void {
     const r = this.ram;

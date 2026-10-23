@@ -28,9 +28,9 @@
   const history = [];
   /** Whether the app in the frame is listening. */
   let listening = false;
-  /** The battle room the app is showing, whether its menu is open, and whether it needs a ROM. */
+  /** The battle room the app is showing, whether Showdown's own controls should show, and whether it needs a ROM. */
   let room = null;
-  let choosing = false;
+  let showdownControls = false;
   let needRom = false;
   let lastHeight = 0;
   /** Whether the app was last told it's parked in the corner (only its status shows). */
@@ -50,7 +50,7 @@
     if (e.source !== frame.contentWindow || e.origin !== APP_ORIGIN) return;
     const m = e.data;
     if (m?.t === 'log') return log('app:', m.text);
-    if (m?.t !== 'choosing') log('embed: from app', JSON.stringify(m).slice(0, 200));
+    log('embed: from app', JSON.stringify(m).slice(0, 200));
     if (m?.t === 'ready') {
       listening = true;
       post({ t: 'msgs', data: history });
@@ -60,8 +60,8 @@
       document.dispatchEvent(new CustomEvent('bw2:to-showdown', { detail: JSON.stringify({ room: m.room, text: m.text }) }));
     } else if (m?.t === 'room') {
       room = m.room;
-    } else if (m?.t === 'choosing') {
-      choosing = !!m.on;
+    } else if (m?.t === 'controls') {
+      showdownControls = !!m.showdown;
     } else if (m?.t === 'needRom') {
       needRom = !!m.on;
     }
@@ -72,8 +72,9 @@
   document.dispatchEvent(new CustomEvent('bw2:embed-ready'));
 
   /**
-   * Over the battle scene of the room the app shows, and twice as tall while
-   * BW2 asks for a choice, so its touch screen shows below. With nothing to
+   * Over the battle scene of the room the app shows, and twice as tall, so
+   * BW2's touch screen covers Showdown's move and switch buttons; just the
+   * top screen when Showdown's own controls are needed. With nothing to
    * show, the frame is parked in the corner as a see-through strip that shows
    * only BW2's status.
    */
@@ -83,7 +84,7 @@
       // A fresh app: it says again what it shows once it's caught up.
       listening = false;
       room = null;
-      choosing = false;
+      showdownControls = false;
       needRom = false;
       document.body.append(frame);
     }
@@ -105,10 +106,10 @@
     }
     park(false);
     s.background = '#000';
-    // Both screens while BW2 asks for a choice, or just the top one; smaller if the window is too short.
+    // Both screens, or just the top one; smaller if the window is too short.
     const space = window.innerHeight - Math.max(0, r.top) - 4;
-    const height = Math.max(120, Math.min(choosing ? r.height * 2 : r.height, space));
-    const screenHeight = choosing ? height / 2 : height;
+    const height = Math.max(120, Math.min(showdownControls ? r.height : r.height * 2, space));
+    const screenHeight = showdownControls ? height : height / 2;
     Object.assign(s, {
       left: `${r.left}px`,
       top: `${r.top}px`,

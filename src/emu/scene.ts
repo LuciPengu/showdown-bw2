@@ -41,6 +41,8 @@ export interface Step {
   writes: MonWrite[];
   trainers: TrainerWrite[];
   cmds: ServerCmd[];
+  /** The HP Showdown says Pokémon have once the step has played, in BW2's units, to check the game against. */
+  hp: { monId: number; hp: number; maxHp: number }[];
 }
 
 /**
@@ -193,7 +195,7 @@ export class Scene {
    * command that animates.
    */
   plan(cmd: Command, instant = false): Step {
-    const step: Step = { writes: [], trainers: [], cmds: [] };
+    const step: Step = { writes: [], trainers: [], cmds: [], hp: [] };
     if (!instant) this.refreshScreen(step);
     const screenBefore = [...this.screen.out];
     if (this.popupOut !== null && cmd.kind !== 'ability') {
@@ -250,6 +252,7 @@ export class Scene {
         const monId = side.order[bench];
         step.writes.push({ client: side.client, partyIndex: bench, monId, mon: spec });
         side.hp.set(monId, { hp: spec.hp, maxHp: spec.maxHp });
+        step.hp.push({ monId, hp: spec.hp, maxHp: spec.maxHp });
         if (spec.status) this.statuses.set(monId, spec.status);
         else this.statuses.delete(monId);
         this.written[cmd.slot.side].set(bench, cmd.mon.name);
@@ -291,6 +294,7 @@ export class Scene {
         if (delta < 0) c.push([SC.OP_SUBTRACT_HP, monId, -delta]);
         if (delta > 0) c.push([SC.OP_ADD_HP, monId, delta]);
         now.hp = target;
+        step.hp.push({ monId, hp: target, maxHp: now.maxHp });
         if (cmd.hit) {
           const sound = cmd.hit.effectiveness === 'super' ? 2 : cmd.hit.effectiveness === 'resisted' ? 3 : 1;
           c.push([SC.DAMAGE, monId, sound, this.lastMove]);
@@ -311,6 +315,7 @@ export class Scene {
           now.hp = 0;
         }
         c.push([SC.MSG_SET, MSG.fainted, monId], [SC.FAINT, monId]);
+        if (now) step.hp.push({ monId, hp: 0, maxHp: now.maxHp });
         this.screen.out[this.pos(cmd.slot)] = false;
         return;
       }
