@@ -153,10 +153,17 @@ export class EmulatorRenderer implements Renderer {
    */
   private async intro(cmd: Extract<Command, { kind: 'start' }>, instant: boolean, upcoming: readonly Command[]): Promise<boolean> {
     this.introLeads.clear();
-    if (instant) return false;
+    if (instant) {
+      this.game.note('battle start: joined mid-way, no intro');
+      return false;
+    }
     const perSide = cmd.gameType === 'doubles' ? 2 : cmd.gameType === 'singles' ? 1 : 0;
     const switchIns = perSide && leadsOf(upcoming, perSide);
-    if (!switchIns) return false;
+    if (!switchIns) {
+      this.game.note(`battle start: no intro (${cmd.gameType}; upcoming ${upcoming.map((c) => c.kind).join(',') || 'nothing'})`);
+      return false;
+    }
+    this.game.note(`battle start: intro with ${switchIns.map((s) => s.mon.species).join(', ')}`);
     const leads: Lead[] = [];
     for (const s of switchIns) {
       const mon = monSpec(s.mon, s.hp, s.status);
@@ -164,7 +171,10 @@ export class EmulatorRenderer implements Renderer {
       leads.push({ side: s.slot.side, pos: s.slot.pos, mon });
     }
     const names: [string, string] = [cmd.trainers[0].name, cmd.trainers[1].name];
-    if (!(await this.game.intro(cmd.gameType, names, leads))) return false;
+    if (!(await this.game.intro(cmd.gameType, names, leads))) {
+      this.game.note('battle start: the intro failed');
+      return false;
+    }
     for (const s of switchIns) this.introLeads.set(`${s.slot.side}:${s.slot.pos}`, s.mon.name);
     return true;
   }
@@ -195,6 +205,7 @@ export class EmulatorRenderer implements Renderer {
     }
     const battle = this.game.battle();
     if (!battle) return;
+    if (cmd.kind === 'switchIn') this.game.note(`switch-in ${cmd.slot.side}:${cmd.slot.pos} ${cmd.mon.name} (${this.introLeads.has(`${cmd.slot.side}:${cmd.slot.pos}`) ? 'intro lead' : 'sent out'})`);
     if (cmd.kind === 'switchIn' && this.introLeads.get(`${cmd.slot.side}:${cmd.slot.pos}`) === cmd.mon.name) {
       this.introLeads.delete(`${cmd.slot.side}:${cmd.slot.pos}`);
       this.scene ??= this.makeScene();
