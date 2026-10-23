@@ -70,6 +70,11 @@ export class EmulatorRenderer implements Renderer {
     return true;
   }
 
+  /** What BW2 couldn't show in this battle so far, with counts. */
+  get gaps(): ReadonlyMap<string, number> {
+    return this.scene?.gaps ?? new Map();
+  }
+
   /** The Showdown Pokémon in the player's BW2 party slot. */
   playerAt(partyIndex: number): string | undefined {
     return this.scene?.nameAt(0, partyIndex);

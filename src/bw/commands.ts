@@ -83,7 +83,8 @@ export type Command =
   | { kind: 'charge'; user: Slot; move: string; target: Slot | null }
   | { kind: 'cant'; slot: Slot; reason: string; move: string | null }
   /** `hit` is set on damage from a move hit, with what its text will say. */
-  | { kind: 'hp'; slot: Slot; hp: Hp; change: 'damage' | 'heal' | 'set'; from?: Effect; of?: Slot; hit?: Hit }
+  /** `silent` changes the HP with no line (the other half of Pain Split). */
+  | { kind: 'hp'; slot: Slot; hp: Hp; change: 'damage' | 'heal' | 'set'; from?: Effect; of?: Slot; hit?: Hit; silent?: boolean }
   | { kind: 'faint'; slot: Slot }
   | { kind: 'status'; slot: Slot; status: Status | null; from?: Effect }
   /** `absolute` sets the stage (Belly Drum) instead of changing it. */
@@ -94,7 +95,8 @@ export type Command =
   | { kind: 'formChange'; slot: Slot; mon: MonView }
   | { kind: 'transform'; slot: Slot; into: Slot }
   | { kind: 'weather'; weather: Weather | null; upkeep: boolean; from?: Effect }
-  | { kind: 'field'; condition: string; active: boolean }
+  /** `slot` is who started it, if Showdown says. */
+  | { kind: 'field'; condition: string; active: boolean; slot?: Slot }
   | { kind: 'sideCondition'; side: Side; condition: string; active: boolean }
   | { kind: 'text'; key: TextKey; slot?: Slot; target?: Slot; args: string[]; from?: Effect }
   | { kind: 'turn'; turn: number }

@@ -63,15 +63,23 @@ function showWarnings(): void {
   const warning = $('gen-warning');
   warning.hidden = !current.gen || current.gen === 5;
   warning.textContent = `This is a Gen ${current.gen} battle. BW2 can only draw Gen 5 battles faithfully.`;
-  const list = $('unhandled-list');
-  list.replaceChildren(
-    ...[...current.unhandled].map(([cmd, n]) => {
+  showCounts('unhandled', [...current.unhandled].map(([cmd, n]) => [`|${cmd}|`, n]));
+  showCounts('gaps', [...inGame.gaps]);
+}
+
+// Gaps are found as BW2 plays each command, after it was queued.
+setInterval(showWarnings, 1000);
+
+/** Fills a collapsible list of things with counts, hidden while it's empty. */
+function showCounts(id: string, items: [string, number][]): void {
+  $(`${id}-list`).replaceChildren(
+    ...items.map(([what, n]) => {
       const li = document.createElement('li');
-      li.textContent = `|${cmd}| ×${n}`;
+      li.textContent = `${what} ×${n}`;
       return li;
     }),
   );
-  $('unhandled').hidden = current.unhandled.size === 0;
+  $(id).hidden = items.length === 0;
 }
 
 // Live battles, as a guest spectator.

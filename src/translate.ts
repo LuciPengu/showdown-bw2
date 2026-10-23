@@ -163,7 +163,8 @@ export class Translator {
         const change = l.cmd === '-damage' ? 'damage' : l.cmd === '-heal' ? 'heal' : 'set';
         const of = this.slot(kw.of);
         const hit = change === 'damage' && !from ? this.hitOn(slot) : undefined;
-        out.push({ kind: 'hp', slot, hp, change, ...(from && { from }), ...(of && { of }), ...(hit && { hit }) });
+        const silent = 'silent' in kw;
+        out.push({ kind: 'hp', slot, hp, change, ...(from && { from }), ...(of && { of }), ...(hit && { hit }), ...(silent && { silent }) });
         if (hit) this.flushHits(out, slot);
         return;
       }
@@ -224,7 +225,8 @@ export class Translator {
       }
       case '-fieldstart':
       case '-fieldend':
-        out.push({ kind: 'field', condition: stripPrefix(args[0] ?? ''), active: l.cmd === '-fieldstart' });
+        const of = this.slot(kw.of);
+        out.push({ kind: 'field', condition: stripPrefix(args[0] ?? ''), active: l.cmd === '-fieldstart', ...(of && { slot: of }) });
         return;
       case '-sidestart':
       case '-sideend': {
@@ -258,7 +260,7 @@ export class Translator {
       case '-hitcount':
         return this.text(out, 'hitCount', args[0], [args[1] ?? '']);
       case '-start':
-        return this.text(out, 'volatileStart', args[0], args.slice(1).map(stripPrefix), from);
+        return this.text(out, 'volatileStart', args[0], args.slice(1).map(stripPrefix), from, kw.of);
       case '-end':
         return this.text(out, 'volatileEnd', args[0], args.slice(1).map(stripPrefix), from);
       case '-activate':
@@ -270,7 +272,9 @@ export class Translator {
       case '-item':
         return this.text(out, 'item', args[0], [args[1] ?? ''], from, kw.of);
       case '-enditem':
-        return this.text(out, 'endItem', args[0], [args[1] ?? ''], from, kw.of);
+        // How it went: eaten (a berry's effect follows), or weakening a hit.
+        const how = 'eat' in kw ? ['eat'] : 'weaken' in kw ? ['weaken'] : [];
+        return this.text(out, 'endItem', args[0], [args[1] ?? '', ...how], from, kw.of);
       case '-message':
         out.push({ kind: 'text', key: 'message', args: [args[0] ?? ''] });
         return;

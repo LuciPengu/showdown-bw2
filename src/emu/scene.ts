@@ -8,7 +8,7 @@ import { MOVE_NUMBERS } from '../bw/moves';
 import { type ServerCmd, SC } from '../bw/servercmd';
 import { SPECIES } from '../bw/species';
 import { toID } from '../showdown/protocol';
-import { MSG, textMessage } from './messages';
+import { MSG, type MsgResult, SILENT, textMessage } from './messages';
 
 /** A Pokémon to write into a party slot before it's sent out. */
 export interface MonSpec {
@@ -289,7 +289,7 @@ export class Scene {
         } else if (delta !== 0) {
           c.push([SC.UPDATE_HP_GAUGE, monId]);
         }
-        if (cmd.from) {
+        if (cmd.from && !cmd.silent) {
           const msg = textMessage({ kind: 'hpFrom', change: cmd.change, from: cmd.from }, monId, cmd.of && this.monAt(cmd.of));
           this.say(c, msg, `${cmd.change} from ${cmd.from.name}`);
         }
@@ -357,8 +357,7 @@ export class Scene {
       case 'weather': {
         if (cmd.weather && cmd.upkeep) {
           c.push([SC.EFFECT, WEATHER_EFFECTS[cmd.weather]]);
-          const msg = textMessage({ kind: 'weatherUpkeep', weather: cmd.weather });
-          if (msg) c.push(msg);
+          this.say(c, textMessage({ kind: 'weatherUpkeep', weather: cmd.weather }), `${cmd.weather} continues`);
         } else if (cmd.weather) {
           // Gen 5 weather from an ability lasts until replaced; from a move, 5 turns.
           c.push([SC.WEATHER_START, WEATHERS[cmd.weather], cmd.from?.kind === 'ability' ? 0xff : 5]);
@@ -380,7 +379,7 @@ export class Scene {
       case 'cant': {
         const status = cmd.reason as Status;
         if (status in STATUS_EFFECTS) c.push([SC.EFFECT_BY_POS, this.pos(cmd.slot), STATUS_EFFECTS[status]]);
-        const msg = textMessage({ kind: 'cant', reason: cmd.reason }, this.monAt(cmd.slot));
+        const msg = textMessage({ kind: 'cant', reason: cmd.reason, move: cmd.move }, this.monAt(cmd.slot));
         this.say(c, msg, `cant: ${cmd.reason}`);
         return;
       }
@@ -415,9 +414,11 @@ export class Scene {
         return;
       }
       case 'charge':
-        return this.gap(`charge: ${cmd.move}`);
-      case 'field':
-        return this.gap(`field${cmd.active ? 'start' : 'end'}: ${cmd.condition}`);
+        return this.say(c, textMessage({ kind: 'charge', move: cmd.move }, this.monAt(cmd.user)), `charge: ${cmd.move}`);
+      case 'field': {
+        const msg = textMessage({ kind: 'field', condition: cmd.condition, active: cmd.active }, cmd.slot && this.monAt(cmd.slot));
+        return this.say(c, msg, `field${cmd.active ? 'start' : 'end'}: ${cmd.condition}`);
+      }
     }
   }
 
@@ -426,14 +427,14 @@ export class Scene {
   }
 
   /** Adds a line of text, or notes that BW2 has none for it. */
-  private say(c: ServerCmd[], msg: ServerCmd | null, what: string): void {
+  private say(c: ServerCmd[], msg: MsgResult, what: string): void {
+    if (msg === SILENT) return;
     if (msg) c.push(msg);
     else this.gap(what);
   }
 
   private message(c: ServerCmd[], key: 'dragged', monId: number): void {
-    const msg = textMessage({ kind: key }, monId);
-    if (msg) c.push(msg);
+    this.say(c, textMessage({ kind: key }, monId), key);
   }
 
   /** A party index to write an incoming Pokémon into: where it already is, else the next benched slot. */
