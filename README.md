@@ -22,6 +22,10 @@ roll and HP number is Showdown's, and BW2 only draws it.
    bottom-right corner asks for your **Pokémon Black 2 ROM** (US version, `.nds`). Pick it
    once; it stays in your browser.
 
+To update, download the new zip, replace the folder's contents with it, and press the
+reload button (↻) on the extension's card in `chrome://extensions`. Chrome keeps running
+the old version until you do.
+
 ## Use
 
 - Start any **Gen 5** battle: Random Battle, OU, Doubles OU, and so on. It opens like a
