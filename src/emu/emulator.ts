@@ -91,6 +91,11 @@ export class Emulator {
     }
   }
 
+  /** How many frames the game has run. */
+  frames(): number {
+    return this.gameManager.getFrameNum();
+  }
+
   /** Holds a button for `ms`, then lets go and waits `after` ms. */
   async press(button: Button, ms = 100, after = 150): Promise<void> {
     const gm = this.gameManager;

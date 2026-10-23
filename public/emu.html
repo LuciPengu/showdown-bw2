@@ -22,6 +22,12 @@
         document.body.style.color = '#fff';
         document.body.textContent = 'Open this from the app.';
       } else {
+        // Browsers stop animation frames in a hidden tab, which would freeze the game while you watch
+        // your Showdown tab. The core's main loop asks for a frame through this global each time, so
+        // while hidden it gets one from a timer instead. A tab playing sound keeps its timers at full speed.
+        const nativeFrame = window.requestAnimationFrame.bind(window);
+        window.requestAnimationFrame = (callback) =>
+          document.hidden ? setTimeout(() => callback(performance.now()), 1000 / 60) : nativeFrame(callback);
         window.EJS_player = '#game';
         window.EJS_core = 'melonds';
         window.EJS_gameName = 'showdown-bw2.nds';

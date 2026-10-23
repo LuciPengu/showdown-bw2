@@ -14,7 +14,9 @@ const MAIN_PROC_NORMAL = 0x021b19d5; // BattleClient_MainProcNormal | 1 (Thumb)
 
 const ADAPTER = { returnData: 0x04, returnSize: 0x08, returned: 0x0c, cmd: 0x10, size: 0x12, data: 0x14 } as const;
 const CLIENT = { mainModule: 0x00, mainProc: 0x28, adapter: 0x50, clientType: 0x1af, mainSeq: 0x1b0 } as const;
-const MAIN_MODULE = { server: 0x08 } as const;
+const MAIN_MODULE = { setup: 0x00, server: 0x08 } as const;
+/** BtlSetup: the battle style (0 singles, 1 doubles, 2 triples, 3 rotation), and the victory music. */
+const SETUP = { style: 0x04, winBgm: 0x1a } as const;
 const SERVER = { mainModule: 0x0c, state: 0xed } as const;
 
 const BTL_ACMD_SELECT_ACTION = 3;
@@ -41,6 +43,13 @@ export function decodeAction(raw: number): Bw2Action {
 }
 
 export class Bw2Battle {
+  /**
+   * The game's time in milliseconds, which timeouts are measured in. Wall-clock
+   * time by default; set it to the emulator's frames so a paused game (a hidden
+   * tab) never runs out of time.
+   */
+  clock: () => number = () => Date.now();
+
   private constructor(
     private readonly ram: DsRam,
     readonly adapter: number,
@@ -70,6 +79,21 @@ export class Bw2Battle {
     return this.ram.read32(this.client + CLIENT.mainModule);
   }
 
+  /** Whether BW2's own battle logic is paused (taken over). */
+  get paused(): boolean {
+    return this.ram.read8(this.server + SERVER.state) === SERVER_STATE_DONE;
+  }
+
+  /** The battle's style: 0 singles, 1 doubles, 2 triples, 3 rotation. */
+  get style(): number {
+    return this.ram.read32(this.ram.read32(this.mainModule + MAIN_MODULE.setup) + SETUP.style);
+  }
+
+  /** The music BW2 plays when the player wins this battle. */
+  get winBgm(): number {
+    return this.ram.read16(this.ram.read32(this.mainModule + MAIN_MODULE.setup) + SETUP.winBgm);
+  }
+
   /** Whether the battle this was attached to is still the one in memory. */
   get alive(): boolean {
     return this.ram.read32(S_ADAPTERS) === this.adapter && this.ram.read32(this.client + CLIENT.adapter) === this.adapter;
@@ -92,9 +116,9 @@ export class Bw2Battle {
    * the server is paused.
    */
   async closeMenu(press: (button: 'A') => Promise<void>, timeoutMs = 10000): Promise<void> {
-    const end = Date.now() + timeoutMs;
+    const end = this.clock() + timeoutMs;
     while (this.choosing) {
-      if (Date.now() > end) throw new Error("BW2's battle menu didn't close");
+      if (this.clock() > end) throw new Error("BW2's battle menu didn't close");
       await press('A');
       await sleep(350);
     }
@@ -108,9 +132,9 @@ export class Bw2Battle {
    */
   async takeOver(press: (button: 'A') => Promise<void>, timeoutMs = 10000): Promise<void> {
     this.ram.write8(this.server + SERVER.state, SERVER_STATE_DONE);
-    const end = Date.now() + timeoutMs;
+    const end = this.clock() + timeoutMs;
     while (!this.idle) {
-      if (Date.now() > end) throw new Error("BW2's battle menu didn't close");
+      if (this.clock() > end) throw new Error("BW2's battle menu didn't close");
       if (this.choosing) await press('A');
       await sleep(400);
     }
@@ -158,9 +182,9 @@ export class Bw2Battle {
   /** Has the client play a block of server commands, and resolves when it has. */
   async play(block: Uint8Array, timeoutMs = 20000): Promise<void> {
     if (!this.alive) throw new Error('the battle has ended');
-    const end = Date.now() + timeoutMs;
+    const end = this.clock() + timeoutMs;
     while (!this.idle) {
-      if (Date.now() > end) throw new Error('the BW2 battle client is busy');
+      if (this.clock() > end) throw new Error('the BW2 battle client is busy');
       await sleep(30);
     }
     const r = this.ram;
@@ -170,7 +194,7 @@ export class Bw2Battle {
     r.write8(this.adapter + ADAPTER.returned, r.read8(this.adapter + ADAPTER.returned) & 0xf0); // the client reads it next frame
     await sleep(50);
     while (!this.idle) {
-      if (Date.now() > end) {
+      if (this.clock() > end) {
         this.unstick();
         throw new Error('BW2 took too long to play a command, so it was skipped');
       }
