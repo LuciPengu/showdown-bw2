@@ -7,6 +7,11 @@ battles, BW2's own battle scene, animations and text replace Showdown's, and you
 moves and switches on BW2's touch screen. Showdown still runs the battle: every move,
 roll and HP number is Showdown's, and BW2 only draws it.
 
+<p align="center">
+  <img src="docs/screenshots/rated-ou-battle.png" alt="BW2 drawing a Gen 5 OU battle on Showdown: Garchomp against Thundurus, with BW2's Fight menu on the touch screen and the speed buttons beside it" width="420">
+  <img src="docs/screenshots/random-battle.png" alt="BW2 drawing a Gen 5 Random Battle on Showdown: Mismagius against Stoutland, asking what Mismagius will do" width="420">
+</p>
+
 ## Install
 
 1. Download `showdown-bw2-extension.zip` from the [latest release](../../releases/latest)
