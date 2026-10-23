@@ -22,12 +22,13 @@ const nameOf = (ident: string) => ident.replace(/^p\d[a-c]?: /, '');
 /** The player's team as the request lists it, ready to write into BW2's party. */
 export function teamFromRequest(req: ShowdownRequest): TeamMember[] {
   const team: TeamMember[] = [];
-  for (const p of req.side.pokemon) {
+  for (const [i, p] of req.side.pokemon.entries()) {
     const name = nameOf(p.ident);
     const hs = parseHpStatus(p.condition);
     const spec = monSpec({ name, ...parseDetails(p.details) }, { hp: hs.hp, maxHp: hs.maxHp || 1 }, hs.status as Status | null);
     if (!spec) continue;
-    const live = p.active ? req.active?.[0]?.moves : undefined;
+    // The active Pokémon come first, in position order, matching `active`.
+    const live = p.active ? req.active?.[i]?.moves : undefined;
     const moves: BattleMove[] = p.moves.flatMap((id) => {
       const num = moveNumber(id);
       if (!num) return [];
@@ -39,13 +40,32 @@ export function teamFromRequest(req: ShowdownRequest): TeamMember[] {
   return team;
 }
 
-/** The /choose command for what the player picked in BW2, or null if Showdown has no such choice. */
-export function toChoice(action: Bw2Action, req: ShowdownRequest, nameAt: (partyIndex: number) => string | undefined): string | null {
+/** Move targets the player picks in doubles; spread and self-targeting moves take none. */
+const PICKED_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
+
+/** Showdown's target for a BW2 battle position, from the player's side: foes 1 and 2, allies -1 and -2. */
+export function showdownTarget(pos: number): number {
+  const index = (pos >> 1) + 1;
+  return pos & 1 ? index : -index;
+}
+
+/**
+ * One position's part of a /choose command for what the player picked in BW2
+ * for the Pokémon at `position`, or null if Showdown has no such choice.
+ */
+export function toChoice(
+  action: Bw2Action,
+  req: ShowdownRequest,
+  nameAt: (partyIndex: number) => string | undefined,
+  position = 0,
+): string | null {
   if (action.kind === 'fight') {
-    const moves = req.active?.[0]?.moves ?? [];
-    const i = moves.findIndex((m) => moveNumber(m.id) === action.move);
-    if (i >= 0) return `move ${i + 1}`;
-    return moves.length === 1 ? 'move 1' : null; // Struggle and locked moves offer one choice
+    const moves = req.active?.[position]?.moves ?? [];
+    let i = moves.findIndex((m) => moveNumber(m.id) === action.move);
+    if (i < 0 && moves.length === 1) i = 0; // Struggle and locked moves offer one choice
+    if (i < 0) return null;
+    const picked = (req.active?.length ?? 1) > 1 && PICKED_TARGETS.has(moves[i].target ?? '');
+    return picked ? `move ${i + 1} ${showdownTarget(action.target)}` : `move ${i + 1}`;
   }
   if (action.kind === 'switch') {
     const name = nameAt(action.partyIndex);
@@ -56,12 +76,37 @@ export function toChoice(action: Bw2Action, req: ShowdownRequest, nameAt: (party
   return null;
 }
 
+/**
+ * The whole /choose command for BW2's answers to a request: one part per
+ * active position, in order. BW2 answers for the positions that need a choice
+ * (a forced switch, or a Pokémon still standing); the rest pass.
+ */
+export function toChoices(actions: Bw2Action[], req: ShowdownRequest, nameAt: (partyIndex: number) => string | undefined): string | null {
+  const count = Math.max(req.active?.length ?? 0, req.forceSwitch?.length ?? 0, 1);
+  const needs = (i: number) =>
+    req.forceSwitch ? !!req.forceSwitch[i] : !!req.active?.[i] && !req.side.pokemon[i]?.condition.endsWith(' fnt');
+  const parts: string[] = [];
+  let next = 0;
+  for (let i = 0; i < count; i++) {
+    const action = needs(i) ? actions[next++] : undefined;
+    if (!action) {
+      parts.push('pass');
+      continue;
+    }
+    const part = toChoice(action, req, nameAt, i);
+    if (!part) return null;
+    parts.push(part);
+  }
+  return count === 1 ? parts[0] : parts.join(', ');
+}
+
 export interface ChoiceBridgeDeps {
   battle(): Bw2Battle | null;
   renderer: EmulatorRenderer;
   /** Whether everything Showdown sent so far has been shown. */
   caughtUp(): boolean;
-  writeActiveMoves(moves: BattleMove[]): void;
+  /** Sets the moves of the player's Pokémon at a position (its party slot), as the Fight menu shows them. */
+  writeActiveMoves(position: number, moves: BattleMove[]): void;
   send(room: string, text: string): boolean;
   status(text: string, ok: boolean): void;
 }
@@ -124,18 +169,20 @@ export class ChoiceBridge {
     const asking = new AbortController();
     this.asking = asking;
     try {
-      const forced = req.forceSwitch?.[0];
+      const forced = req.forceSwitch?.some(Boolean);
       if (!forced) {
-        const active = req.side.pokemon.find((p) => p.active);
-        if (active && this.deps.renderer.playerAt(0) === nameOf(active.ident)) {
-          const team = teamFromRequest({ ...req, side: { ...req.side, pokemon: [active] } });
-          if (team[0]) this.deps.writeActiveMoves(team[0].moves);
-        }
+        req.side.pokemon.forEach((p, i) => {
+          if (!p.active || !req.active?.[i] || this.deps.renderer.playerAt(i) !== nameOf(p.ident)) return;
+          const [member] = teamFromRequest({ ...req, active: [req.active[i]], side: { ...req.side, pokemon: [p] } });
+          if (member) this.deps.writeActiveMoves(i, member.moves);
+        });
       }
       this.deps.status(forced ? 'Choose a Pokémon to send in, in the game.' : 'Your move: choose in the game.', true);
-      const [action] = await battle.ask(forced ? [0] : null, asking.signal);
+      // A forced switch names the battle positions to fill: the player's are 0, 2, 4.
+      const fainted = forced ? req.forceSwitch!.flatMap((f, i) => (f ? [i * 2] : [])) : null;
+      const actions = await battle.ask(fainted, asking.signal);
       if (this.request !== req) return; // superseded while the menu was open
-      const choice = action && toChoice(action, req, (i) => this.deps.renderer.playerAt(i));
+      const choice = actions.length ? toChoices(actions, req, (i) => this.deps.renderer.playerAt(i)) : null;
       if (!choice) {
         this.deps.status("Showdown doesn't have that choice. Pick again.", false);
         return;

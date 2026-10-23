@@ -1,6 +1,6 @@
 // Draws commands in the running BW2 game, through the scene's plan.
 
-import type { Command } from '../bw/commands';
+import type { Command, GameType } from '../bw/commands';
 import { encodeBlock } from '../bw/servercmd';
 import type { Renderer } from '../director';
 import type { Bw2Battle } from './bw2';
@@ -30,6 +30,8 @@ export interface GameLink {
   press(button: 'A'): Promise<void>;
   /** The battle on screen has ended and BW2 has shown its result. */
   battleOver(): void;
+  /** Gets BW2 into a battle of this style (a savestate of one), if it isn't in one. */
+  prepare(gameType: GameType): Promise<void>;
 }
 
 export class EmulatorRenderer implements Renderer {
@@ -86,13 +88,18 @@ export class EmulatorRenderer implements Renderer {
     this.pendingTeam = null;
   }
 
-  /** A different BW2 battle was taken over: nothing of ours is on its screen. */
-  newGame(): void {
+  /** A different BW2 battle was taken over, with `perSide` Pokémon out a side: nothing of ours is on its screen. */
+  newGame(perSide = 1): void {
     this.scene = null;
-    this.screen = newScreen();
+    this.screen = newScreen(perSide);
   }
 
   async play(cmd: Command, instant: boolean): Promise<void> {
+    try {
+      if (cmd.kind === 'start') await this.game.prepare(cmd.gameType);
+    } catch (e) {
+      this.onError((e as Error).message);
+    }
     const battle = this.game.battle();
     if (!battle) return;
     try {

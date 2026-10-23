@@ -11,6 +11,7 @@ import { ChoiceBridge } from './play';
 import { PreviewRenderer } from './preview';
 import { Session } from './session';
 import { battleRoom, fetchReplay, listenToRelay, spectate } from './sources';
+import type { GameType } from './bw/commands';
 import type { Translator } from './translate';
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -19,7 +20,7 @@ const renderer = new PreviewRenderer([$('side-near'), $('side-far')], $('textbox
 const inGame = new EmulatorRenderer(
   {
     battle: () => (bw2?.alive ? bw2 : null),
-    newScene: (screen) => new Scene(parties!.sides(), screen, bw2!.winBgm),
+    newScene: (screen) => new Scene(parties!.sides(), screen, bw2!.winBgm, perSide(bw2!.style)),
     writeMon: (write) => parties!.write(write),
     growPlayerParty: () => {
       parties!.growParty(0);
@@ -29,6 +30,7 @@ const inGame = new EmulatorRenderer(
     writeTrainer: (client, name) => trainers!.write(client, name),
     press: (button) => emulator!.press(button, 120, 300),
     battleOver: () => void restartBattle(),
+    prepare: (gameType) => prepareBattle(gameType),
   },
   (message) => setStatus($('emu-status'), `BW2: ${message}`, false),
 );
@@ -126,7 +128,7 @@ const choices = new ChoiceBridge({
   battle: () => (bw2?.alive ? bw2 : null),
   renderer: inGame,
   caughtUp: () => director.idle,
-  writeActiveMoves: (moves) => parties?.writeMoves(0, 0, moves),
+  writeActiveMoves: (position, moves) => parties?.writeMoves(0, position, moves),
   send: (room, text) => relay.send(room, text),
   status: (text, ok) => setStatus($('emu-status'), text, ok),
 });
@@ -234,13 +236,37 @@ async function takeOverBattle(emu: Emulator, report = true, clearScreen = true):
   bw2 = battle;
   parties = new BattleParties(ram, battle.mainModule, personal!);
   trainers = new TrainerNames(ram, battle.mainModule, battle.server);
-  inGame.newGame();
+  inGame.newGame(perSide(battle.style));
   if (clearScreen) director.reset(); // the next battle shown starts from this battle's party data
   (window as any).bw.battle = battle;
   (window as any).bw.parties = parties;
   (window as any).bw.trainers = trainers;
   emuStatus('BW2 is drawing: moves play in the game.', true);
   return true;
+}
+
+/** How many Pokémon each side has out in a BW2 battle style (0 singles, 1 doubles, 2 triples, 3 rotation). */
+function perSide(style: number): number {
+  return style === 1 ? 2 : style === 2 ? 3 : 1;
+}
+
+const STYLES: Record<GameType, number> = { singles: 0, doubles: 1, triples: 2, rotation: 3 };
+/** Savestates of a battle in each style: the dev server's STATE for singles, savestates/ for the rest. */
+const STYLE_STATES: Partial<Record<GameType, string>> = { singles: '/state', doubles: '/savestates/battle-doubles.state' };
+
+/** When Showdown's battle is another style than BW2's (doubles in a singles battle), loads a savestate of one. */
+async function prepareBattle(gameType: GameType): Promise<void> {
+  const emu = emulator;
+  if (!emu || !bw2 || bw2.style === STYLES[gameType]) return;
+  const url = STYLE_STATES[gameType];
+  if (!url) throw new Error(`there's no savestate of a ${gameType} battle, so this one is drawn in the wrong style`);
+  emuStatus(`Switching BW2 to a ${gameType} battle…`);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`no ${gameType} savestate at ${url}`);
+  emu.loadState(new Uint8Array(await res.arrayBuffer()));
+  await new Promise((r) => setTimeout(r, 1000));
+  if (!(await takeOverBattle(emu, false, false))) throw new Error(`the ${gameType} savestate isn't in a battle`);
+  if (bw2.style !== STYLES[gameType]) throw new Error(`the savestate at ${url} isn't a ${gameType} battle`);
 }
 
 /** How long BW2's result line stays up before the game goes back to a fresh battle. */

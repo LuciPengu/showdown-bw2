@@ -52,8 +52,9 @@ export interface Screen {
   out: boolean[];
 }
 
-export function newScreen(): Screen {
-  return { out: [true, true, false, false, false, false] };
+/** The screen of a battle that has just started: `perSide` Pokémon out on each side (2 in doubles). */
+export function newScreen(perSide = 1): Screen {
+  return { out: [0, 1, 2, 3, 4, 5].map((pos) => pos < perSide * 2) };
 }
 
 /** A side of the battle as BW2 has it. */
@@ -121,9 +122,9 @@ function scaleHp(percent: number, maxHp: number): number {
 export class Scene {
   /** Showdown's Pokémon by party index, per side: what's written into each slot. */
   private written: [Map<number, string>, Map<number, string>] = [new Map(), new Map()];
-  /** Whether each side's active Pokémon is still the one BW2 started with. */
-  private placeholder = [true, true];
-  private nextBench = [1, 1];
+  /** Slots (side * 4 + pos) whose Pokémon is no longer the one BW2 started with. */
+  private replaced = new Set<number>();
+  private nextBench: [number, number];
   private turn = 1;
   private lastMove = 0;
   private weather: Weather | null = null;
@@ -137,12 +138,19 @@ export class Scene {
   /** What BW2 couldn't show (no line or animation mapped yet), with counts. */
   readonly gaps = new Map<string, number>();
 
-  /** `winBgm` is the battle's victory music (from its BtlSetup), 0 for none. */
+  /**
+   * `winBgm` is the battle's victory music (from its BtlSetup), 0 for none.
+   * `perSide` is how many Pokémon each side has out: 1 in singles, 2 in doubles.
+   * They're the first party slots.
+   */
   constructor(
     private readonly sides: [Bw2Side, Bw2Side],
     private readonly screen: Screen = newScreen(),
     private readonly winBgm = 0,
-  ) {}
+    private readonly perSide = 1,
+  ) {
+    this.nextBench = [perSide, perSide];
+  }
 
   /** Recalls the Pokémon at a slot if one is on screen. */
   private recall(c: ServerCmd[], slot: Slot): void {
@@ -224,17 +232,17 @@ export class Scene {
         if (this.screen.out[this.pos(cmd.slot)]) c.push([SC.RECALL_MSG, this.sides[cmd.slot.side].client, monId]);
         this.recall(c, cmd.slot);
         c.push([SC.OP_CLEAR_FOR_SWITCH, monId]);
-        this.placeholder[cmd.slot.side] = false;
+        this.replaced.add(this.slotKey(cmd.slot));
         return;
       }
       case 'switchIn': {
         const side = this.sides[cmd.slot.side];
-        if (this.placeholder[cmd.slot.side]) {
+        if (!this.replaced.has(this.slotKey(cmd.slot))) {
           // BW2's own Pokémon from the savestate leaves without a word.
           const monId = this.monAt(cmd.slot);
           this.recall(c, cmd.slot);
           c.push([SC.OP_CLEAR_FOR_SWITCH, monId]);
-          this.placeholder[cmd.slot.side] = false;
+          this.replaced.add(this.slotKey(cmd.slot));
         }
         const spec = monSpec(cmd.mon, cmd.hp, cmd.status);
         if (!spec) return;
@@ -437,23 +445,27 @@ export class Scene {
     this.say(c, textMessage({ kind: key }, monId), key);
   }
 
-  /** A party index to write an incoming Pokémon into: where it already is, else the next benched slot. */
+  /**
+   * A party index to write an incoming Pokémon into: where it already is, else
+   * the next benched slot (the active Pokémon hold the first `perSide`).
+   */
   private benchFor(slot: Slot, name: string): number {
     const side = this.sides[slot.side];
     const written = this.written[slot.side];
-    for (const [index, n] of written) if (n === name) return index;
+    for (const [index, n] of written) if (n === name && (index >= this.perSide || index === slot.pos)) return index;
     const count = side.order.length;
-    if (count < 2) return slot.pos;
+    if (count <= this.perSide) return slot.pos;
     let index = this.nextBench[slot.side];
-    if (index === slot.pos || index >= count) index = slot.pos === 1 ? 2 % count : 1;
-    this.nextBench[slot.side] = index + 1 >= count ? 1 : index + 1;
+    if (index >= count) index = this.perSide;
+    this.nextBench[slot.side] = index + 1 >= count ? this.perSide : index + 1;
     return index;
   }
 
   private activeSlots(): Slot[] {
-    return [
-      { side: 0, pos: 0 },
-      { side: 1, pos: 0 },
-    ];
+    return ([0, 1] as const).flatMap((side) => Array.from({ length: this.perSide }, (_, pos) => ({ side, pos })));
+  }
+
+  private slotKey(slot: Slot): number {
+    return slot.side * 4 + slot.pos;
   }
 }
