@@ -1,0 +1,575 @@
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up.
+|t:|1792769108
+|gametype|singles
+|player|p1|mentalsoft|winona-gen6|
+|player|p2|leppadparadscha2|1|
+|gen|5
+|tier|[Gen 5] OU
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokemon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Moves Clause: Sleep-inducing moves are banned
+|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats
+|clearpoke
+|poke|p1|Politoed, M|item
+|poke|p1|Tentacruel, F|item
+|poke|p1|Ferrothorn, F|item
+|poke|p1|Keldeo-Resolute|item
+|poke|p1|Thundurus-Therian, M|item
+|poke|p1|Latios, M|item
+|poke|p2|Heatran, M|item
+|poke|p2|Gliscor, M|item
+|poke|p2|Ferrothorn, F|item
+|poke|p2|Tyranitar, F|item
+|poke|p2|Latios, M|item
+|poke|p2|Reuniclus, M|item
+|teampreview
+|c|☆mentalsoft|hf
+|inactive|leppadparadscha2 has 270 seconds left.
+|inactive|leppadparadscha2 has 240 seconds left.
+|
+|t:|1792769188
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Politoed|Politoed, M|100/100
+|switch|p2a: Heatran|Heatran, M|100/100
+|-weather|RainDance|[from] ability: Drizzle|[of] p1a: Politoed
+|turn|1
+|
+|t:|1792769199
+|switch|p1a: Keldeo|Keldeo-Resolute|100/100
+|move|p2a: Heatran|Stealth Rock|p1a: Keldeo
+|-sidestart|p1: mentalsoft|move: Stealth Rock
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|turn|2
+|inactive|mentalsoft has 270 seconds left.
+|inactive|leppadparadscha2 has 270 seconds left.
+|
+|t:|1792769235
+|move|p2a: Heatran|Protect|p2a: Heatran
+|-singleturn|p2a: Heatran|Protect
+|move|p1a: Keldeo|Surf|p2a: Heatran
+|-activate|p2a: Heatran|move: Protect
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|turn|3
+|inactive|mentalsoft has 270 seconds left.
+|inactive|leppadparadscha2 has 270 seconds left.
+|
+|t:|1792769279
+|switch|p2a: Latios|Latios, M|100/100
+|move|p1a: Keldeo|Surf|p2a: Latios
+|-resisted|p2a: Latios
+|-damage|p2a: Latios|47/100
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|turn|4
+|inactive|leppadparadscha2 disconnected and has 300 seconds to reconnect!
+|player|p2|
+|inactive|leppadparadscha2 reconnected and has 250 seconds left.
+|player|p2|leppadparadscha2|1|
+|inactive|leppadparadscha2 has 240 seconds left.
+|c|☆leppadparadscha2|Test
+|inactive|leppadparadscha2 has 210 seconds left.
+|inactive|leppadparadscha2 has 180 seconds left.
+|
+|t:|1792769399
+|switch|p1a: Ferrothorn|Ferrothorn, F|100/100
+|-damage|p1a: Ferrothorn|94/100|[from] Stealth Rock
+|move|p2a: Latios|Roost|p2a: Latios
+|-heal|p2a: Latios|98/100
+|-singleturn|p2a: Latios|move: Roost
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Ferrothorn|100/100|[from] item: Leftovers
+|upkeep
+|turn|5
+|inactive|leppadparadscha2 has 180 seconds left.
+|
+|t:|1792769416
+|switch|p2a: Ferrothorn|Ferrothorn, F|100/100
+|move|p1a: Ferrothorn|Stealth Rock|p2a: Ferrothorn
+|-sidestart|p2: leppadparadscha2|move: Stealth Rock
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|turn|6
+|
+|t:|1792769421
+|move|p2a: Ferrothorn|Spikes|p1a: Ferrothorn
+|-sidestart|p1: mentalsoft|Spikes
+|move|p1a: Ferrothorn|Spikes|p2a: Ferrothorn
+|-sidestart|p2: leppadparadscha2|Spikes
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|turn|7
+|
+|t:|1792769426
+|switch|p2a: Gliscor|Gliscor, M|100/100
+|-damage|p2a: Gliscor|88/100|[from] Stealth Rock
+|move|p1a: Ferrothorn|Spikes|p2a: Gliscor
+|-sidestart|p2: leppadparadscha2|Spikes
+|
+|-weather|RainDance|[upkeep]
+|-status|p2a: Gliscor|tox|[from] item: Toxic Orb
+|upkeep
+|turn|8
+|inactive|mentalsoft has 270 seconds left.
+|inactive|leppadparadscha2 has 180 seconds left.
+|inactive|mentalsoft has 240 seconds left.
+|
+|t:|1792769490
+|switch|p1a: Thundurus|Thundurus-Therian, M|100/100
+|-damage|p1a: Thundurus|76/100|[from] Stealth Rock
+|move|p2a: Gliscor|Knock Off|p1a: Thundurus
+|-damage|p1a: Thundurus|69/100
+|-enditem|p1a: Thundurus|Leftovers|[from] move: Knock Off|[of] p2a: Gliscor
+|
+|-weather|RainDance|[upkeep]
+|-heal|p2a: Gliscor|100/100 tox|[from] ability: Poison Heal
+|upkeep
+|turn|9
+|inactive|mentalsoft has 210 seconds left.
+|inactive|leppadparadscha2 has 150 seconds left.
+|
+|t:|1792769527
+|switch|p2a: Heatran|Heatran, M|100/100
+|-damage|p2a: Heatran|88/100|[from] Stealth Rock
+|-damage|p2a: Heatran|71/100|[from] Spikes
+|move|p1a: Thundurus|Hidden Power|p2a: Heatran
+|-resisted|p2a: Heatran
+|-damage|p2a: Heatran|67/100
+|
+|-weather|RainDance|[upkeep]
+|-heal|p2a: Heatran|74/100|[from] item: Leftovers
+|upkeep
+|turn|10
+|inactive|leppadparadscha2 has 150 seconds left.
+|
+|t:|1792769542
+|move|p1a: Thundurus|Nasty Plot|p1a: Thundurus
+|-boost|p1a: Thundurus|spa|2
+|move|p2a: Heatran|Roar|p1a: Thundurus
+|drag|p1a: Tentacruel|Tentacruel, F|100/100
+|-damage|p1a: Tentacruel|88/100|[from] Stealth Rock
+|-damage|p1a: Tentacruel|76/100|[from] Spikes
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|82/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|88/100|[from] item: Black Sludge
+|-heal|p2a: Heatran|80/100|[from] item: Leftovers
+|upkeep
+|turn|11
+|inactive|leppadparadscha2 has 150 seconds left.
+|inactive|leppadparadscha2 has 120 seconds left.
+|
+|t:|1792769593
+|switch|p2a: Reuniclus|Reuniclus, M|100/100
+|move|p1a: Tentacruel|Rapid Spin|p2a: Reuniclus
+|-damage|p2a: Reuniclus|98/100
+|-sideend|p1: mentalsoft|Spikes|[from] move: Rapid Spin|[of] p1a: Tentacruel
+|-sideend|p1: mentalsoft|Stealth Rock|[from] move: Rapid Spin|[of] p1a: Tentacruel
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|94/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|99/100|[from] item: Black Sludge
+|upkeep
+|turn|12
+|
+|t:|1792769619
+|switch|p1a: Politoed|Politoed, M|100/100
+|move|p2a: Reuniclus|Psychic|p1a: Politoed
+|-damage|p1a: Politoed|54/100
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Politoed|60/100|[from] item: Leftovers
+|upkeep
+|turn|13
+|inactive|mentalsoft has 180 seconds left.
+|
+|t:|1792769652
+|move|p1a: Politoed|Scald|p2a: Reuniclus
+|-damage|p2a: Reuniclus|64/100
+|move|p2a: Reuniclus|Psychic|p1a: Politoed
+|-damage|p1a: Politoed|10/100
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Politoed|16/100|[from] item: Leftovers
+|upkeep
+|turn|14
+|inactive|mentalsoft has 180 seconds left.
+|
+|t:|1792769687
+|switch|p1a: Latios|Latios, M|100/100
+|switch|p2a: Tyranitar|Tyranitar, F|100/100
+|-damage|p2a: Tyranitar|88/100|[from] Stealth Rock
+|-damage|p2a: Tyranitar|72/100|[from] Spikes
+|-weather|Sandstorm|[from] ability: Sand Stream|[of] p2a: Tyranitar
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Latios|95/100|[from] Sandstorm
+|upkeep
+|turn|15
+|inactive|leppadparadscha2 has 90 seconds left.
+|
+|t:|1792769702
+|move|p1a: Latios|Surf|p2a: Tyranitar
+|-supereffective|p2a: Tyranitar
+|-damage|p2a: Tyranitar|27/100
+|move|p2a: Tyranitar|Crunch|p1a: Latios
+|-supereffective|p1a: Latios
+|-damage|p1a: Latios|0 fnt
+|faint|p1a: Latios
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|inactive|mentalsoft has 150 seconds left.
+|
+|t:|1792769717
+|switch|p1a: Keldeo|Keldeo-Resolute|100/100
+|turn|16
+|inactive|leppadparadscha2 has 90 seconds left.
+|inactive|leppadparadscha2 has 60 seconds left.
+|inactive|leppadparadscha2 has 30 seconds left.
+|
+|t:|1792769798
+|move|p2a: Tyranitar|Crunch|p1a: Keldeo
+|-resisted|p1a: Keldeo
+|-damage|p1a: Keldeo|78/100
+|-ability|p1a: Keldeo|Justified|boost
+|-boost|p1a: Keldeo|atk|1
+|move|p1a: Keldeo|Hidden Power|p2a: Tyranitar
+|-supereffective|p2a: Tyranitar
+|-damage|p2a: Tyranitar|0 fnt
+|faint|p2a: Tyranitar
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Keldeo|71/100|[from] Sandstorm
+|upkeep
+|inactive|leppadparadscha2 has 30 seconds left this turn.
+|inactive|leppadparadscha2 has 20 seconds left.
+|inactive|leppadparadscha2 has 15 seconds left.
+|inactive|leppadparadscha2 has 10 seconds left.
+|inactive|leppadparadscha2 has 5 seconds left.
+|
+|t:|1792769823
+|switch|p2a: Ferrothorn|Ferrothorn, F|100/100
+|-damage|p2a: Ferrothorn|94/100|[from] Stealth Rock
+|-damage|p2a: Ferrothorn|78/100|[from] Spikes
+|turn|17
+|inactive|leppadparadscha2 has 15 seconds left this turn.
+|
+|t:|1792769830
+|switch|p1a: Politoed|Politoed, M|16/100
+|-weather|RainDance|[from] ability: Drizzle|[of] p1a: Politoed
+|move|p2a: Ferrothorn|Spikes|p1a: Politoed
+|-sidestart|p1: mentalsoft|Spikes
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Politoed|22/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|84/100|[from] item: Leftovers
+|upkeep
+|turn|18
+|inactive|leppadparadscha2 has 25 seconds left this turn.
+|inactive|leppadparadscha2 has 20 seconds left.
+|
+|t:|1792769837
+|move|p1a: Politoed|Encore|p2a: Ferrothorn
+|-start|p2a: Ferrothorn|Encore
+|move|p2a: Ferrothorn|Spikes|p1a: Politoed
+|-sidestart|p1: mentalsoft|Spikes
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Politoed|28/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|90/100|[from] item: Leftovers
+|upkeep
+|turn|19
+|inactive|leppadparadscha2 has 30 seconds left this turn.
+|inactive|mentalsoft has 180 seconds left.
+|
+|t:|1792769844
+|move|p1a: Politoed|Scald|p2a: Ferrothorn
+|-resisted|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|78/100
+|move|p2a: Ferrothorn|Spikes|p1a: Politoed
+|-sidestart|p1: mentalsoft|Spikes
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Politoed|34/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|85/100|[from] item: Leftovers
+|upkeep
+|turn|20
+|inactive|leppadparadscha2 has 30 seconds left.
+|
+|t:|1792769849
+|switch|p2a: Gliscor|Gliscor, M|100/100 tox
+|-damage|p2a: Gliscor|88/100 tox|[from] Stealth Rock
+|move|p1a: Politoed|Scald|p2a: Gliscor
+|-supereffective|p2a: Gliscor
+|-damage|p2a: Gliscor|0 fnt
+|faint|p2a: Gliscor
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Politoed|40/100|[from] item: Leftovers
+|upkeep
+|inactive|leppadparadscha2 has 30 seconds left.
+|
+|t:|1792769855
+|switch|p2a: Latios|Latios, M|98/100
+|-damage|p2a: Latios|85/100|[from] Stealth Rock
+|turn|21
+|inactive|mentalsoft has 180 seconds left.
+|
+|t:|1792769900
+|switch|p1a: Ferrothorn|Ferrothorn, F|100/100
+|-damage|p1a: Ferrothorn|75/100|[from] Spikes
+|move|p2a: Latios|Draco Meteor|p1a: Ferrothorn
+|-resisted|p1a: Ferrothorn
+|-damage|p1a: Ferrothorn|39/100
+|-unboost|p2a: Latios|spa|2
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Ferrothorn|45/100|[from] item: Leftovers
+|upkeep
+|turn|22
+|
+|t:|1792769922
+|switch|p2a: Reuniclus|Reuniclus, M|64/100
+|switch|p1a: Tentacruel|Tentacruel, F|99/100
+|-damage|p1a: Tentacruel|75/100|[from] Spikes
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|81/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|87/100|[from] item: Black Sludge
+|upkeep
+|turn|23
+|inactive|mentalsoft has 150 seconds left.
+|inactive|leppadparadscha2 has 30 seconds left.
+|inactive|mentalsoft has 120 seconds left.
+|
+|t:|1792769984
+|move|p1a: Tentacruel|Rapid Spin|p2a: Reuniclus
+|-damage|p2a: Reuniclus|61/100
+|-sideend|p1: mentalsoft|Spikes|[from] move: Rapid Spin|[of] p1a: Tentacruel
+|move|p2a: Reuniclus|Trick Room|p2a: Reuniclus
+|-fieldstart|move: Trick Room|[of] p2a: Reuniclus
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|93/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|99/100|[from] item: Black Sludge
+|upkeep
+|turn|24
+|
+|t:|1792769988
+|move|p1a: Tentacruel|Protect|p1a: Tentacruel
+|-singleturn|p1a: Tentacruel|Protect
+|move|p2a: Reuniclus|Recover|p2a: Reuniclus
+|-heal|p2a: Reuniclus|100/100
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|100/100|[from] ability: Rain Dish
+|upkeep
+|turn|25
+|inactive|mentalsoft has 120 seconds left.
+|inactive|leppadparadscha2 has 30 seconds left.
+|inactive|leppadparadscha2 has 20 seconds left.
+|
+|t:|1792770023
+|switch|p1a: Ferrothorn|Ferrothorn, F|45/100
+|move|p2a: Reuniclus|Psychic|p1a: Ferrothorn
+|-resisted|p1a: Ferrothorn
+|-damage|p1a: Ferrothorn|22/100
+|-unboost|p1a: Ferrothorn|spd|1
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Ferrothorn|28/100|[from] item: Leftovers
+|upkeep
+|turn|26
+|inactive|leppadparadscha2 has 30 seconds left this turn.
+|
+|t:|1792770030
+|switch|p1a: Politoed|Politoed, M|40/100
+|move|p2a: Reuniclus|Psychic|p1a: Politoed
+|-damage|p1a: Politoed|0 fnt
+|faint|p1a: Politoed
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|inactive|mentalsoft has 90 seconds left.
+|
+|t:|1792770064
+|switch|p1a: Ferrothorn|Ferrothorn, F|28/100
+|turn|27
+|inactive|mentalsoft has 90 seconds left.
+|inactive|leppadparadscha2 has 30 seconds left.
+|
+|t:|1792770087
+|move|p1a: Ferrothorn|Spikes|p2a: Reuniclus
+|-sidestart|p2: leppadparadscha2|Spikes
+|move|p2a: Reuniclus|Psychic|p1a: Ferrothorn
+|-resisted|p1a: Ferrothorn
+|-crit|p1a: Ferrothorn
+|-damage|p1a: Ferrothorn|0 fnt
+|faint|p1a: Ferrothorn
+|
+|-weather|RainDance|[upkeep]
+|-fieldend|move: Trick Room
+|upkeep
+|
+|t:|1792770092
+|switch|p1a: Keldeo|Keldeo-Resolute|71/100
+|turn|28
+|
+|t:|1792770101
+|switch|p2a: Heatran|Heatran, M|80/100
+|-damage|p2a: Heatran|67/100|[from] Stealth Rock
+|-damage|p2a: Heatran|42/100|[from] Spikes
+|move|p1a: Keldeo|Surf|p2a: Heatran
+|-supereffective|p2a: Heatran
+|-damage|p2a: Heatran|0 fnt
+|faint|p2a: Heatran
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|
+|t:|1792770106
+|switch|p2a: Latios|Latios, M|85/100
+|-damage|p2a: Latios|73/100|[from] Stealth Rock
+|turn|29
+|
+|t:|1792770116
+|switch|p1a: Tentacruel|Tentacruel, F|100/100
+|move|p2a: Latios|Draco Meteor|p1a: Tentacruel
+|-damage|p1a: Tentacruel|20/100
+|-unboost|p2a: Latios|spa|2
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|26/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|32/100|[from] item: Black Sludge
+|upkeep
+|turn|30
+|
+|t:|1792770128
+|switch|p2a: Reuniclus|Reuniclus, M|100/100
+|move|p1a: Tentacruel|Protect||[still]
+|-fail|p1a: Tentacruel
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|39/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|45/100|[from] item: Black Sludge
+|upkeep
+|turn|31
+|
+|t:|1792770133
+|move|p1a: Tentacruel|Scald|p2a: Reuniclus
+|-damage|p2a: Reuniclus|68/100
+|move|p2a: Reuniclus|Trick Room|p2a: Reuniclus
+|-fieldstart|move: Trick Room|[of] p2a: Reuniclus
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|51/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|57/100|[from] item: Black Sludge
+|upkeep
+|turn|32
+|
+|t:|1792770145
+|move|p1a: Tentacruel|Protect|p1a: Tentacruel
+|-singleturn|p1a: Tentacruel|Protect
+|move|p2a: Reuniclus|Psychic|p1a: Tentacruel
+|-activate|p1a: Tentacruel|move: Protect
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|63/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|69/100|[from] item: Black Sludge
+|upkeep
+|turn|33
+|inactive|mentalsoft has 90 seconds left.
+|
+|t:|1792770180
+|switch|p1a: Thundurus|Thundurus-Therian, M|69/100
+|move|p2a: Reuniclus|Psychic|p1a: Thundurus
+|-damage|p1a: Thundurus|0 fnt
+|faint|p1a: Thundurus
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|
+|t:|1792770183
+|switch|p1a: Tentacruel|Tentacruel, F|69/100
+|turn|34
+|
+|t:|1792770187
+|move|p1a: Tentacruel|Protect|p1a: Tentacruel
+|-singleturn|p1a: Tentacruel|Protect
+|move|p2a: Reuniclus|Recover|p2a: Reuniclus
+|-heal|p2a: Reuniclus|100/100
+|
+|-weather|RainDance|[upkeep]
+|-heal|p1a: Tentacruel|75/100|[from] ability: Rain Dish
+|-heal|p1a: Tentacruel|81/100|[from] item: Black Sludge
+|upkeep
+|turn|35
+|
+|t:|1792770192
+|move|p1a: Tentacruel|Protect||[still]
+|-fail|p1a: Tentacruel
+|move|p2a: Reuniclus|Psychic|p1a: Tentacruel
+|-supereffective|p1a: Tentacruel
+|-damage|p1a: Tentacruel|0 fnt
+|faint|p1a: Tentacruel
+|
+|-weather|RainDance|[upkeep]
+|-fieldend|move: Trick Room
+|upkeep
+|
+|t:|1792770195
+|switch|p1a: Keldeo|Keldeo-Resolute|71/100
+|turn|36
+|inactive|mentalsoft has 120 seconds left.
+|
+|t:|1792770201
+|move|p1a: Keldeo|Surf|p2a: Reuniclus
+|-damage|p2a: Reuniclus|0 fnt
+|faint|p2a: Reuniclus
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|
+|t:|1792770214
+|switch|p2a: Ferrothorn|Ferrothorn, F|85/100
+|-damage|p2a: Ferrothorn|78/100|[from] Stealth Rock
+|-damage|p2a: Ferrothorn|53/100|[from] Spikes
+|turn|37
+|
+|t:|1792770218
+|move|p2a: Ferrothorn|Protect|p2a: Ferrothorn
+|-singleturn|p2a: Ferrothorn|Protect
+|move|p1a: Keldeo|Surf|p2a: Ferrothorn
+|-activate|p2a: Ferrothorn|move: Protect
+|
+|-weather|RainDance|[upkeep]
+|-heal|p2a: Ferrothorn|60/100|[from] item: Leftovers
+|upkeep
+|turn|38
+|
+|t:|1792770221
+|move|p1a: Keldeo|Surf|p2a: Ferrothorn
+|-resisted|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|21/100
+|move|p2a: Ferrothorn|Power Whip|p1a: Keldeo
+|-supereffective|p1a: Keldeo
+|-damage|p1a: Keldeo|0 fnt
+|faint|p1a: Keldeo
+|
+|win|leppadparadscha2
+|c|☆mentalsoft|gg

@@ -1,0 +1,421 @@
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up.
+|t:|1792195206
+|gametype|doubles
+|player|p1|Razachu|#wcop2026oceania2|
+|player|p2|crow crumbs|#puclibluelockon|
+|gen|5
+|tier|[Gen 5] Doubles OU
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokémon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|clearpoke
+|poke|p1|Thundurus, M|item
+|poke|p1|Landorus-Therian, M|item
+|poke|p1|Metagross|item
+|poke|p1|Jellicent, M|item
+|poke|p1|Amoonguss, M|item
+|poke|p1|Kyurem-Black|item
+|poke|p2|Rotom-Wash|item
+|poke|p2|Genesect-*|item
+|poke|p2|Landorus-Therian, M|item
+|poke|p2|Scrafty, F|item
+|poke|p2|Latios, M|item
+|poke|p2|Kyurem-Black|item
+|teampreview
+|inactive|crow crumbs also wants the timer to be on.
+|c|☆crow crumbs|hf
+|c|☆Razachu|u2
+|
+|t:|1792195236
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Landorus|Landorus-Therian, M|100/100
+|switch|p1b: Thundurus|Thundurus, M|100/100
+|switch|p2a: Landorus|Landorus-Therian, M|100/100
+|switch|p2b: Kyurem|Kyurem-Black|100/100
+|-ability|p1a: Landorus|Intimidate|boost
+|-unboost|p2a: Landorus|atk|1
+|-unboost|p2b: Kyurem|atk|1
+|-ability|p2b: Kyurem|Teravolt
+|-ability|p2a: Landorus|Intimidate|boost
+|-unboost|p1a: Landorus|atk|1
+|-unboost|p1b: Thundurus|atk|1
+|turn|1
+|
+|t:|1792195262
+|move|p2b: Kyurem|Protect|p2b: Kyurem
+|-singleturn|p2b: Kyurem|Protect
+|move|p1b: Thundurus|Thunder Wave|p2b: Kyurem
+|-activate|p2b: Kyurem|move: Protect
+|move|p1a: Landorus|U-turn|p2a: Landorus
+|-resisted|p2a: Landorus
+|-damage|p2a: Landorus|91/100
+|
+|t:|1792195269
+|switch|p1a: Metagross|Metagross|100/100|[from] U-turn
+|move|p2a: Landorus|Stealth Rock|p1a: Metagross
+|-sidestart|p1: Razachu|move: Stealth Rock
+|
+|upkeep
+|turn|2
+|
+|t:|1792195294
+|switch|p2b: Rotom|Rotom-Wash|100/100
+|move|p1b: Thundurus|Hidden Power|p2a: Landorus
+|-supereffective|p2a: Landorus
+|-crit|p2a: Landorus
+|-damage|p2a: Landorus|0 fnt
+|faint|p2a: Landorus
+|move|p1a: Metagross|Meteor Mash|p2b: Rotom
+|-resisted|p2b: Rotom
+|-crit|p2b: Rotom
+|-damage|p2b: Rotom|72/100
+|-boost|p1a: Metagross|atk|1
+|
+|upkeep
+|inactive|crow crumbs has 270 seconds left.
+|inactive|crow crumbs has 240 seconds left.
+|inactive|crow crumbs has 210 seconds left.
+|
+|t:|1792195389
+|switch|p2a: Genesect|Genesect, shiny|100/100
+|-ability|p2a: Genesect|Download|boost
+|-boost|p2a: Genesect|spa|1
+|turn|3
+|
+|t:|1792195399
+|move|p1a: Metagross|Protect|p1a: Metagross
+|-singleturn|p1a: Metagross|Protect
+|move|p1b: Thundurus|Thunder Wave|p2a: Genesect
+|-status|p2a: Genesect|par
+|move|p2b: Rotom|Trick|p1b: Thundurus
+|-activate|p2b: Rotom|move: Trick|[of] p1b: Thundurus
+|-item|p1b: Thundurus|Choice Scarf|[from] move: Trick
+|-item|p2b: Rotom|Sitrus Berry|[from] move: Trick
+|move|p2a: Genesect|Flamethrower|p1a: Metagross
+|-activate|p1a: Metagross|move: Protect
+|
+|upkeep
+|turn|4
+|
+|t:|1792195412
+|move|p1b: Thundurus|Thunder Wave|p2b: Rotom
+|-status|p2b: Rotom|par
+|cant|p2b: Rotom|par
+|move|p1a: Metagross|Substitute|p1a: Metagross
+|-start|p1a: Metagross|Substitute
+|-damage|p1a: Metagross|75/100
+|move|p2a: Genesect|Flamethrower|p1a: Metagross
+|-supereffective|p1a: Metagross
+|-end|p1a: Metagross|Substitute
+|
+|-heal|p1a: Metagross|82/100|[from] item: Leftovers
+|upkeep
+|turn|5
+|inactive|crow crumbs has 240 seconds left.
+|inactive|Razachu has 270 seconds left.
+|
+|t:|1792195464
+|switch|p1b: Landorus|Landorus-Therian, M|100/100
+|-damage|p1b: Landorus|88/100|[from] Stealth Rock
+|-ability|p1b: Landorus|Intimidate|boost
+|-unboost|p2a: Genesect|atk|1
+|-unboost|p2b: Rotom|atk|1
+|move|p1a: Metagross|Protect|p1a: Metagross
+|-singleturn|p1a: Metagross|Protect
+|cant|p2a: Genesect|par
+|move|p2b: Rotom|Will-O-Wisp|p1b: Landorus
+|-status|p1b: Landorus|brn
+|
+|-heal|p1a: Metagross|88/100|[from] item: Leftovers
+|-damage|p1b: Landorus|76/100 brn|[from] brn
+|upkeep
+|turn|6
+|
+|t:|1792195487
+|move|p1b: Landorus|U-turn|p2a: Genesect
+|-resisted|p2a: Genesect
+|-damage|p2a: Genesect|92/100 par
+|
+|t:|1792195490
+|switch|p1b: Jellicent|Jellicent, M|100/100|[from] U-turn
+|-damage|p1b: Jellicent|88/100|[from] Stealth Rock
+|move|p1a: Metagross|Substitute|p1a: Metagross
+|-start|p1a: Metagross|Substitute
+|-damage|p1a: Metagross|63/100
+|move|p2a: Genesect|Flamethrower|p1a: Metagross
+|-supereffective|p1a: Metagross
+|-end|p1a: Metagross|Substitute
+|move|p2b: Rotom|Volt Switch|p1a: Metagross
+|-damage|p1a: Metagross|40/100
+|
+|t:|1792195506
+|switch|p2b: Kyurem|Kyurem-Black|100/100|[from] Volt Switch
+|-ability|p2b: Kyurem|Teravolt
+|
+|-heal|p1a: Metagross|46/100|[from] item: Leftovers
+|-heal|p1b: Jellicent|94/100|[from] item: Leftovers
+|upkeep
+|turn|7
+|
+|t:|1792195520
+|move|p2b: Kyurem|Substitute|p2b: Kyurem
+|-start|p2b: Kyurem|Substitute
+|-damage|p2b: Kyurem|76/100
+|move|p1a: Metagross|Meteor Mash|p2b: Kyurem|[miss]
+|-miss|p1a: Metagross|p2b: Kyurem
+|move|p1b: Jellicent|Toxic|p2b: Kyurem|[miss]
+|-miss|p1b: Jellicent|p2b: Kyurem
+|cant|p2a: Genesect|par
+|
+|-heal|p2b: Kyurem|82/100|[from] item: Leftovers
+|-heal|p1a: Metagross|52/100|[from] item: Leftovers
+|-heal|p1b: Jellicent|100/100|[from] item: Leftovers
+|upkeep
+|turn|8
+|
+|t:|1792195535
+|move|p2b: Kyurem|Protect|p2b: Kyurem
+|-singleturn|p2b: Kyurem|Protect
+|move|p1a: Metagross|Protect|p1a: Metagross
+|-singleturn|p1a: Metagross|Protect
+|move|p1b: Jellicent|Scald|p2a: Genesect
+|-damage|p2a: Genesect|61/100 par
+|move|p2a: Genesect|Flamethrower|p1a: Metagross
+|-activate|p1a: Metagross|move: Protect
+|
+|-heal|p2b: Kyurem|88/100|[from] item: Leftovers
+|-heal|p1a: Metagross|58/100|[from] item: Leftovers
+|upkeep
+|turn|9
+|inactive|crow crumbs has 270 seconds left.
+|
+|t:|1792195556
+|move|p2b: Kyurem|Earth Power|p1a: Metagross
+|-supereffective|p1a: Metagross
+|-damage|p1a: Metagross|7/100
+|move|p1a: Metagross|Meteor Mash|p2b: Kyurem
+|-supereffective|p2b: Kyurem
+|-end|p2b: Kyurem|Substitute
+|move|p1b: Jellicent|Scald|p2a: Genesect
+|-damage|p2a: Genesect|31/100 par
+|move|p2a: Genesect|Flamethrower|p1a: Metagross
+|-supereffective|p1a: Metagross
+|-damage|p1a: Metagross|0 fnt
+|faint|p1a: Metagross
+|
+|-heal|p2b: Kyurem|94/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1792195567
+|switch|p1a: Kyurem|Kyurem-Black|100/100
+|-damage|p1a: Kyurem|76/100|[from] Stealth Rock
+|-ability|p1a: Kyurem|Teravolt
+|turn|10
+|inactive|Razachu has 270 seconds left.
+|
+|t:|1792195623
+|switch|p2a: Scrafty|Scrafty, F|100/100
+|-ability|p2a: Scrafty|Intimidate|boost
+|-unboost|p1a: Kyurem|atk|1
+|-unboost|p1b: Jellicent|atk|1
+|move|p2b: Kyurem|Protect|p2b: Kyurem
+|-singleturn|p2b: Kyurem|Protect
+|move|p1a: Kyurem|Protect|p1a: Kyurem
+|-singleturn|p1a: Kyurem|Protect
+|move|p1b: Jellicent|Toxic|p2b: Kyurem
+|-activate|p2b: Kyurem|move: Protect
+|
+|-heal|p2b: Kyurem|100/100|[from] item: Leftovers
+|upkeep
+|turn|11
+|
+|t:|1792195646
+|move|p2a: Scrafty|Fake Out|p1a: Kyurem
+|-damage|p1a: Kyurem|66/100
+|move|p2b: Kyurem|Substitute|p2b: Kyurem
+|-start|p2b: Kyurem|Substitute
+|-damage|p2b: Kyurem|76/100
+|cant|p1a: Kyurem|flinch
+|move|p1b: Jellicent|Toxic|p2a: Scrafty
+|-status|p2a: Scrafty|tox
+|-enditem|p2a: Scrafty|Lum Berry|[eat]
+|-curestatus|p2a: Scrafty|tox|[msg]
+|
+|-heal|p2b: Kyurem|82/100|[from] item: Leftovers
+|upkeep
+|turn|12
+|inactive|Razachu has 270 seconds left.
+|inactive|crow crumbs has 270 seconds left.
+|
+|t:|1792195685
+|move|p2b: Kyurem|Protect|p2b: Kyurem
+|-singleturn|p2b: Kyurem|Protect
+|move|p1a: Kyurem|Protect|p1a: Kyurem
+|-singleturn|p1a: Kyurem|Protect
+|move|p1b: Jellicent|Toxic|p2a: Scrafty
+|-status|p2a: Scrafty|tox
+|move|p2a: Scrafty|Taunt|p1b: Jellicent
+|-start|p1b: Jellicent|move: Taunt
+|
+|-heal|p2b: Kyurem|88/100|[from] item: Leftovers
+|-damage|p2a: Scrafty|95/100 tox|[from] psn
+|upkeep
+|turn|13
+|inactive|crow crumbs has 270 seconds left.
+|
+|t:|1792195710
+|move|p2b: Kyurem|Ice Beam|p1b: Jellicent
+|-resisted|p1b: Jellicent
+|-damage|p1b: Jellicent|84/100
+|move|p1a: Kyurem|Ice Beam|p2b: Kyurem
+|-crit|p2b: Kyurem
+|-end|p2b: Kyurem|Substitute
+|move|p1b: Jellicent|Scald|p2b: Kyurem
+|-resisted|p2b: Kyurem
+|-damage|p2b: Kyurem|78/100
+|move|p2a: Scrafty|Crunch|p1b: Jellicent
+|-supereffective|p1b: Jellicent
+|-damage|p1b: Jellicent|32/100
+|
+|-heal|p2b: Kyurem|84/100|[from] item: Leftovers
+|-heal|p1b: Jellicent|38/100|[from] item: Leftovers
+|-damage|p2a: Scrafty|83/100 tox|[from] psn
+|upkeep
+|turn|14
+|inactive|crow crumbs has 270 seconds left.
+|
+|t:|1792195759
+|move|p1a: Kyurem|Substitute|p1a: Kyurem
+|-start|p1a: Kyurem|Substitute
+|-damage|p1a: Kyurem|41/100
+|move|p2b: Kyurem|Ice Beam|p1b: Jellicent
+|-resisted|p1b: Jellicent
+|-damage|p1b: Jellicent|19/100
+|move|p1b: Jellicent|Scald|p2b: Kyurem
+|-resisted|p2b: Kyurem
+|-damage|p2b: Kyurem|73/100
+|-status|p2b: Kyurem|brn
+|move|p2a: Scrafty|Crunch|p1b: Jellicent
+|-supereffective|p1b: Jellicent
+|-damage|p1b: Jellicent|0 fnt
+|faint|p1b: Jellicent
+|
+|-heal|p2b: Kyurem|79/100 brn|[from] item: Leftovers
+|-damage|p2a: Scrafty|65/100 tox|[from] psn
+|-damage|p2b: Kyurem|67/100 brn|[from] brn
+|upkeep
+|inactive|Razachu has 270 seconds left.
+|
+|t:|1792195783
+|switch|p1b: Landorus|Landorus-Therian, M|76/100 brn
+|-damage|p1b: Landorus|63/100 brn|[from] Stealth Rock
+|-ability|p1b: Landorus|Intimidate|boost
+|-unboost|p2a: Scrafty|atk|1
+|-unboost|p2b: Kyurem|atk|1
+|turn|15
+|
+|t:|1792195791
+|move|p1a: Kyurem|Protect|p1a: Kyurem
+|-singleturn|p1a: Kyurem|Protect
+|move|p1b: Landorus|Superpower|p2b: Kyurem
+|-supereffective|p2b: Kyurem
+|-damage|p2b: Kyurem|34/100 brn
+|-unboost|p1b: Landorus|atk|1
+|-unboost|p1b: Landorus|def|1
+|move|p2b: Kyurem|Ice Beam|p1b: Landorus
+|-supereffective|p1b: Landorus
+|-damage|p1b: Landorus|0 fnt
+|faint|p1b: Landorus
+|move|p2a: Scrafty|Low Kick|p1a: Kyurem
+|-activate|p1a: Kyurem|move: Protect
+|
+|-heal|p2b: Kyurem|40/100 brn|[from] item: Leftovers
+|-damage|p2a: Scrafty|41/100 tox|[from] psn
+|-damage|p2b: Kyurem|28/100 brn|[from] brn
+|upkeep
+|
+|t:|1792195804
+|switch|p1b: Amoonguss|Amoonguss, M|100/100
+|-damage|p1b: Amoonguss|88/100|[from] Stealth Rock
+|turn|16
+|
+|t:|1792195826
+|move|p1b: Amoonguss|Rage Powder|p1b: Amoonguss
+|-singleturn|p1b: Amoonguss|move: Rage Powder
+|move|p1a: Kyurem|Ice Beam|p2b: Kyurem
+|-damage|p2b: Kyurem|0 fnt
+|faint|p2b: Kyurem
+|move|p2a: Scrafty|Taunt|p1b: Amoonguss
+|-start|p1b: Amoonguss|move: Taunt
+|
+|-damage|p2a: Scrafty|11/100 tox|[from] psn
+|upkeep
+|
+|t:|1792195844
+|switch|p2b: Genesect|Genesect, shiny|31/100 par
+|-ability|p2b: Genesect|Download|boost
+|-boost|p2b: Genesect|spa|1
+|turn|17
+|
+|t:|1792195874
+|move|p2b: Genesect|Extreme Speed|p1a: Kyurem
+|-end|p1a: Kyurem|Substitute
+|move|p1a: Kyurem|Earth Power|p2b: Genesect
+|-damage|p2b: Genesect|0 fnt
+|faint|p2b: Genesect
+|move|p2a: Scrafty|Crunch|p1b: Amoonguss
+|-damage|p1b: Amoonguss|68/100
+|move|p1b: Amoonguss|Giga Drain|p2a: Scrafty
+|-damage|p2a: Scrafty|0 fnt
+|-heal|p1b: Amoonguss|72/100|[from] drain|[of] p2a: Scrafty
+|faint|p2a: Scrafty
+|
+|upkeep
+|
+|t:|1792195883
+|switch|p2b: Latios|Latios, M|100/100
+|switch|p2a: Rotom|Rotom-Wash|72/100 par
+|turn|18
+|
+|t:|1792195904
+|switch|p1b: Thundurus|Thundurus, M|100/100
+|-damage|p1b: Thundurus|76/100|[from] Stealth Rock
+|move|p1a: Kyurem|Protect|p1a: Kyurem
+|-singleturn|p1a: Kyurem|Protect
+|move|p2b: Latios|Psychic|p1b: Thundurus
+|-damage|p1b: Thundurus|19/100
+|cant|p2a: Rotom|par
+|
+|upkeep
+|turn|19
+|
+|t:|1792195930
+|move|p1b: Thundurus|Thunder Wave|p2b: Latios
+|-status|p2b: Latios|par
+|cant|p2b: Latios|par
+|move|p1a: Kyurem|Ice Beam|p2b: Latios
+|-supereffective|p2b: Latios
+|-damage|p2b: Latios|7/100 par
+|move|p2a: Rotom|Volt Switch|p1b: Thundurus
+|-damage|p1b: Thundurus|0 fnt
+|faint|p1b: Thundurus
+|
+|upkeep
+|c|☆crow crumbs|alright
+|
+|t:|1792195940
+|switch|p1b: Amoonguss|Amoonguss, M|100/100
+|-damage|p1b: Amoonguss|88/100|[from] Stealth Rock
+|turn|20
+|-message|crow crumbs forfeited.
+|
+|win|Razachu
+|c|☆Razachu|mb gg
+|player|p2|

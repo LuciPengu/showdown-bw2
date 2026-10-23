@@ -1,0 +1,406 @@
+|j|☆yuzusoft67
+|j|☆Sheikko
+|t:|1791759834
+|gametype|doubles
+|player|p1|yuzusoft67|waitress|
+|player|p2|Sheikko|lacey-masters|
+|gen|5
+|tier|[Gen 5] Doubles OU
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokémon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|clearpoke
+|poke|p1|Tyranitar, M|item
+|poke|p1|Excadrill, M|item
+|poke|p1|Latios, M|item
+|poke|p1|Latias, F|item
+|poke|p1|Breloom, M|item
+|poke|p1|Thundurus, M|item
+|poke|p2|Marowak, F|item
+|poke|p2|Whimsicott, F|item
+|poke|p2|Terrakion|item
+|poke|p2|Hitmontop, M|item
+|poke|p2|Bisharp, M|item
+|poke|p2|Latias, F|item
+|teampreview
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Sheikko)
+|
+|t:|1791759850
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: goku|Breloom, M, shiny|100/100
+|switch|p1b: ilutv|Tyranitar, M|100/100
+|switch|p2a: God|Whimsicott, F, shiny|100/100
+|switch|p2b: Venezuela|Terrakion, shiny|100/100
+|-weather|Sandstorm|[from] ability: Sand Stream|[of] p1b: ilutv
+|turn|1
+|j| shinakeii
+|j| wbecruz
+|
+|t:|1791759873
+|move|p1b: ilutv|Protect|p1b: ilutv
+|-singleturn|p1b: ilutv|Protect
+|move|p2a: God|Beat Up|p2b: Venezuela
+|-resisted|p2b: Venezuela
+|-damage|p2b: Venezuela|99/100
+|-ability|p2b: Venezuela|Justified|boost
+|-boost|p2b: Venezuela|atk|1
+|-resisted|p2b: Venezuela
+|-damage|p2b: Venezuela|98/100
+|-ability|p2b: Venezuela|Justified|boost
+|-boost|p2b: Venezuela|atk|1
+|-resisted|p2b: Venezuela
+|-damage|p2b: Venezuela|97/100
+|-ability|p2b: Venezuela|Justified|boost
+|-boost|p2b: Venezuela|atk|1
+|-resisted|p2b: Venezuela
+|-damage|p2b: Venezuela|96/100
+|-ability|p2b: Venezuela|Justified|boost
+|-boost|p2b: Venezuela|atk|1
+|-resisted|p2b: Venezuela
+|-damage|p2b: Venezuela|94/100
+|-ability|p2b: Venezuela|Justified|boost
+|-boost|p2b: Venezuela|atk|1
+|-resisted|p2b: Venezuela
+|-damage|p2b: Venezuela|93/100
+|-ability|p2b: Venezuela|Justified|boost
+|-boost|p2b: Venezuela|atk|1
+|-hitcount|p2b: Venezuela|6
+|move|p2b: Venezuela|Sacred Sword|p1b: ilutv
+|-activate|p1b: ilutv|move: Protect
+|move|p1a: goku|Bullet Seed|p2b: Venezuela
+|-supereffective|p2b: Venezuela
+|-damage|p2b: Venezuela|48/100
+|-supereffective|p2b: Venezuela
+|-damage|p2b: Venezuela|0 fnt
+|faint|p2b: Venezuela
+|-hitcount|p2: Venezuela|2
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: God|94/100|[from] Sandstorm
+|-damage|p1a: goku|94/100|[from] Sandstorm
+|upkeep
+|
+|t:|1791759879
+|switch|p2b: Hitmontop|Hitmontop, M, shiny|100/100
+|-ability|p2b: Hitmontop|Intimidate|boost
+|-unboost|p1a: goku|atk|1
+|-unboost|p1b: ilutv|atk|1
+|turn|2
+|j| Hoishino
+|j| juanzu
+|
+|t:|1791759895
+|switch|p1b: beeru|Thundurus, M|100/100
+|move|p2b: Hitmontop|Fake Out|p1a: goku
+|-crit|p1a: goku
+|-damage|p1a: goku|52/100
+|move|p2a: God|Tailwind|p2a: God
+|-sidestart|p2: Sheikko|move: Tailwind
+|cant|p1a: goku|flinch
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: God|88/100|[from] Sandstorm
+|-damage|p2b: Hitmontop|94/100|[from] Sandstorm
+|-damage|p1b: beeru|94/100|[from] Sandstorm
+|-damage|p1a: goku|46/100|[from] Sandstorm
+|upkeep
+|turn|3
+|c| Hoishino|que asco el whimsicott es negra
+|c| juanzu|Pero
+|inactive|yuzusoft67 has 270 seconds left.
+|j| suiiroha
+|
+|t:|1791759953
+|switch|p1a: el incel|Latios, M|100/100
+|move|p2a: God|Taunt|p1b: beeru
+|-start|p1b: beeru|move: Taunt
+|cant|p1b: beeru|move: Taunt|Thunder Wave
+|move|p2b: Hitmontop|Toxic|p1a: el incel
+|-status|p1a: el incel|tox
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: God|82/100|[from] Sandstorm
+|-damage|p2b: Hitmontop|88/100|[from] Sandstorm
+|-damage|p1a: el incel|95/100 tox|[from] Sandstorm
+|-damage|p1b: beeru|88/100|[from] Sandstorm
+|-damage|p1a: el incel|89/100 tox|[from] psn
+|upkeep
+|turn|4
+|
+|t:|1791759974
+|switch|p2a: Gitano|Marowak, F|100/100
+|switch|p2b: Bostero|Bisharp, M, shiny|100/100
+|move|p1a: el incel|Trick|p2b: Bostero
+|-activate|p1a: el incel|move: Trick|[of] p2b: Bostero
+|-item|p2b: Bostero|Choice Specs|[from] move: Trick
+|-item|p1a: el incel|Life Orb|[from] move: Trick
+|move|p1b: beeru|Thunderbolt|p2a: Gitano
+|-activate|p2a: Gitano|ability: Lightning Rod
+|-immune|p2a: Gitano
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: el incel|83/100 tox|[from] Sandstorm
+|-damage|p1b: beeru|82/100|[from] Sandstorm
+|-damage|p1a: el incel|71/100 tox|[from] psn
+|upkeep
+|turn|5
+|inactive|yuzusoft67 has 270 seconds left.
+|inactive|Sheikko has 270 seconds left.
+|inactive|yuzusoft67 has 240 seconds left.
+|inactive|yuzusoft67 has 210 seconds left.
+|
+|t:|1791760046
+|switch|p1a: ilutv|Tyranitar, M|100/100
+|switch|p1b: goku|Breloom, M, shiny|46/100
+|move|p2b: Bostero|Sucker Punch||[still]
+|-fail|p2b: Bostero
+|move|p2a: Gitano|Substitute|p2a: Gitano
+|-start|p2a: Gitano|Substitute
+|-damage|p2a: Gitano|75/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1b: goku|40/100|[from] Sandstorm
+|-sideend|p2: Sheikko|move: Tailwind
+|upkeep
+|turn|6
+|inactive|Sheikko has 270 seconds left.
+|inactive|yuzusoft67 has 210 seconds left.
+|
+|t:|1791760068
+|switch|p2b: Hitmontop|Hitmontop, M, shiny|88/100
+|-ability|p2b: Hitmontop|Intimidate|boost
+|-unboost|p1a: ilutv|atk|1
+|-unboost|p1b: goku|atk|1
+|move|p2a: Gitano|Detect|p2a: Gitano
+|-singleturn|p2a: Gitano|Protect
+|move|p1a: ilutv|Protect|p1a: ilutv
+|-singleturn|p1a: ilutv|Protect
+|move|p1b: goku|Bullet Seed|p2a: Gitano
+|-activate|p2a: Gitano|move: Protect
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1b: goku|34/100|[from] Sandstorm
+|-damage|p2b: Hitmontop|82/100|[from] Sandstorm
+|upkeep
+|turn|7
+|
+|t:|1791760092
+|switch|p1b: el incel|Latios, M|71/100 tox
+|switch|p1a: la femcel|Latias, F|100/100
+|move|p2b: Hitmontop|Fake Out|p1b: el incel
+|-damage|p1b: el incel|52/100 tox
+|move|p2a: Gitano|Bonemerang|p1a: la femcel
+|-immune|p1a: la femcel|[from] ability: Levitate
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: la femcel|95/100|[from] Sandstorm
+|-damage|p1b: el incel|46/100 tox|[from] Sandstorm
+|-damage|p2b: Hitmontop|76/100|[from] Sandstorm
+|-damage|p1b: el incel|40/100 tox|[from] psn
+|upkeep
+|turn|8
+|
+|t:|1791760116
+|move|p1a: la femcel|Protect|p1a: la femcel
+|-singleturn|p1a: la femcel|Protect
+|move|p2a: Gitano|Detect|p2a: Gitano
+|-singleturn|p2a: Gitano|Protect
+|move|p1b: el incel|Surf|p2a: Gitano|[spread] p2b
+|-activate|p1a: la femcel|move: Protect
+|-activate|p2a: Gitano|move: Protect
+|-damage|p2b: Hitmontop|39/100
+|-damage|p1b: el incel|30/100 tox|[from] item: Life Orb
+|move|p2b: Hitmontop|Toxic|p1a: la femcel
+|-activate|p1a: la femcel|move: Protect
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1b: el incel|24/100 tox|[from] Sandstorm
+|-damage|p1a: la femcel|89/100|[from] Sandstorm
+|-damage|p2b: Hitmontop|32/100|[from] Sandstorm
+|-damage|p1b: el incel|12/100 tox|[from] psn
+|upkeep
+|turn|9
+|inactive|yuzusoft67 has 240 seconds left.
+|
+|t:|1791760132
+|move|p2b: Hitmontop|Wide Guard|p2b: Hitmontop
+|-singleturn|p2b: Hitmontop|Wide Guard
+|move|p1b: el incel|Psychic|p2a: Gitano
+|-end|p2a: Gitano|Substitute
+|-damage|p1b: el incel|2/100 tox|[from] item: Life Orb
+|move|p1a: la femcel|Ice Beam|p2b: Hitmontop
+|-damage|p2b: Hitmontop|0 fnt
+|faint|p2b: Hitmontop
+|move|p2a: Gitano|Rock Slide|p1b: el incel|[spread] p1a,p1b
+|-damage|p1a: la femcel|53/100
+|-damage|p1b: el incel|0 fnt
+|faint|p1b: el incel
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: la femcel|47/100|[from] Sandstorm
+|upkeep
+|inactive|Sheikko has 270 seconds left.
+|inactive|yuzusoft67 has 210 seconds left.
+|
+|t:|1791760174
+|switch|p1b: goku|Breloom, M, shiny|34/100
+|switch|p2b: Bostero|Bisharp, M, shiny|100/100
+|turn|10
+|inactive|yuzusoft67 has 210 seconds left.
+|inactive|Sheikko has 270 seconds left.
+|
+|t:|1791760215
+|move|p1a: la femcel|Protect|p1a: la femcel
+|-singleturn|p1a: la femcel|Protect
+|move|p2b: Bostero|Sucker Punch||[still]
+|-fail|p2b: Bostero
+|move|p1b: goku|Spore|p2b: Bostero
+|-status|p2b: Bostero|slp|[from] move: Spore
+|move|p2a: Gitano|Rock Slide|p1b: goku|[spread] p1b
+|-activate|p1a: la femcel|move: Protect
+|-resisted|p1b: goku
+|-damage|p1b: goku|10/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: la femcel|41/100|[from] Sandstorm
+|-damage|p1b: goku|4/100|[from] Sandstorm
+|upkeep
+|turn|11
+|inactive|yuzusoft67 has 210 seconds left.
+|
+|t:|1791760246
+|move|p2a: Gitano|Detect|p2a: Gitano
+|-singleturn|p2a: Gitano|Protect
+|cant|p2b: Bostero|slp
+|move|p1a: la femcel|Ice Beam|p2a: Gitano
+|-activate|p2a: Gitano|move: Protect
+|move|p1b: goku|Superpower|p2b: Bostero
+|-enditem|p1b: goku|Fighting Gem|[from] gem|[move] Superpower
+|-supereffective|p2b: Bostero
+|-damage|p2b: Bostero|0 fnt
+|-unboost|p1b: goku|atk|1
+|-unboost|p1b: goku|def|1
+|faint|p2b: Bostero
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: la femcel|35/100|[from] Sandstorm
+|-damage|p1b: goku|0 fnt|[from] Sandstorm
+|faint|p1b: goku
+|upkeep
+|inactive|yuzusoft67 has 180 seconds left.
+|
+|t:|1791760270
+|switch|p1b: kalathras|Excadrill, M|100/100
+|switch|p2b: God|Whimsicott, F, shiny|82/100
+|turn|12
+|inactive|yuzusoft67 has 180 seconds left.
+|
+|t:|1791760294
+|move|p2b: God|Tailwind|p2b: God
+|-sidestart|p2: Sheikko|move: Tailwind
+|move|p1b: kalathras|Substitute|p1b: kalathras
+|-start|p1b: kalathras|Substitute
+|-damage|p1b: kalathras|76/100
+|move|p1a: la femcel|Ice Beam|p2a: Gitano
+|-supereffective|p2a: Gitano
+|-damage|p2a: Gitano|0 fnt
+|faint|p2a: Gitano
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2b: God|76/100|[from] Sandstorm
+|-damage|p1a: la femcel|29/100|[from] Sandstorm
+|upkeep
+|
+|t:|1791760301
+|switch|p2a: Potential Wife|Latias, F|100/100
+|turn|13
+|
+|t:|1791760319
+|move|p1a: la femcel|Protect|p1a: la femcel
+|-singleturn|p1a: la femcel|Protect
+|move|p2b: God|Giga Drain|p1b: kalathras
+|-end|p1b: kalathras|Substitute
+|-heal|p2b: God|93/100|[from] drain|[of] p1b: kalathras
+|move|p2a: Potential Wife|Dragon Pulse|p1a: la femcel
+|-activate|p1a: la femcel|move: Protect
+|move|p1b: kalathras|Rock Slide|p2a: Potential Wife|[spread] p2a,p2b
+|-damage|p2a: Potential Wife|64/100
+|-damage|p2b: God|55/100
+|-damage|p1b: kalathras|66/100|[from] item: Life Orb
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2b: God|48/100|[from] Sandstorm
+|-damage|p2a: Potential Wife|58/100|[from] Sandstorm
+|-damage|p1a: la femcel|23/100|[from] Sandstorm
+|upkeep
+|turn|14
+|inactive|yuzusoft67 has 210 seconds left.
+|inactive|yuzusoft67 has 180 seconds left.
+|
+|t:|1791760358
+|move|p1a: la femcel|Protect||[still]
+|-fail|p1a: la femcel
+|move|p2b: God|Giga Drain|p1b: kalathras
+|-damage|p1b: kalathras|36/100
+|-heal|p2b: God|69/100|[from] drain|[of] p1b: kalathras
+|move|p2a: Potential Wife|Dragon Pulse|p1a: la femcel
+|-supereffective|p1a: la femcel
+|-damage|p1a: la femcel|0 fnt
+|faint|p1a: la femcel
+|move|p1b: kalathras|Rock Slide|p2b: God|[spread] p2a,p2b
+|-damage|p2a: Potential Wife|23/100
+|-damage|p2b: God|25/100
+|-damage|p1b: kalathras|26/100|[from] item: Life Orb
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2b: God|19/100|[from] Sandstorm
+|-damage|p2a: Potential Wife|17/100|[from] Sandstorm
+|upkeep
+|
+|t:|1791760361
+|switch|p1a: ilutv|Tyranitar, M|100/100
+|turn|15
+|
+|t:|1791760377
+|move|p2b: God|Giga Drain|p1a: ilutv
+|-supereffective|p1a: ilutv
+|-damage|p1a: ilutv|71/100
+|-heal|p2b: God|42/100|[from] drain|[of] p1a: ilutv
+|move|p2a: Potential Wife|Roost|p2a: Potential Wife
+|-heal|p2a: Potential Wife|67/100
+|-singleturn|p2a: Potential Wife|move: Roost
+|move|p1b: kalathras|Rock Slide|p2a: Potential Wife|[spread] 
+|-miss|p1b: kalathras|p2a: Potential Wife
+|-miss|p1b: kalathras|p2b: God
+|move|p1a: ilutv|Rock Slide|p2b: God|[spread] p2b
+|-miss|p1a: ilutv|p2a: Potential Wife
+|-damage|p2b: God|0 fnt
+|faint|p2b: God
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Potential Wife|61/100|[from] Sandstorm
+|-sideend|p2: Sheikko|move: Tailwind
+|upkeep
+|turn|16
+|
+|t:|1791760393
+|move|p1b: kalathras|Rock Slide|p2a: Potential Wife
+|-damage|p2a: Potential Wife|15/100
+|-damage|p1b: kalathras|16/100|[from] item: Life Orb
+|move|p2a: Potential Wife|Dragon Pulse|p1a: ilutv
+|-damage|p1a: ilutv|45/100
+|move|p1a: ilutv|Crunch|p2a: Potential Wife
+|-supereffective|p2a: Potential Wife
+|-damage|p2a: Potential Wife|0 fnt
+|faint|p2a: Potential Wife
+|
+|win|yuzusoft67
+|l|☆yuzusoft67
+|player|p1|

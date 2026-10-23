@@ -1,0 +1,298 @@
+|j|☆edgypunishment
+|j|☆EmmanuelXYN
+|t:|1792780794
+|gametype|singles
+|player|p1|edgypunishment|acetrainer-gen4dp|1099
+|player|p2|EmmanuelXYN|hilbert-wonderlauncher|1000
+|gen|5
+|tier|[Gen 5] OU
+|rated|
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokemon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Moves Clause: Sleep-inducing moves are banned
+|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats
+|clearpoke
+|poke|p1|Eelektross, M|item
+|poke|p1|Lanturn, F|item
+|poke|p1|Magnezone|item
+|poke|p1|Galvantula, F|item
+|poke|p1|Emolga, F|item
+|poke|p1|Rotom-Mow|item
+|poke|p2|Gardevoir, F|item
+|poke|p2|Zoroark, M|item
+|poke|p2|Metagross|item
+|poke|p2|Milotic, F|item
+|poke|p2|Charizard, M|item
+|poke|p2|Garchomp, F|item
+|teampreview
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by edgypunishment)
+|
+|t:|1792780800
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Eelektross|Eelektross, M|100/100
+|switch|p2a: Metagross|Metagross|100/100
+|turn|1
+|
+|t:|1792780809
+|move|p2a: Metagross|Stealth Rock|p1a: Eelektross
+|-sidestart|p1: edgypunishment|move: Stealth Rock
+|move|p1a: Eelektross|Coil|p1a: Eelektross
+|-boost|p1a: Eelektross|atk|1
+|-boost|p1a: Eelektross|def|1
+|-boost|p1a: Eelektross|accuracy|1
+|
+|upkeep
+|turn|2
+|j| bratwurstgaming
+|
+|t:|1792780826
+|move|p2a: Metagross|Earthquake|p1a: Eelektross
+|-immune|p1a: Eelektross|[from] ability: Levitate
+|move|p1a: Eelektross|Coil|p1a: Eelektross
+|-boost|p1a: Eelektross|atk|1
+|-boost|p1a: Eelektross|def|1
+|-boost|p1a: Eelektross|accuracy|1
+|
+|upkeep
+|turn|3
+|
+|t:|1792780835
+|move|p2a: Metagross|Bullet Punch|p1a: Eelektross
+|-resisted|p1a: Eelektross
+|-damage|p1a: Eelektross|93/100
+|move|p1a: Eelektross|Thunder Punch|p2a: Metagross
+|-damage|p2a: Metagross|38/100
+|
+|-heal|p2a: Metagross|44/100|[from] item: Leftovers
+|-heal|p1a: Eelektross|99/100|[from] item: Leftovers
+|upkeep
+|turn|4
+|
+|t:|1792780844
+|move|p2a: Metagross|Meteor Mash|p1a: Eelektross|[miss]
+|-miss|p2a: Metagross|p1a: Eelektross
+|move|p1a: Eelektross|Thunder Punch|p2a: Metagross
+|-damage|p2a: Metagross|0 fnt
+|faint|p2a: Metagross
+|
+|-heal|p1a: Eelektross|100/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1792780854
+|switch|p2a: Gardevoir|Gardevoir, F|100/100
+|-ability|p2a: Gardevoir|Levitate|Trace|[from] ability: Trace|[of] p1a: Eelektross
+|turn|5
+|
+|t:|1792780860
+|move|p2a: Gardevoir|Trick|p1a: Eelektross
+|-activate|p2a: Gardevoir|move: Trick|[of] p1a: Eelektross
+|-item|p1a: Eelektross|Choice Scarf|[from] move: Trick
+|-item|p2a: Gardevoir|Leftovers|[from] move: Trick
+|move|p1a: Eelektross|Thunder Punch|p2a: Gardevoir
+|-damage|p2a: Gardevoir|0 fnt
+|faint|p2a: Gardevoir
+|
+|upkeep
+|
+|t:|1792780869
+|switch|p2a: Garchomp|Garchomp, F|100/100
+|turn|6
+|
+|t:|1792780876
+|switch|p1a: Rotom|Rotom-Mow|100/100
+|-damage|p1a: Rotom|88/100|[from] Stealth Rock
+|move|p2a: Garchomp|Dark Pulse|p1a: Rotom
+|-damage|p1a: Rotom|17/100
+|-damage|p2a: Garchomp|91/100|[from] item: Life Orb
+|
+|upkeep
+|turn|7
+|
+|t:|1792780886
+|move|p1a: Rotom|Leaf Storm|p2a: Garchomp
+|-damage|p2a: Garchomp|0 fnt
+|-unboost|p1a: Rotom|spa|2
+|replace|p2a: Zoroark|Zoroark, M
+|-end|p2a: Zoroark|Illusion
+|faint|p2a: Zoroark
+|
+|upkeep
+|
+|t:|1792780895
+|switch|p2a: Charizard|Charizard, M, shiny|100/100
+|turn|8
+|
+|t:|1792780924
+|switch|p1a: Emolga|Emolga, F|100/100
+|-damage|p1a: Emolga|75/100|[from] Stealth Rock
+|move|p2a: Charizard|Fire Blast|p1a: Emolga
+|-damage|p1a: Emolga|0 fnt
+|faint|p1a: Emolga
+|
+|upkeep
+|
+|t:|1792780934
+|switch|p1a: Lanturn|Lanturn, F|100/100
+|-damage|p1a: Lanturn|88/100|[from] Stealth Rock
+|-item|p1a: Lanturn|Air Balloon
+|turn|9
+|
+|t:|1792780939
+|move|p2a: Charizard|Hidden Power|p1a: Lanturn
+|-supereffective|p1a: Lanturn
+|-damage|p1a: Lanturn|53/100
+|-enditem|p1a: Lanturn|Air Balloon
+|move|p1a: Lanturn|Scald|p2a: Charizard
+|-supereffective|p2a: Charizard
+|-damage|p2a: Charizard|11/100
+|
+|-heal|p2a: Charizard|17/100|[from] item: Leftovers
+|upkeep
+|turn|10
+|
+|t:|1792780953
+|move|p2a: Charizard|Roost|p2a: Charizard
+|-heal|p2a: Charizard|67/100
+|-singleturn|p2a: Charizard|move: Roost
+|move|p1a: Lanturn|Scald|p2a: Charizard
+|-supereffective|p2a: Charizard
+|-damage|p2a: Charizard|0 fnt
+|faint|p2a: Charizard
+|
+|upkeep
+|
+|t:|1792780964
+|switch|p2a: Garchomp|Garchomp, F|100/100
+|turn|11
+|
+|t:|1792780968
+|move|p2a: Garchomp|Dragon Claw|p1a: Lanturn
+|-damage|p1a: Lanturn|0 fnt
+|faint|p1a: Lanturn
+|
+|upkeep
+|
+|t:|1792780980
+|switch|p1a: Magnezone|Magnezone|100/100
+|-damage|p1a: Magnezone|94/100|[from] Stealth Rock
+|turn|12
+|
+|t:|1792780988
+|move|p2a: Garchomp|Fire Fang|p1a: Magnezone
+|-supereffective|p1a: Magnezone
+|-damage|p1a: Magnezone|56/100
+|cant|p1a: Magnezone|flinch
+|
+|upkeep
+|turn|13
+|
+|t:|1792780994
+|move|p2a: Garchomp|Dragon Claw|p1a: Magnezone
+|-resisted|p1a: Magnezone
+|-damage|p1a: Magnezone|39/100
+|move|p1a: Magnezone|Reflect|p1a: Magnezone
+|-sidestart|p1: edgypunishment|Reflect
+|
+|upkeep
+|turn|14
+|
+|t:|1792781002
+|move|p2a: Garchomp|Swords Dance|p2a: Garchomp
+|-boost|p2a: Garchomp|atk|2
+|move|p1a: Magnezone|Hidden Power|p2a: Garchomp
+|-resisted|p2a: Garchomp
+|-crit|p2a: Garchomp
+|-damage|p2a: Garchomp|80/100
+|
+|upkeep
+|turn|15
+|
+|t:|1792781010
+|move|p2a: Garchomp|Fire Fang|p1a: Magnezone
+|-supereffective|p1a: Magnezone
+|-damage|p1a: Magnezone|6/100
+|-status|p1a: Magnezone|brn
+|move|p1a: Magnezone|Hidden Power|p2a: Garchomp
+|-resisted|p2a: Garchomp
+|-damage|p2a: Garchomp|68/100
+|
+|-damage|p1a: Magnezone|0 fnt|[from] brn
+|faint|p1a: Magnezone
+|upkeep
+|
+|t:|1792781021
+|switch|p1a: Rotom|Rotom-Mow|17/100
+|-damage|p1a: Rotom|4/100|[from] Stealth Rock
+|turn|16
+|
+|t:|1792781028
+|move|p1a: Rotom|Leaf Storm|p2a: Garchomp
+|-damage|p2a: Garchomp|0 fnt
+|-unboost|p1a: Rotom|spa|2
+|faint|p2a: Garchomp
+|
+|upkeep
+|
+|t:|1792781034
+|switch|p2a: Milotic|Milotic, F|100/100
+|turn|17
+|
+|t:|1792781039
+|move|p1a: Rotom|Leaf Storm|p2a: Milotic
+|-supereffective|p2a: Milotic
+|-damage|p2a: Milotic|58/100
+|-unboost|p1a: Rotom|spa|2
+|move|p2a: Milotic|Ice Beam|p1a: Rotom
+|-supereffective|p1a: Rotom
+|-crit|p1a: Rotom
+|-damage|p1a: Rotom|0 fnt
+|faint|p1a: Rotom
+|
+|-heal|p2a: Milotic|64/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1792781051
+|switch|p1a: Eelektross|Eelektross, M|100/100
+|-damage|p1a: Eelektross|88/100|[from] Stealth Rock
+|turn|18
+|
+|t:|1792781057
+|move|p1a: Eelektross|Thunder Punch|p2a: Milotic
+|-supereffective|p2a: Milotic
+|-damage|p2a: Milotic|3/100
+|move|p2a: Milotic|Recover|p2a: Milotic
+|-heal|p2a: Milotic|53/100
+|
+|-heal|p2a: Milotic|59/100|[from] item: Leftovers
+|upkeep
+|turn|19
+|
+|t:|1792781067
+|move|p1a: Eelektross|Thunder Punch|p2a: Milotic
+|-supereffective|p2a: Milotic
+|-damage|p2a: Milotic|4/100
+|move|p2a: Milotic|Recover|p2a: Milotic
+|-heal|p2a: Milotic|54/100
+|
+|-heal|p2a: Milotic|60/100|[from] item: Leftovers
+|upkeep
+|turn|20
+|
+|t:|1792781076
+|move|p1a: Eelektross|Thunder Punch|p2a: Milotic
+|-supereffective|p2a: Milotic
+|-damage|p2a: Milotic|0 fnt
+|faint|p2a: Milotic
+|
+|win|edgypunishment
+|raw|edgypunishment's rating: 1099 &rarr; <strong>1117</strong><br />(+18 for winning)
+|raw|EmmanuelXYN's rating: 1000 &rarr; <strong>1000</strong><br />(+0 for losing)
+|l|☆EmmanuelXYN
+|player|p2|

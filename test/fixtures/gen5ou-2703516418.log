@@ -1,0 +1,306 @@
+|j|☆edgypunishment
+|j|☆muoluhhn
+|t:|1792782360
+|gametype|singles
+|player|p1|edgypunishment|acetrainer-gen4dp|1082
+|player|p2|muoluhhn|gardenia-masters|1000
+|gen|5
+|tier|[Gen 5] OU
+|rated|
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokemon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Moves Clause: Sleep-inducing moves are banned
+|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats
+|clearpoke
+|poke|p1|Eelektross, F|item
+|poke|p1|Lanturn, F|item
+|poke|p1|Magnezone|item
+|poke|p1|Galvantula, F|item
+|poke|p1|Emolga, M|item
+|poke|p1|Rotom-Mow|item
+|poke|p2|Tyranitar, F|item
+|poke|p2|Seismitoad, M|item
+|poke|p2|Latios, M|item
+|poke|p2|Alakazam, F|item
+|poke|p2|Skarmory, F|item
+|poke|p2|Magneton|item
+|teampreview
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by edgypunishment)
+|
+|t:|1792782370
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Eelektross|Eelektross, F|100/100
+|switch|p2a: Latios|Latios, M|100/100
+|turn|1
+|
+|t:|1792782375
+|switch|p1a: Emolga|Emolga, M|100/100
+|move|p2a: Latios|Draco Meteor|p1a: Emolga
+|-damage|p1a: Emolga|0 fnt
+|-unboost|p2a: Latios|spa|2
+|faint|p1a: Emolga
+|
+|upkeep
+|
+|t:|1792782384
+|switch|p1a: Eelektross|Eelektross, F|100/100
+|turn|2
+|
+|t:|1792782393
+|switch|p2a: Tyranitar|Tyranitar, F|100/100
+|-weather|Sandstorm|[from] ability: Sand Stream|[of] p2a: Tyranitar
+|move|p1a: Eelektross|Coil|p1a: Eelektross
+|-boost|p1a: Eelektross|atk|1
+|-boost|p1a: Eelektross|def|1
+|-boost|p1a: Eelektross|accuracy|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Eelektross|94/100|[from] Sandstorm
+|-heal|p1a: Eelektross|100/100|[from] item: Leftovers
+|upkeep
+|turn|3
+|
+|t:|1792782405
+|switch|p2a: Latios|Latios, M|100/100
+|move|p1a: Eelektross|Coil|p1a: Eelektross
+|-boost|p1a: Eelektross|atk|1
+|-boost|p1a: Eelektross|def|1
+|-boost|p1a: Eelektross|accuracy|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|95/100|[from] Sandstorm
+|-damage|p1a: Eelektross|94/100|[from] Sandstorm
+|-heal|p1a: Eelektross|100/100|[from] item: Leftovers
+|upkeep
+|turn|4
+|
+|t:|1792782416
+|move|p2a: Latios|Draco Meteor|p1a: Eelektross
+|-damage|p1a: Eelektross|0 fnt
+|-unboost|p2a: Latios|spa|2
+|faint|p1a: Eelektross
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|89/100|[from] Sandstorm
+|upkeep
+|
+|t:|1792782426
+|switch|p1a: Magnezone|Magnezone|100/100
+|turn|5
+|
+|t:|1792782429
+|switch|p2a: Seismitoad|Seismitoad, M, shiny|100/100
+|move|p1a: Magnezone|Discharge|p2a: Seismitoad
+|-immune|p2a: Seismitoad
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|6
+|
+|t:|1792782432
+|move|p2a: Seismitoad|Stealth Rock|p1a: Magnezone
+|-sidestart|p1: edgypunishment|move: Stealth Rock
+|move|p1a: Magnezone|Reflect|p1a: Magnezone
+|-sidestart|p1: edgypunishment|Reflect
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|7
+|
+|t:|1792782436
+|move|p2a: Seismitoad|Scald|p1a: Magnezone
+|-damage|p1a: Magnezone|81/100
+|-status|p1a: Magnezone|brn
+|move|p1a: Magnezone|Light Screen|p1a: Magnezone
+|-sidestart|p1: edgypunishment|move: Light Screen
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Magnezone|69/100 brn|[from] brn
+|upkeep
+|turn|8
+|
+|t:|1792782445
+|switch|p2a: Magneton|Magneton, shiny|100/100
+|switch|p1a: Rotom|Rotom-Mow|100/100
+|-damage|p1a: Rotom|88/100|[from] Stealth Rock
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|82/100|[from] Sandstorm
+|upkeep
+|turn|9
+|
+|t:|1792782455
+|move|p1a: Rotom|Trick|p2a: Magneton
+|-activate|p1a: Rotom|move: Trick|[of] p2a: Magneton
+|-item|p2a: Magneton|Choice Scarf|[from] move: Trick
+|-item|p1a: Rotom|Choice Scarf|[from] move: Trick
+|move|p2a: Magneton|Volt Switch|p1a: Rotom
+|-resisted|p1a: Rotom
+|-damage|p1a: Rotom|76/100
+|
+|t:|1792782461
+|switch|p2a: Seismitoad|Seismitoad, M, shiny|100/100|[from] Volt Switch
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|70/100|[from] Sandstorm
+|upkeep
+|turn|10
+|
+|t:|1792782468
+|move|p2a: Seismitoad|Protect|p2a: Seismitoad
+|-singleturn|p2a: Seismitoad|Protect
+|move|p1a: Rotom|Trick|p2a: Seismitoad
+|-activate|p2a: Seismitoad|move: Protect
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|63/100|[from] Sandstorm
+|upkeep
+|turn|11
+|
+|t:|1792782476
+|switch|p2a: Tyranitar|Tyranitar, F|100/100
+|move|p1a: Rotom|Trick|p2a: Tyranitar
+|-activate|p1a: Rotom|move: Trick|[of] p2a: Tyranitar
+|-item|p2a: Tyranitar|Choice Scarf|[from] move: Trick
+|-item|p1a: Rotom|Chople Berry|[from] move: Trick
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|57/100|[from] Sandstorm
+|upkeep
+|turn|12
+|
+|t:|1792782492
+|move|p1a: Rotom|Leaf Storm|p2a: Tyranitar
+|-supereffective|p2a: Tyranitar
+|-damage|p2a: Tyranitar|49/100
+|-unboost|p1a: Rotom|spa|2
+|move|p2a: Tyranitar|Crunch|p1a: Rotom
+|-damage|p1a: Rotom|35/100
+|-unboost|p1a: Rotom|def|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|29/100|[from] Sandstorm
+|upkeep
+|turn|13
+|
+|t:|1792782504
+|switch|p1a: Magnezone|Magnezone|69/100 brn
+|-damage|p1a: Magnezone|63/100 brn|[from] Stealth Rock
+|switch|p2a: Magneton|Magneton, shiny|100/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Magnezone|50/100 brn|[from] brn
+|-sideend|p1: edgypunishment|Reflect
+|upkeep
+|turn|14
+|
+|t:|1792782515
+|move|p2a: Magneton|Hidden Power|p1a: Magnezone
+|-supereffective|p1a: Magnezone
+|-damage|p1a: Magnezone|30/100 brn
+|move|p1a: Magnezone|Discharge|p2a: Magneton
+|-resisted|p2a: Magneton
+|-damage|p2a: Magneton|60/100
+|-status|p2a: Magneton|par
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Magnezone|18/100 brn|[from] brn
+|-sideend|p1: edgypunishment|move: Light Screen
+|upkeep
+|turn|15
+|inactive|edgypunishment has 120 seconds left.
+|
+|t:|1792782546
+|move|p1a: Magnezone|Discharge|p2a: Magneton
+|-resisted|p2a: Magneton
+|-damage|p2a: Magneton|25/100 par
+|move|p2a: Magneton|Hidden Power|p1a: Magnezone
+|-supereffective|p1a: Magnezone
+|-damage|p1a: Magnezone|0 fnt
+|faint|p1a: Magnezone
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|
+|t:|1792782556
+|switch|p1a: Lanturn|Lanturn, F|100/100
+|-damage|p1a: Lanturn|88/100|[from] Stealth Rock
+|-item|p1a: Lanturn|Air Balloon
+|turn|16
+|inactive|edgypunishment has 120 seconds left.
+|inactive|edgypunishment has 90 seconds left.
+|
+|t:|1792782604
+|switch|p2a: Seismitoad|Seismitoad, M, shiny|100/100
+|move|p1a: Lanturn|Scald|p2a: Seismitoad
+|-immune|p2a: Seismitoad|[from] ability: Water Absorb
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Lanturn|82/100|[from] Sandstorm
+|upkeep
+|turn|17
+|
+|t:|1792782614
+|move|p2a: Seismitoad|Scald|p1a: Lanturn
+|-resisted|p1a: Lanturn
+|-crit|p1a: Lanturn
+|-damage|p1a: Lanturn|64/100
+|-enditem|p1a: Lanturn|Air Balloon
+|move|p1a: Lanturn|Ice Beam|p2a: Seismitoad
+|-damage|p2a: Seismitoad|76/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Lanturn|58/100|[from] Sandstorm
+|-heal|p2a: Seismitoad|82/100|[from] item: Leftovers
+|upkeep
+|turn|18
+|inactive|edgypunishment has 90 seconds left.
+|inactive|edgypunishment has 60 seconds left.
+|
+|t:|1792782654
+|switch|p1a: Rotom|Rotom-Mow|29/100
+|-damage|p1a: Rotom|16/100|[from] Stealth Rock
+|move|p2a: Seismitoad|Scald|p1a: Rotom
+|-resisted|p1a: Rotom
+|-damage|p1a: Rotom|1/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|0 fnt|[from] Sandstorm
+|faint|p1a: Rotom
+|-heal|p2a: Seismitoad|88/100|[from] item: Leftovers
+|upkeep
+|inactive|edgypunishment has 30 seconds left.
+|
+|t:|1792782693
+|switch|p1a: Galvantula|Galvantula, F|100/100
+|-damage|p1a: Galvantula|76/100|[from] Stealth Rock
+|turn|19
+|
+|t:|1792782698
+|move|p2a: Seismitoad|Protect|p2a: Seismitoad
+|-singleturn|p2a: Seismitoad|Protect
+|move|p1a: Galvantula|Energy Ball|p2a: Seismitoad
+|-activate|p2a: Seismitoad|move: Protect
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Galvantula|70/100|[from] Sandstorm
+|-heal|p2a: Seismitoad|94/100|[from] item: Leftovers
+|upkeep
+|turn|20
+|inactive|edgypunishment has 30 seconds left.
+|inactive|edgypunishment has 20 seconds left.
+|inactive|edgypunishment has 15 seconds left.
+|inactive|edgypunishment has 10 seconds left.
+|inactive|edgypunishment has 5 seconds left.
+|-message|edgypunishment lost due to inactivity.
+|
+|win|muoluhhn
+|raw|edgypunishment's rating: 1082 &rarr; <strong>1055</strong><br />(-27 for losing)
+|raw|muoluhhn's rating: 1000 &rarr; <strong>1049</strong><br />(+49 for winning)

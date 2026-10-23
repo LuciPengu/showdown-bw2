@@ -1,0 +1,296 @@
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up.
+|t:|1792774891
+|gametype|singles
+|player|p1|ReshiRampage|acetrainer-gen4dp|
+|player|p2|kkmh|unknown|
+|gen|5
+|tier|[Gen 5] OU
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokemon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Moves Clause: Sleep-inducing moves are banned
+|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats
+|clearpoke
+|poke|p1|Tyranitar, M|item
+|poke|p1|Ferrothorn, M|item
+|poke|p1|Landorus-Therian, M|item
+|poke|p1|Latios, M|item
+|poke|p1|Rotom-Wash|item
+|poke|p1|Alakazam, M|item
+|poke|p2|Scizor, F|item
+|poke|p2|Magnezone|item
+|poke|p2|Landorus-Therian, M|item
+|poke|p2|Starmie|item
+|poke|p2|Dragonite, M|item
+|poke|p2|Garchomp, F|item
+|teampreview
+|c|☆kkmh|hf
+|inactive|ReshiRampage has 270 seconds left.
+|inactive|kkmh has 270 seconds left.
+|c|☆ReshiRampage|u2
+|inactive|ReshiRampage has 240 seconds left.
+|inactive|kkmh has 240 seconds left.
+|inactive|kkmh has 210 seconds left.
+|inactive|kkmh has 180 seconds left.
+|
+|t:|1792775019
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Rotom|Rotom-Wash|100/100
+|switch|p2a: Starmie|Starmie|100/100
+|turn|1
+|
+|t:|1792775035
+|switch|p2a: Garchomp|Garchomp, F|100/100
+|move|p1a: Rotom|Hydro Pump|p2a: Garchomp|[miss]
+|-miss|p1a: Rotom|p2a: Garchomp
+|
+|upkeep
+|turn|2
+|
+|t:|1792775039
+|move|p2a: Garchomp|Swords Dance|p2a: Garchomp
+|-boost|p2a: Garchomp|atk|2
+|move|p1a: Rotom|Hydro Pump|p2a: Garchomp
+|-damage|p2a: Garchomp|37/100
+|
+|upkeep
+|turn|3
+|
+|t:|1792775058
+|switch|p1a: Ferrothorn|Ferrothorn, M|100/100
+|move|p2a: Garchomp|Stealth Rock|p1a: Ferrothorn
+|-sidestart|p1: ReshiRampage|move: Stealth Rock
+|
+|upkeep
+|turn|4
+|
+|t:|1792775064
+|switch|p2a: Magnezone|Magnezone|100/100
+|move|p1a: Ferrothorn|Stealth Rock|p2a: Magnezone
+|-sidestart|p2: kkmh|move: Stealth Rock
+|
+|upkeep
+|turn|5
+|
+|t:|1792775069
+|move|p2a: Magnezone|Hidden Power|p1a: Ferrothorn
+|-supereffective|p1a: Ferrothorn
+|-damage|p1a: Ferrothorn|0 fnt
+|faint|p1a: Ferrothorn
+|
+|upkeep
+|
+|t:|1792775082
+|switch|p1a: Rotom|Rotom-Wash|100/100
+|-damage|p1a: Rotom|88/100|[from] Stealth Rock
+|turn|6
+|inactive|kkmh has 270 seconds left.
+|
+|t:|1792775118
+|switch|p2a: Garchomp|Garchomp, F|37/100
+|-damage|p2a: Garchomp|30/100|[from] Stealth Rock
+|move|p1a: Rotom|Hydro Pump|p2a: Garchomp
+|-damage|p2a: Garchomp|0 fnt
+|faint|p2a: Garchomp
+|
+|-heal|p1a: Rotom|94/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1792775131
+|switch|p2a: Dragonite|Dragonite, M|100/100
+|-damage|p2a: Dragonite|76/100|[from] Stealth Rock
+|turn|7
+|
+|t:|1792775146
+|move|p1a: Rotom|Volt Switch|p2a: Dragonite
+|-damage|p2a: Dragonite|43/100
+|
+|t:|1792775153
+|switch|p1a: Tyranitar|Tyranitar, M|100/100|[from] Volt Switch
+|-damage|p1a: Tyranitar|88/100|[from] Stealth Rock
+|-weather|Sandstorm|[from] ability: Sand Stream|[of] p1a: Tyranitar
+|move|p2a: Dragonite|Outrage|p1a: Tyranitar
+|-damage|p1a: Tyranitar|5/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Dragonite|37/100|[from] Sandstorm
+|upkeep
+|turn|8
+|
+|t:|1792775165
+|move|p2a: Dragonite|Outrage|p1a: Tyranitar|[from] lockedmove
+|-damage|p1a: Tyranitar|0 fnt
+|faint|p1a: Tyranitar
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Dragonite|31/100|[from] Sandstorm
+|upkeep
+|inactive|ReshiRampage has 270 seconds left.
+|
+|t:|1792775202
+|switch|p1a: Alakazam|Alakazam, M|100/100
+|turn|9
+|
+|t:|1792775206
+|move|p1a: Alakazam|Psychic|p2a: Dragonite
+|-damage|p2a: Dragonite|0 fnt
+|faint|p2a: Dragonite
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|
+|t:|1792775209
+|switch|p2a: Landorus-T|Landorus-Therian, M|100/100
+|-damage|p2a: Landorus-T|88/100|[from] Stealth Rock
+|-ability|p2a: Landorus-T|Intimidate|boost
+|-unboost|p1a: Alakazam|atk|1
+|turn|10
+|
+|t:|1792775216
+|switch|p1a: Landorus|Landorus-Therian, M|100/100
+|-damage|p1a: Landorus|88/100|[from] Stealth Rock
+|-ability|p1a: Landorus|Intimidate|boost
+|-unboost|p2a: Landorus-T|atk|1
+|move|p2a: Landorus-T|U-turn|p1a: Landorus
+|-resisted|p1a: Landorus
+|-damage|p1a: Landorus|80/100
+|
+|t:|1792775218
+|switch|p2a: Starmie|Starmie|100/100|[from] U-turn
+|-damage|p2a: Starmie|88/100|[from] Stealth Rock
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Starmie|82/100|[from] Sandstorm
+|upkeep
+|turn|11
+|
+|t:|1792775229
+|move|p1a: Landorus|U-turn|p2a: Starmie
+|-supereffective|p2a: Starmie
+|-damage|p2a: Starmie|9/100
+|
+|t:|1792775254
+|switch|p1a: Alakazam|Alakazam, M|100/100|[from] U-turn
+|move|p2a: Starmie|Rapid Spin|p1a: Alakazam
+|-damage|p1a: Alakazam|87/100
+|-sideend|p2: kkmh|Stealth Rock|[from] move: Rapid Spin|[of] p2a: Starmie
+|-damage|p2a: Starmie|0 fnt|[from] item: Life Orb
+|faint|p2a: Starmie
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|
+|t:|1792775261
+|switch|p2a: Landorus-T|Landorus-Therian, M|88/100
+|-ability|p2a: Landorus-T|Intimidate|boost
+|-unboost|p1a: Alakazam|atk|1
+|turn|12
+|
+|t:|1792775265
+|switch|p1a: Landorus|Landorus-Therian, M|80/100
+|-damage|p1a: Landorus|67/100|[from] Stealth Rock
+|-ability|p1a: Landorus|Intimidate|boost
+|-unboost|p2a: Landorus-T|atk|1
+|move|p2a: Landorus-T|U-turn|p1a: Landorus
+|-resisted|p1a: Landorus
+|-damage|p1a: Landorus|59/100
+|
+|t:|1792775268
+|switch|p2a: Scizor|Scizor, F|100/100|[from] U-turn
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|13
+|
+|t:|1792775276
+|move|p1a: Landorus|U-turn|p2a: Scizor
+|-resisted|p2a: Scizor
+|-damage|p2a: Scizor|89/100
+|
+|t:|1792775278
+|switch|p1a: Rotom|Rotom-Wash|94/100|[from] U-turn
+|-damage|p1a: Rotom|82/100|[from] Stealth Rock
+|move|p2a: Scizor|U-turn|p1a: Rotom
+|-damage|p1a: Rotom|39/100
+|
+|t:|1792775282
+|switch|p2a: Landorus-T|Landorus-Therian, M|88/100|[from] U-turn
+|-ability|p2a: Landorus-T|Intimidate|boost
+|-unboost|p1a: Rotom|atk|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|33/100|[from] Sandstorm
+|-heal|p1a: Rotom|39/100|[from] item: Leftovers
+|upkeep
+|turn|14
+|
+|t:|1792775296
+|move|p2a: Landorus-T|U-turn|p1a: Rotom
+|-damage|p1a: Rotom|7/100
+|
+|t:|1792775298
+|switch|p2a: Magnezone|Magnezone|100/100|[from] U-turn
+|move|p1a: Rotom|Pain Split|p2a: Magnezone
+|-sethp|p2a: Magnezone|53/100|[from] move: Pain Split|[silent]
+|-sethp|p1a: Rotom|62/100|[from] move: Pain Split
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|56/100|[from] Sandstorm
+|-heal|p1a: Rotom|62/100|[from] item: Leftovers
+|upkeep
+|turn|15
+|
+|t:|1792775309
+|move|p1a: Rotom|Hidden Power|p2a: Magnezone
+|-supereffective|p2a: Magnezone
+|-damage|p2a: Magnezone|0 fnt
+|faint|p2a: Magnezone
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|56/100|[from] Sandstorm
+|-heal|p1a: Rotom|62/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1792775313
+|switch|p2a: Landorus-T|Landorus-Therian, M|88/100
+|-ability|p2a: Landorus-T|Intimidate|boost
+|-unboost|p1a: Rotom|atk|1
+|turn|16
+|inactive|ReshiRampage has 270 seconds left.
+|
+|t:|1792775367
+|move|p2a: Landorus-T|Stone Edge|p1a: Rotom
+|-damage|p1a: Rotom|13/100
+|move|p1a: Rotom|Hydro Pump|p2a: Landorus-T
+|-supereffective|p2a: Landorus-T
+|-damage|p2a: Landorus-T|0 fnt
+|faint|p2a: Landorus-T
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|7/100|[from] Sandstorm
+|-heal|p1a: Rotom|13/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1792775370
+|switch|p2a: Scizor|Scizor, F|89/100
+|turn|17
+|
+|t:|1792775375
+|move|p2a: Scizor|Bullet Punch|p1a: Rotom
+|-resisted|p1a: Rotom
+|-damage|p1a: Rotom|3/100
+|move|p1a: Rotom|Hidden Power|p2a: Scizor
+|-supereffective|p2a: Scizor
+|-damage|p2a: Scizor|0 fnt
+|faint|p2a: Scizor
+|
+|win|ReshiRampage
+|c|☆ReshiRampage|gg
+|c|☆kkmh|gg
+|player|p2|

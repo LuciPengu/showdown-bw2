@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`lists what BW2 has no line or animation for 1`] = `
+[
+  "activate: Trick ×4",
+  "cant: Taunt ×1",
+  "charge: Bounce ×2",
+  "damage from Iron Barbs ×5",
+  "damage from Rocky Helmet ×1",
+  "endItem: Air Balloon ×5",
+  "endItem: Focus Sash ×2",
+  "endItem: Leftovers ×2",
+  "endItem: Lum Berry ×1",
+  "endItem: Passho Berry ×2",
+  "endItem: Rocky Helmet ×1",
+  "endItem: Sitrus Berry ×1",
+  "fieldend: Trick Room ×2",
+  "fieldstart: Trick Room ×2",
+  "heal from Healing Wish ×1",
+  "heal from Poison Heal ×7",
+  "heal from Rain Dish ×12",
+  "item: Air Balloon ×7",
+  "item: Choice Scarf ×4",
+  "item: Choice Specs ×1",
+  "item: Chople Berry ×1",
+  "item: Flame Orb ×1",
+  "item: Leftovers ×1",
+  "set from Pain Split ×2",
+  "sideend: Light Screen ×1",
+  "sideend: Reflect ×1",
+  "sidestart: Light Screen ×1",
+  "sidestart: Reflect ×2",
+  "singleTurn: Roost ×3",
+  "volatileEnd: Illusion ×1",
+  "volatileStart: Encore ×1",
+  "volatileStart: Taunt ×2",
+]
+`;

@@ -1,0 +1,463 @@
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up.
+|t:|1792768145
+|gametype|singles
+|player|p1|mentalsoft|winona-gen6|
+|player|p2|leppadparadscha2|1|
+|gen|5
+|tier|[Gen 5] OU
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokemon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Moves Clause: Sleep-inducing moves are banned
+|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats
+|clearpoke
+|poke|p1|Garchomp, M|item
+|poke|p1|Scizor, M|item
+|poke|p1|Starmie|item
+|poke|p1|Jirachi|item
+|poke|p1|Dragonite, M|item
+|poke|p1|Rotom-Wash|item
+|poke|p2|Tyranitar, F|item
+|poke|p2|Latios, M|item
+|poke|p2|Gengar, F|item
+|poke|p2|Ferrothorn, F|item
+|poke|p2|Alakazam, F|item
+|poke|p2|Gliscor, M|item
+|teampreview
+|c|☆mentalsoft|hf
+|c|☆leppadparadscha2|Hf
+|inactive|leppadparadscha2 has 270 seconds left.
+|
+|t:|1792768194
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Rotom|Rotom-Wash|100/100
+|switch|p2a: Gliscor|Gliscor, M|100/100
+|turn|1
+|
+|t:|1792768202
+|move|p2a: Gliscor|Protect|p2a: Gliscor
+|-singleturn|p2a: Gliscor|Protect
+|move|p1a: Rotom|Will-O-Wisp|p2a: Gliscor
+|-activate|p2a: Gliscor|move: Protect
+|
+|-status|p2a: Gliscor|tox|[from] item: Toxic Orb
+|upkeep
+|turn|2
+|
+|t:|1792768220
+|move|p2a: Gliscor|Substitute|p2a: Gliscor
+|-start|p2a: Gliscor|Substitute
+|-damage|p2a: Gliscor|76/100 tox
+|move|p1a: Rotom|Hydro Pump|p2a: Gliscor
+|-supereffective|p2a: Gliscor
+|-end|p2a: Gliscor|Substitute
+|
+|-heal|p2a: Gliscor|88/100 tox|[from] ability: Poison Heal
+|upkeep
+|turn|3
+|inactive|mentalsoft has 270 seconds left.
+|
+|t:|1792768253
+|switch|p1a: Starmie|Starmie|100/100
+|-item|p1a: Starmie|Air Balloon
+|move|p2a: Gliscor|Substitute|p2a: Gliscor
+|-start|p2a: Gliscor|Substitute
+|-damage|p2a: Gliscor|63/100 tox
+|
+|-heal|p2a: Gliscor|76/100 tox|[from] ability: Poison Heal
+|upkeep
+|turn|4
+|
+|t:|1792768260
+|move|p2a: Gliscor|Protect|p2a: Gliscor
+|-singleturn|p2a: Gliscor|Protect
+|move|p1a: Starmie|Ice Beam|p2a: Gliscor
+|-activate|p2a: Gliscor|move: Protect
+|
+|-heal|p2a: Gliscor|88/100 tox|[from] ability: Poison Heal
+|upkeep
+|turn|5
+|
+|t:|1792768280
+|switch|p2a: Tyranitar|Tyranitar, F|100/100
+|-weather|Sandstorm|[from] ability: Sand Stream|[of] p2a: Tyranitar
+|move|p1a: Starmie|Ice Beam|p2a: Tyranitar
+|-damage|p2a: Tyranitar|84/100
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Starmie|94/100|[from] Sandstorm
+|upkeep
+|turn|6
+|
+|t:|1792768294
+|move|p1a: Starmie|Hydro Pump|p2a: Tyranitar
+|-supereffective|p2a: Tyranitar
+|-damage|p2a: Tyranitar|37/100
+|move|p2a: Tyranitar|Stealth Rock|p1a: Starmie
+|-sidestart|p1: mentalsoft|move: Stealth Rock
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Starmie|88/100|[from] Sandstorm
+|upkeep
+|turn|7
+|
+|t:|1792768304
+|switch|p2a: Ferrothorn|Ferrothorn, F|100/100
+|move|p1a: Starmie|Hydro Pump|p2a: Ferrothorn|[miss]
+|-miss|p1a: Starmie|p2a: Ferrothorn
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Starmie|82/100|[from] Sandstorm
+|upkeep
+|turn|8
+|inactive|mentalsoft has 270 seconds left.
+|
+|t:|1792768336
+|switch|p1a: Scizor|Scizor, M|100/100
+|-damage|p1a: Scizor|88/100|[from] Stealth Rock
+|move|p2a: Ferrothorn|Power Whip|p1a: Scizor
+|-resisted|p1a: Scizor
+|-damage|p1a: Scizor|77/100
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|9
+|inactive|mentalsoft has 270 seconds left.
+|
+|t:|1792768371
+|move|p1a: Scizor|Swords Dance|p1a: Scizor
+|-boost|p1a: Scizor|atk|2
+|move|p2a: Ferrothorn|Spikes|p1a: Scizor
+|-sidestart|p1: mentalsoft|Spikes
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|10
+|
+|t:|1792768381
+|switch|p2a: Gliscor|Gliscor, M|88/100 tox
+|move|p1a: Scizor|Natural Gift|p2a: Gliscor
+|-damage|p2a: Gliscor|48/100 tox
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Gliscor|61/100 tox|[from] ability: Poison Heal
+|upkeep
+|turn|11
+|
+|t:|1792768398
+|move|p2a: Gliscor|Earthquake|p1a: Scizor
+|-damage|p1a: Scizor|42/100
+|move|p1a: Scizor|Swords Dance|p1a: Scizor
+|-boost|p1a: Scizor|atk|2
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Gliscor|73/100 tox|[from] ability: Poison Heal
+|upkeep
+|turn|12
+|inactive|leppadparadscha2 has 270 seconds left.
+|inactive|mentalsoft has 240 seconds left.
+|inactive|leppadparadscha2 has 240 seconds left.
+|
+|t:|1792768479
+|move|p1a: Scizor|Bullet Punch|p2a: Gliscor
+|-crit|p2a: Gliscor
+|-damage|p2a: Gliscor|0 fnt
+|faint|p2a: Gliscor
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|inactive|leppadparadscha2 has 210 seconds left.
+|
+|t:|1792768496
+|switch|p2a: Alakazam|Alakazam, F|100/100
+|turn|13
+|
+|t:|1792768513
+|switch|p1a: Jirachi|Jirachi|100/100
+|-damage|p1a: Jirachi|94/100|[from] Stealth Rock
+|-damage|p1a: Jirachi|82/100|[from] Spikes
+|move|p2a: Alakazam|Focus Blast|p1a: Jirachi
+|-damage|p1a: Jirachi|42/100
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|turn|14
+|inactive|leppadparadscha2 has 210 seconds left.
+|
+|t:|1792768529
+|switch|p2a: Ferrothorn|Ferrothorn, F|100/100
+|move|p1a: Jirachi|U-turn|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|86/100
+|-damage|p1a: Jirachi|30/100|[from] ability: Iron Barbs|[of] p2a: Ferrothorn
+|
+|t:|1792768540
+|switch|p1a: Rotom|Rotom-Wash|100/100|[from] U-turn
+|-damage|p1a: Rotom|88/100|[from] Stealth Rock
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Rotom|82/100|[from] Sandstorm
+|-heal|p1a: Rotom|88/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|92/100|[from] item: Leftovers
+|upkeep
+|turn|15
+|
+|t:|1792768554
+|switch|p2a: Latios|Latios, M|100/100
+|move|p1a: Rotom|Will-O-Wisp|p2a: Latios
+|-status|p2a: Latios|brn
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|95/100 brn|[from] Sandstorm
+|-damage|p1a: Rotom|82/100|[from] Sandstorm
+|-heal|p1a: Rotom|88/100|[from] item: Leftovers
+|-damage|p2a: Latios|82/100 brn|[from] brn
+|upkeep
+|turn|16
+|inactive|mentalsoft has 240 seconds left.
+|
+|t:|1792768576
+|move|p2a: Latios|Draco Meteor|p1a: Rotom
+|-damage|p1a: Rotom|0 fnt
+|-unboost|p2a: Latios|spa|2
+|faint|p1a: Rotom
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|76/100 brn|[from] Sandstorm
+|-damage|p2a: Latios|64/100 brn|[from] brn
+|upkeep
+|
+|t:|1792768588
+|switch|p1a: Starmie|Starmie|82/100
+|-damage|p1a: Starmie|70/100|[from] Stealth Rock
+|-item|p1a: Starmie|Air Balloon
+|turn|17
+|inactive|mentalsoft has 210 seconds left.
+|
+|t:|1792768621
+|switch|p2a: Gengar|Gengar, F|100/100
+|move|p1a: Starmie|Rapid Spin|p2a: Gengar
+|-immune|p2a: Gengar
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Starmie|64/100|[from] Sandstorm
+|-damage|p2a: Gengar|94/100|[from] Sandstorm
+|-heal|p2a: Gengar|100/100|[from] item: Black Sludge
+|upkeep
+|turn|18
+|
+|t:|1792768645
+|switch|p2a: Tyranitar|Tyranitar, F|37/100
+|move|p1a: Starmie|Hydro Pump|p2a: Tyranitar
+|-supereffective|p2a: Tyranitar
+|-damage|p2a: Tyranitar|0 fnt
+|faint|p2a: Tyranitar
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Starmie|58/100|[from] Sandstorm
+|upkeep
+|
+|t:|1792768652
+|switch|p2a: Alakazam|Alakazam, F|100/100
+|turn|19
+|inactive|mentalsoft has 180 seconds left.
+|
+|t:|1792768689
+|move|p2a: Alakazam|Shadow Ball|p1a: Starmie
+|-supereffective|p1a: Starmie
+|-damage|p1a: Starmie|0 fnt
+|-enditem|p1a: Starmie|Air Balloon
+|faint|p1a: Starmie
+|
+|-weather|Sandstorm|[upkeep]
+|upkeep
+|
+|t:|1792768700
+|switch|p1a: Jirachi|Jirachi|30/100
+|-damage|p1a: Jirachi|24/100|[from] Stealth Rock
+|-damage|p1a: Jirachi|11/100|[from] Spikes
+|turn|20
+|
+|t:|1792768711
+|switch|p2a: Gengar|Gengar, F|100/100
+|move|p1a: Jirachi|Healing Wish|p1a: Jirachi
+|faint|p1a: Jirachi
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Gengar|94/100|[from] Sandstorm
+|-heal|p2a: Gengar|100/100|[from] item: Black Sludge
+|upkeep
+|
+|t:|1792768719
+|switch|p1a: Scizor|Scizor, M|42/100
+|-heal|p1a: Scizor|100/100|[from] move: Healing Wish
+|-damage|p1a: Scizor|88/100|[from] Stealth Rock
+|-damage|p1a: Scizor|76/100|[from] Spikes
+|turn|21
+|inactive|mentalsoft has 180 seconds left.
+|inactive|leppadparadscha2 has 240 seconds left.
+|
+|t:|1792768738
+|move|p2a: Gengar|Will-O-Wisp|p1a: Scizor
+|-status|p1a: Scizor|brn
+|move|p1a: Scizor|Swords Dance|p1a: Scizor
+|-boost|p1a: Scizor|atk|2
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Gengar|94/100|[from] Sandstorm
+|-heal|p2a: Gengar|100/100|[from] item: Black Sludge
+|-damage|p1a: Scizor|63/100 brn|[from] brn
+|upkeep
+|turn|22
+|
+|t:|1792768767
+|move|p1a: Scizor|Bullet Punch|p2a: Gengar
+|-damage|p2a: Gengar|42/100
+|move|p2a: Gengar|Shadow Ball|p1a: Scizor
+|-resisted|p1a: Scizor
+|-damage|p1a: Scizor|40/100 brn
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Gengar|36/100|[from] Sandstorm
+|-heal|p2a: Gengar|42/100|[from] item: Black Sludge
+|-damage|p1a: Scizor|28/100 brn|[from] brn
+|upkeep
+|turn|23
+|
+|t:|1792768787
+|switch|p2a: Ferrothorn|Ferrothorn, F|92/100
+|move|p1a: Scizor|Bullet Punch|p2a: Ferrothorn
+|-resisted|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|80/100
+|-damage|p1a: Scizor|16/100 brn|[from] ability: Iron Barbs|[of] p2a: Ferrothorn
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Ferrothorn|86/100|[from] item: Leftovers
+|-damage|p1a: Scizor|3/100 brn|[from] brn
+|upkeep
+|turn|24
+|inactive|leppadparadscha2 has 210 seconds left.
+|
+|t:|1792768839
+|move|p2a: Ferrothorn|Protect|p2a: Ferrothorn
+|-singleturn|p2a: Ferrothorn|Protect
+|move|p1a: Scizor|Bug Bite|p2a: Ferrothorn
+|-activate|p2a: Ferrothorn|move: Protect
+|
+|-weather|Sandstorm|[upkeep]
+|-heal|p2a: Ferrothorn|93/100|[from] item: Leftovers
+|-damage|p1a: Scizor|0 fnt|[from] brn
+|faint|p1a: Scizor
+|upkeep
+|
+|t:|1792768849
+|switch|p1a: Garchomp|Garchomp, M|100/100
+|-damage|p1a: Garchomp|94/100|[from] Stealth Rock
+|-damage|p1a: Garchomp|82/100|[from] Spikes
+|turn|25
+|
+|t:|1792768867
+|switch|p2a: Latios|Latios, M|64/100 brn
+|move|p1a: Garchomp|Swords Dance|p1a: Garchomp
+|-boost|p1a: Garchomp|atk|2
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|58/100 brn|[from] Sandstorm
+|-damage|p2a: Latios|46/100 brn|[from] brn
+|upkeep
+|turn|26
+|inactive|mentalsoft has 180 seconds left.
+|
+|t:|1792768880
+|move|p2a: Latios|Draco Meteor|p1a: Garchomp
+|-supereffective|p1a: Garchomp
+|-damage|p1a: Garchomp|0 fnt
+|-unboost|p2a: Latios|spa|2
+|faint|p1a: Garchomp
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p2a: Latios|40/100 brn|[from] Sandstorm
+|-damage|p2a: Latios|27/100 brn|[from] brn
+|upkeep
+|
+|t:|1792768884
+|switch|p1a: Dragonite|Dragonite, M|100/100
+|-damage|p1a: Dragonite|76/100|[from] Stealth Rock
+|turn|27
+|
+|t:|1792768898
+|move|p1a: Dragonite|Extreme Speed|p2a: Latios
+|-damage|p2a: Latios|0 fnt
+|faint|p2a: Latios
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Dragonite|70/100|[from] Sandstorm
+|upkeep
+|
+|t:|1792768917
+|switch|p2a: Gengar|Gengar, F|42/100
+|turn|28
+|
+|t:|1792768922
+|move|p2a: Gengar|Substitute|p2a: Gengar
+|-start|p2a: Gengar|Substitute
+|-damage|p2a: Gengar|17/100
+|move|p1a: Dragonite|Dragon Dance|p1a: Dragonite
+|-boost|p1a: Dragonite|atk|1
+|-boost|p1a: Dragonite|spe|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Dragonite|63/100|[from] Sandstorm
+|-damage|p2a: Gengar|11/100|[from] Sandstorm
+|-heal|p2a: Gengar|17/100|[from] item: Black Sludge
+|upkeep
+|turn|29
+|
+|t:|1792768928
+|move|p1a: Dragonite|Outrage|p2a: Gengar
+|-end|p2a: Gengar|Substitute
+|move|p2a: Gengar|Shadow Ball|p1a: Dragonite
+|-damage|p1a: Dragonite|28/100
+|-unboost|p1a: Dragonite|spd|1
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Dragonite|22/100|[from] Sandstorm
+|-damage|p2a: Gengar|11/100|[from] Sandstorm
+|-heal|p2a: Gengar|17/100|[from] item: Black Sludge
+|upkeep
+|turn|30
+|
+|t:|1792768936
+|move|p1a: Dragonite|Outrage|p2a: Gengar|[from] lockedmove
+|-crit|p2a: Gengar
+|-damage|p2a: Gengar|0 fnt
+|faint|p2a: Gengar
+|-start|p1a: Dragonite|confusion|[fatigue]
+|
+|-weather|Sandstorm|[upkeep]
+|-damage|p1a: Dragonite|15/100|[from] Sandstorm
+|upkeep
+|
+|t:|1792768940
+|switch|p2a: Alakazam|Alakazam, F|100/100
+|turn|31
+|
+|t:|1792768950
+|-activate|p1a: Dragonite|confusion
+|move|p1a: Dragonite|Earthquake|p2a: Alakazam
+|-enditem|p2a: Alakazam|Focus Sash
+|-damage|p2a: Alakazam|1/100
+|move|p2a: Alakazam|Hidden Power|p1a: Dragonite
+|-supereffective|p1a: Dragonite
+|-damage|p1a: Dragonite|0 fnt
+|faint|p1a: Dragonite
+|
+|win|leppadparadscha2
+|c|☆mentalsoft|gg
+|player|p2|
+|player|p2|leppadparadscha2|1|

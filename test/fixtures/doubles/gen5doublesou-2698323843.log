@@ -1,0 +1,434 @@
+|j|☆xmarsh
+|j|☆grayblood
+|t:|1791990790
+|gametype|doubles
+|player|p1|xmarsh|blue-gen3two|
+|player|p2|grayblood|1|
+|gen|5
+|tier|[Gen 5] Doubles OU
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|Species Clause: Limit one of each Pokémon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Evasion Abilities Clause: Evasion abilities are banned
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|clearpoke
+|poke|p1|Landorus-Therian, M|item
+|poke|p1|Thundurus, M|item
+|poke|p1|Latias, F|item
+|poke|p1|Metagross|item
+|poke|p1|Gastrodon, M|item
+|poke|p1|Conkeldurr, F|item
+|poke|p2|Ferrothorn, M|item
+|poke|p2|Kyurem-Black|item
+|poke|p2|Conkeldurr, F|item
+|poke|p2|Thundurus, M|item
+|poke|p2|Kingdra, F|item
+|poke|p2|Garchomp, F|item
+|teampreview
+|c|☆xmarsh|glhf
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by grayblood)
+|c|☆grayblood|u3
+|
+|t:|1791990840
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Landorus|Landorus-Therian, M|100/100
+|switch|p1b: Latias|Latias, F|100/100
+|switch|p2a: Conkeldurr|Conkeldurr, F|100/100
+|switch|p2b: Thundurus|Thundurus, M|100/100
+|-ability|p1a: Landorus|Intimidate|boost
+|-unboost|p2a: Conkeldurr|atk|1
+|-unboost|p2b: Thundurus|atk|1
+|turn|1
+|inactive|xmarsh has 270 seconds left.
+|
+|t:|1791990887
+|move|p2a: Conkeldurr|Detect|p2a: Conkeldurr
+|-singleturn|p2a: Conkeldurr|Protect
+|move|p1a: Landorus|Stone Edge|p2b: Thundurus
+|-supereffective|p2b: Thundurus
+|-damage|p2b: Thundurus|4/100
+|-enditem|p2b: Thundurus|Sitrus Berry|[eat]
+|-heal|p2b: Thundurus|29/100|[from] item: Sitrus Berry
+|move|p1b: Latias|Psychic|p2a: Conkeldurr
+|-activate|p2a: Conkeldurr|move: Protect
+|move|p2b: Thundurus|Hidden Power|p1a: Landorus
+|-supereffective|p1a: Landorus
+|-damage|p1a: Landorus|2/100
+|
+|upkeep
+|turn|2
+|inactive|xmarsh has 270 seconds left.
+|inactive|xmarsh has 240 seconds left.
+|
+|t:|1791990930
+|switch|p1a: Thundurus|Thundurus, M|100/100
+|move|p2b: Thundurus|Thunder Wave|p1b: Latias
+|-status|p1b: Latias|par
+|move|p2a: Conkeldurr|Mach Punch|p1a: Thundurus
+|-resisted|p1a: Thundurus
+|-crit|p1a: Thundurus
+|-damage|p1a: Thundurus|53/100
+|-damage|p2a: Conkeldurr|91/100|[from] item: Life Orb
+|cant|p1b: Latias|par
+|
+|upkeep
+|turn|3
+|
+|t:|1791990954
+|switch|p2a: Ferrothorn|Ferrothorn, M|100/100
+|move|p2b: Thundurus|Thunder Wave|p1a: Thundurus
+|-status|p1a: Thundurus|par
+|move|p1a: Thundurus|Thunderbolt|p2b: Thundurus
+|-damage|p2b: Thundurus|0 fnt
+|faint|p2b: Thundurus
+|move|p1b: Latias|Psychic|p2a: Ferrothorn
+|-resisted|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|85/100
+|
+|-heal|p2a: Ferrothorn|91/100|[from] item: Leftovers
+|upkeep
+|inactive|grayblood has 270 seconds left.
+|
+|t:|1791990985
+|switch|p2b: Kingdra|Kingdra, F|100/100
+|turn|4
+|inactive|xmarsh has 270 seconds left.
+|
+|t:|1791991001
+|move|p1a: Thundurus|Taunt|p2a: Ferrothorn
+|-start|p2a: Ferrothorn|move: Taunt
+|move|p2b: Kingdra|Draco Meteor|p1a: Thundurus
+|-damage|p1a: Thundurus|0 fnt
+|-unboost|p2b: Kingdra|spa|2
+|faint|p1a: Thundurus
+|cant|p1b: Latias|par
+|cant|p2a: Ferrothorn|move: Taunt|Stealth Rock
+|
+|-heal|p2a: Ferrothorn|98/100|[from] item: Leftovers
+|upkeep
+|inactive|xmarsh has 270 seconds left.
+|
+|t:|1791991025
+|switch|p1a: Conkeldurr|Conkeldurr, F|100/100
+|turn|5
+|
+|t:|1791991042
+|switch|p2b: Conkeldurr|Conkeldurr, F|91/100
+|switch|p2a: Garchomp|Garchomp, F|100/100
+|move|p1a: Conkeldurr|Drain Punch|p2a: Garchomp
+|-damage|p2a: Garchomp|26/100
+|-damage|p1a: Conkeldurr|88/100|[from] ability: Rough Skin|[of] p2a: Garchomp
+|-damage|p1a: Conkeldurr|78/100|[from] item: Life Orb
+|cant|p1b: Latias|par
+|
+|upkeep
+|turn|6
+|
+|t:|1791991058
+|move|p1a: Conkeldurr|Mach Punch|p2a: Garchomp
+|-damage|p2a: Garchomp|0 fnt
+|-damage|p1a: Conkeldurr|66/100|[from] ability: Rough Skin|[of] p2a: Garchomp
+|faint|p2a: Garchomp
+|-damage|p1a: Conkeldurr|56/100|[from] item: Life Orb
+|move|p2b: Conkeldurr|Hammer Arm|p1a: Conkeldurr
+|-crit|p1a: Conkeldurr
+|-damage|p1a: Conkeldurr|0 fnt
+|-unboost|p2b: Conkeldurr|spe|1
+|faint|p1a: Conkeldurr
+|-damage|p2b: Conkeldurr|81/100|[from] item: Life Orb
+|move|p1b: Latias|Psychic|p2b: Conkeldurr
+|-supereffective|p2b: Conkeldurr
+|-damage|p2b: Conkeldurr|0 fnt
+|faint|p2b: Conkeldurr
+|
+|upkeep
+|inactive|xmarsh has 270 seconds left.
+|
+|t:|1791991089
+|switch|p2a: Kingdra|Kingdra, F|100/100
+|switch|p1a: Metagross|Metagross, shiny|100/100
+|switch|p2b: Kyurem|Kyurem-Black|100/100
+|-ability|p2b: Kyurem|Teravolt
+|turn|7
+|inactive|xmarsh has 270 seconds left.
+|
+|t:|1791991113
+|switch|p2a: Ferrothorn|Ferrothorn, M|98/100
+|move|p2b: Kyurem|Dragon Claw|p1b: Latias
+|-supereffective|p1b: Latias
+|-enditem|p1b: Latias|Haban Berry|[eat]
+|-enditem|p1b: Latias|Haban Berry|[weaken]
+|-damage|p1b: Latias|11/100 par
+|move|p1a: Metagross|Meteor Mash|p2b: Kyurem
+|-supereffective|p2b: Kyurem
+|-damage|p2b: Kyurem|0 fnt
+|faint|p2b: Kyurem
+|move|p1b: Latias|Draco Meteor|p2a: Ferrothorn
+|-resisted|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|72/100
+|-unboost|p1b: Latias|spa|2
+|
+|-heal|p2a: Ferrothorn|78/100|[from] item: Leftovers
+|upkeep
+|
+|t:|1791991119
+|switch|p2b: Kingdra|Kingdra, F|100/100
+|turn|8
+|
+|t:|1791991141
+|switch|p1b: Gastrodon|Gastrodon, M|100/100
+|move|p2b: Kingdra|Dragon Pulse|p1b: Gastrodon
+|-damage|p1b: Gastrodon|70/100
+|move|p1a: Metagross|Meteor Mash|p2b: Kingdra
+|-resisted|p2b: Kingdra
+|-damage|p2b: Kingdra|68/100
+|move|p2a: Ferrothorn|Leech Seed|p1a: Metagross
+|-start|p1a: Metagross|move: Leech Seed
+|
+|-heal|p2a: Ferrothorn|84/100|[from] item: Leftovers
+|-damage|p1a: Metagross|88/100|[from] Leech Seed|[of] p2a: Ferrothorn
+|-heal|p2a: Ferrothorn|97/100|[silent]
+|upkeep
+|turn|9
+|inactive|xmarsh has 270 seconds left.
+|
+|t:|1791991183
+|move|p2b: Kingdra|Dragon Pulse|p1b: Gastrodon
+|-damage|p1b: Gastrodon|42/100
+|-enditem|p1b: Gastrodon|Sitrus Berry|[eat]
+|-heal|p1b: Gastrodon|67/100|[from] item: Sitrus Berry
+|move|p1a: Metagross|Meteor Mash|p2b: Kingdra
+|-resisted|p2b: Kingdra
+|-damage|p2b: Kingdra|33/100
+|-boost|p1a: Metagross|atk|1
+|move|p1b: Gastrodon|Earth Power|p2b: Kingdra
+|-damage|p2b: Kingdra|0 fnt
+|faint|p2b: Kingdra
+|move|p2a: Ferrothorn|Stealth Rock|p1b: Gastrodon
+|-sidestart|p1: xmarsh|move: Stealth Rock
+|
+|-heal|p1a: Metagross|94/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|100/100|[from] item: Leftovers
+|-damage|p1a: Metagross|82/100|[from] Leech Seed|[of] p2a: Ferrothorn
+|upkeep
+|turn|10
+|inactive|xmarsh has 270 seconds left.
+|
+|t:|1791991214
+|switch|p1a: Landorus|Landorus-Therian, M|2/100
+|-damage|p1a: Landorus|0 fnt|[from] Stealth Rock
+|faint|p1a: Landorus
+|switch|p1b: Latias|Latias, F|11/100 par
+|-damage|p1b: Latias|0 fnt|[from] Stealth Rock
+|faint|p1b: Latias
+|move|p2a: Ferrothorn|Leech Seed|p1: Landorus|[notarget]
+|-fail|p2a: Ferrothorn
+|
+|upkeep
+|
+|t:|1791991218
+|switch|p1b: Gastrodon|Gastrodon, M|67/100
+|switch|p1a: Metagross|Metagross, shiny|82/100
+|-damage|p1a: Metagross|76/100|[from] Stealth Rock
+|-damage|p1b: Gastrodon|61/100|[from] Stealth Rock
+|turn|11
+|
+|t:|1791991228
+|move|p1a: Metagross|Substitute|p1a: Metagross
+|-start|p1a: Metagross|Substitute
+|-damage|p1a: Metagross|51/100
+|move|p1b: Gastrodon|Earth Power|p2a: Ferrothorn
+|-crit|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|44/100
+|move|p2a: Ferrothorn|Power Whip|p1b: Gastrodon
+|-supereffective|p1b: Gastrodon
+|-crit|p1b: Gastrodon
+|-damage|p1b: Gastrodon|0 fnt
+|faint|p1b: Gastrodon
+|
+|-heal|p1a: Metagross|57/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|50/100|[from] item: Leftovers
+|upkeep
+|turn|12
+|
+|t:|1791991237
+|move|p2a: Ferrothorn|Protect|p2a: Ferrothorn
+|-singleturn|p2a: Ferrothorn|Protect
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-activate|p2a: Ferrothorn|move: Protect
+|
+|-heal|p1a: Metagross|63/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|57/100|[from] item: Leftovers
+|upkeep
+|turn|13
+|
+|t:|1791991250
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|34/100
+|move|p2a: Ferrothorn|Power Whip|p1a: Metagross
+|-resisted|p1a: Metagross
+|-activate|p1a: Metagross|Substitute|[damage]
+|
+|-heal|p1a: Metagross|69/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|41/100|[from] item: Leftovers
+|upkeep
+|turn|14
+|
+|t:|1791991256
+|move|p2a: Ferrothorn|Protect|p2a: Ferrothorn
+|-singleturn|p2a: Ferrothorn|Protect
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-activate|p2a: Ferrothorn|move: Protect
+|
+|-heal|p1a: Metagross|75/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|47/100|[from] item: Leftovers
+|upkeep
+|turn|15
+|
+|t:|1791991258
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|27/100
+|move|p2a: Ferrothorn|Power Whip|p1a: Metagross
+|-resisted|p1a: Metagross
+|-end|p1a: Metagross|Substitute
+|
+|-heal|p1a: Metagross|81/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|33/100|[from] item: Leftovers
+|upkeep
+|turn|16
+|
+|t:|1791991264
+|move|p1a: Metagross|Substitute|p1a: Metagross
+|-start|p1a: Metagross|Substitute
+|-damage|p1a: Metagross|56/100
+|move|p2a: Ferrothorn|Power Whip|p1a: Metagross
+|-resisted|p1a: Metagross
+|-activate|p1a: Metagross|Substitute|[damage]
+|
+|-heal|p1a: Metagross|62/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|39/100|[from] item: Leftovers
+|upkeep
+|turn|17
+|
+|t:|1791991267
+|move|p2a: Ferrothorn|Protect|p2a: Ferrothorn
+|-singleturn|p2a: Ferrothorn|Protect
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-activate|p2a: Ferrothorn|move: Protect
+|
+|-heal|p1a: Metagross|68/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|45/100|[from] item: Leftovers
+|upkeep
+|turn|18
+|
+|t:|1791991269
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|23/100
+|move|p2a: Ferrothorn|Power Whip|p1a: Metagross
+|-resisted|p1a: Metagross
+|-end|p1a: Metagross|Substitute
+|
+|-heal|p1a: Metagross|74/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|29/100|[from] item: Leftovers
+|upkeep
+|turn|19
+|
+|t:|1791991279
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|6/100
+|move|p2a: Ferrothorn|Leech Seed|p1a: Metagross
+|-start|p1a: Metagross|move: Leech Seed
+|
+|-heal|p1a: Metagross|80/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|12/100|[from] item: Leftovers
+|-damage|p1a: Metagross|68/100|[from] Leech Seed|[of] p2a: Ferrothorn
+|-heal|p2a: Ferrothorn|25/100|[silent]
+|upkeep
+|turn|20
+|
+|t:|1791991285
+|move|p2a: Ferrothorn|Protect|p2a: Ferrothorn
+|-singleturn|p2a: Ferrothorn|Protect
+|move|p1a: Metagross|Substitute|p1a: Metagross
+|-start|p1a: Metagross|Substitute
+|-damage|p1a: Metagross|43/100
+|
+|-heal|p1a: Metagross|49/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|31/100|[from] item: Leftovers
+|-damage|p1a: Metagross|36/100|[from] Leech Seed|[of] p2a: Ferrothorn
+|-heal|p2a: Ferrothorn|44/100|[silent]
+|upkeep
+|turn|21
+|
+|t:|1791991292
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|21/100
+|move|p2a: Ferrothorn|Power Whip|p1a: Metagross
+|-resisted|p1a: Metagross
+|-activate|p1a: Metagross|Substitute|[damage]
+|
+|-heal|p1a: Metagross|43/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|27/100|[from] item: Leftovers
+|-damage|p1a: Metagross|30/100|[from] Leech Seed|[of] p2a: Ferrothorn
+|-heal|p2a: Ferrothorn|40/100|[silent]
+|upkeep
+|turn|22
+|
+|t:|1791991298
+|move|p2a: Ferrothorn|Protect|p2a: Ferrothorn
+|-singleturn|p2a: Ferrothorn|Protect
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-activate|p2a: Ferrothorn|move: Protect
+|
+|-heal|p1a: Metagross|36/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|46/100|[from] item: Leftovers
+|-damage|p1a: Metagross|24/100|[from] Leech Seed|[of] p2a: Ferrothorn
+|-heal|p2a: Ferrothorn|59/100|[silent]
+|upkeep
+|turn|23
+|
+|t:|1791991305
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|35/100
+|move|p2a: Ferrothorn|Power Whip|p1a: Metagross
+|-resisted|p1a: Metagross
+|-end|p1a: Metagross|Substitute
+|
+|-heal|p1a: Metagross|30/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|41/100|[from] item: Leftovers
+|-damage|p1a: Metagross|18/100|[from] Leech Seed|[of] p2a: Ferrothorn
+|-heal|p2a: Ferrothorn|54/100|[silent]
+|upkeep
+|turn|24
+|
+|t:|1791991308
+|move|p2a: Ferrothorn|Protect|p2a: Ferrothorn
+|-singleturn|p2a: Ferrothorn|Protect
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-activate|p2a: Ferrothorn|move: Protect
+|
+|-heal|p1a: Metagross|24/100|[from] item: Leftovers
+|-heal|p2a: Ferrothorn|60/100|[from] item: Leftovers
+|-damage|p1a: Metagross|11/100|[from] Leech Seed|[of] p2a: Ferrothorn
+|-heal|p2a: Ferrothorn|73/100|[silent]
+|upkeep
+|turn|25
+|
+|t:|1791991315
+|move|p1a: Metagross|Earthquake|p2a: Ferrothorn
+|-damage|p2a: Ferrothorn|52/100
+|move|p2a: Ferrothorn|Power Whip|p1a: Metagross
+|-resisted|p1a: Metagross
+|-damage|p1a: Metagross|0 fnt
+|faint|p1a: Metagross
+|
+|win|grayblood
+|c|☆grayblood|gg
+|c|☆xmarsh|gg
+|l|☆grayblood
+|player|p2|
