@@ -91,6 +91,22 @@ export class Emulator {
     }
   }
 
+  private get ejs(): Record<string, any> {
+    const ejs = (this.frame.contentWindow as any)?.EJS_emulator;
+    if (!ejs) throw new Error('the game is still loading');
+    return ejs;
+  }
+
+  /** Whether the game's sound is off. EmulatorJS remembers it for next time. */
+  get muted(): boolean {
+    return !!this.ejs.muted;
+  }
+
+  set muted(on: boolean) {
+    const ejs = this.ejs;
+    ejs.setVolume(on ? 0 : ejs.volume || 0.5);
+  }
+
   /** Runs the game at `ratio` times its normal speed (1 is normal), with RetroArch's fast-forward. */
   setSpeed(ratio: number): void {
     const gm = this.gameManager;

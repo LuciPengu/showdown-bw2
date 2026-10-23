@@ -26,6 +26,11 @@ const request: ShowdownRequest = {
 };
 
 describe('reading a request', () => {
+  it('gives moves Showdown has disabled no PP, so BW2 refuses them', () => {
+    const disabled = { ...request, active: [{ moves: request.active![0].moves.map((m, i) => ({ ...m, disabled: i === 1 })) }] };
+    expect(teamFromRequest(disabled)[0].moves.map((m) => m.pp)).toEqual([14, 0, 24, 32]);
+  });
+
   it('maps move ids to BW2 numbers, Hidden Power and Return included', () => {
     expect(moveNumber('earthquake')).toBe(89);
     expect(moveNumber('hiddenpowerfire70')).toBe(237);

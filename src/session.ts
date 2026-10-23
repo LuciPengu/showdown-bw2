@@ -22,7 +22,7 @@ export interface ShowdownRequest {
   wait?: boolean;
   teamPreview?: boolean;
   forceSwitch?: boolean[];
-  active?: { moves: { move: string; id: string; pp: number; maxpp: number; target?: string; disabled?: boolean }[]; trapped?: boolean }[];
+  active?: { moves: { move: string; id: string; pp: number; maxpp: number; target?: string; disabled?: boolean | string }[]; trapped?: boolean }[];
   side: {
     id: string;
     pokemon: {

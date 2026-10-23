@@ -61,6 +61,13 @@
   Element.prototype.requestPointerLock = function () {
     return Promise.resolve();
   };
+  // RetroArch keeps the screen awake with a wake lock, which a page framed in another site (the
+  // extension, in Showdown) isn't allowed; there it just does without.
+  if (navigator.wakeLock) {
+    const request = navigator.wakeLock.request.bind(navigator.wakeLock);
+    const standIn = (type) => ({ type, released: false, onrelease: null, release: async () => {}, addEventListener() {}, removeEventListener() {} });
+    navigator.wakeLock.request = (type) => request(type).catch(() => standIn(type));
+  }
   window.EJS_player = '#game';
   window.EJS_core = 'melonds';
   window.EJS_gameName = 'showdown-bw2.nds';

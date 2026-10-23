@@ -33,7 +33,9 @@ export function teamFromRequest(req: ShowdownRequest): TeamMember[] {
       const num = moveNumber(id);
       if (!num) return [];
       const m = live?.find((x) => toID(x.id) === toID(id));
-      return [{ id: num, pp: m?.pp ?? 10, maxPp: m?.maxpp ?? 10 }];
+      // A move Showdown won't take this turn (Disable, Taunt, a Choice lock…) has no PP in BW2's
+      // menu, so the game itself refuses it.
+      return [{ id: num, pp: m?.disabled ? 0 : (m?.pp ?? 10), maxPp: m?.maxpp ?? 10 }];
     });
     team.push({ name, spec, moves });
   }

@@ -18,6 +18,7 @@
       #speed:hover, #speed:focus-within { opacity: 1; }
       #speed button { width: 40px; padding: 3px 0; border: 1px solid #555; border-radius: 4px; background: #1d2228; color: #eee; font: 600 12px system-ui, sans-serif; cursor: pointer; }
       #speed button[aria-pressed='true'] { border-color: #6aa9ff; background: #2b4a75; }
+      #speed #mute { margin-top: 6px; }
       html.parked #speed { display: none; }
       #status { position: absolute; right: 8px; top: calc(var(--bh, 360px) - 30px); margin: 0; max-width: 70%; padding: 3px 8px; border-radius: 4px; background: rgba(0, 0, 0, 0.7); transition: opacity 0.6s; }
       #status[data-ok='false'] { color: #ffb4a8; }
@@ -39,12 +40,13 @@
       <p>Choose your Pokémon Black 2 ROM (.nds). It stays in this browser, so you only choose it once.</p>
       <input id="rom-file" type="file" accept=".nds" />
     </form>
-    <div id="speed" role="group" aria-label="Game speed" hidden>
+    <div id="speed" role="group" aria-label="Game speed and sound" hidden>
       <button type="button" data-speed="1" aria-pressed="true">1×</button>
       <button type="button" data-speed="1.5" aria-pressed="false">1.5×</button>
       <button type="button" data-speed="2" aria-pressed="false">2×</button>
       <!-- As fast as the computer can run it: about 2× on a recent Mac. -->
       <button type="button" data-speed="8" aria-pressed="false" title="As fast as your computer can run it">Max</button>
+      <button type="button" id="mute" aria-pressed="false">Mute</button>
     </div>
     <p id="status" hidden></p>
     <script type="module" src="../src/ext/app.ts"></script>

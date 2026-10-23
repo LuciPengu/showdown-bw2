@@ -127,8 +127,25 @@ function applySpeed(): void {
     return; // still loading; applied once a battle is taken over
   }
   $('speed').hidden = false;
-  for (const b of $('speed').querySelectorAll<HTMLButtonElement>('button')) b.setAttribute('aria-pressed', String(Number(b.dataset.speed) === speed));
+  for (const b of $('speed').querySelectorAll<HTMLButtonElement>('button[data-speed]')) b.setAttribute('aria-pressed', String(Number(b.dataset.speed) === speed));
+  showMuted();
 }
+
+/** The mute button shows whether the game's sound is off (EmulatorJS remembers it). */
+function showMuted(): void {
+  const muted = !!game.emulator?.muted;
+  $('mute').textContent = muted ? 'Unmute' : 'Mute';
+  $('mute').setAttribute('aria-pressed', String(muted));
+}
+$('mute').addEventListener('click', () => {
+  if (!game.emulator) return;
+  try {
+    game.emulator.muted = !game.emulator.muted;
+  } catch {
+    return; // still loading
+  }
+  showMuted();
+});
 $('speed').addEventListener('click', (e) => {
   const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-speed]');
   if (!button) return;
