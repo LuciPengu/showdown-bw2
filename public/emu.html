@@ -22,12 +22,18 @@
         document.body.style.color = '#fff';
         document.body.textContent = 'Open this from the app.';
       } else {
-        // Browsers stop animation frames in a hidden tab, which would freeze the game while you watch
-        // your Showdown tab. The core's main loop asks for a frame through this global each time, so
-        // while hidden it gets one from a timer instead. A tab playing sound keeps its timers at full speed.
+        // The game has to keep running while you watch your Showdown tab. RetroArch pauses a page it
+        // sees as hidden, so it's told the page is always visible. Browsers also stop animation frames
+        // in a hidden page; the core asks for each frame through this global, so while the page is
+        // really hidden, frames come from a timer (a page playing sound keeps its timers at full speed).
+        const reallyHidden = Object.getOwnPropertyDescriptor(Document.prototype, 'hidden').get.bind(document);
+        Object.defineProperty(document, 'hidden', { get: () => false });
+        Object.defineProperty(document, 'visibilityState', { get: () => 'visible' });
+        document.addEventListener('visibilitychange', (e) => e.stopImmediatePropagation(), true);
+        window.addEventListener('blur', (e) => e.stopImmediatePropagation(), true);
         const nativeFrame = window.requestAnimationFrame.bind(window);
         window.requestAnimationFrame = (callback) =>
-          document.hidden ? setTimeout(() => callback(performance.now()), 1000 / 60) : nativeFrame(callback);
+          reallyHidden() ? setTimeout(() => callback(performance.now()), 1000 / 60) : nativeFrame(callback);
         window.EJS_player = '#game';
         window.EJS_core = 'melonds';
         window.EJS_gameName = 'showdown-bw2.nds';
