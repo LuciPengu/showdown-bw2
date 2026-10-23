@@ -8,8 +8,10 @@ moves and switches on BW2's touch screen. Showdown still runs the battle: every 
 roll and HP number is Showdown's, and BW2 only draws it.
 
 <p align="center">
-  <img src="docs/screenshots/rated-ou-battle.png" alt="BW2 drawing a Gen 5 OU battle on Showdown: Garchomp against Thundurus, with BW2's Fight menu on the touch screen and the speed buttons beside it" width="420">
-  <img src="docs/screenshots/random-battle.png" alt="BW2 drawing a Gen 5 Random Battle on Showdown: Mismagius against Stoutland, asking what Mismagius will do" width="420">
+  <img src="docs/screenshots/rated-ou-battle.png" alt="A rated Gen 5 OU battle on Showdown: BW2 shows Garchomp against Thundurus with its Fight menu on the touch screen, beside Showdown's battle log" width="760">
+</p>
+<p align="center">
+  <img src="docs/screenshots/random-battle.png" alt="A Gen 5 Random Battle on Showdown: BW2 asks what Mismagius will do against Stoutland, beside Showdown's battle log" width="760">
 </p>
 
 ## Install
