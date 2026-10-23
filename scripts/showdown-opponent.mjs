@@ -19,6 +19,14 @@ if (!target) {
   process.exit(1);
 }
 
+/** A legal Gen 5 team (packed) for formats that aren't random. */
+export const TEAM = [
+  'Garchomp||lifeorb|roughskin|dragonclaw,earthquake,rockslide,protect|Jolly|,252,,,4,252|||||',
+  'Tyranitar||choiceband|sandstream|stoneedge,crunch,superpower,pursuit|Adamant|252,252,,,4,|||||',
+  'Scizor||lifeorb|technician|bulletpunch,bugbite,superpower,protect|Adamant|252,252,,,4,|||||',
+  'Rotom-Wash||sitrusberry|levitate|hydropump,thunderbolt,willowisp,protect|Modest|252,,,252,4,|||||',
+].join(']');
+
 const name = `bw2test${Math.floor(Math.random() * 1e6)}`;
 const ws = new WebSocket('wss://sim3.psim.us/showdown/websocket');
 const log = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
@@ -42,7 +50,7 @@ ws.on('message', async (data) => {
       send('', `/trn ${name},0,${assertion}`);
     } else if (cmd === 'updateuser' && rest[0].trim() === name && rest[1] === '1') {
       log(`signed in as ${name}; waiting for ${target} to challenge it to ${format}`);
-      send('', '/utm null');
+      send('', `/utm ${format.includes('random') ? 'null' : TEAM}`);
     } else if (cmd === 'updatechallenges') {
       const from = JSON.parse(rest.join('|')).challengesFrom ?? {};
       for (const [user, f] of Object.entries(from)) {
@@ -89,7 +97,8 @@ function choose(room, req) {
   if (req.wait) return;
   const rqid = req.rqid !== undefined ? `|${req.rqid}` : '';
   const moves = req.active?.[0]?.moves?.map((m, i) => ({ ...m, slot: i + 1 })).filter((m) => !m.disabled && m.pp !== 0) ?? [];
-  if (req.forceSwitch || req.teamPreview || !moves.length) return send(room, `/choose default${rqid}`);
+  // Doubles and the rest: Showdown's default choice covers every position.
+  if (req.forceSwitch || req.teamPreview || !moves.length || req.active.length > 1) return send(room, `/choose default${rqid}`);
   const pick = moves[Math.floor(Math.random() * moves.length)];
   log(`using ${pick.move}`);
   send(room, `/choose move ${pick.slot}${rqid}`);

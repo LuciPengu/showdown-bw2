@@ -7,9 +7,10 @@ messages into a list of things for the screen to show, such as "play Thunderbolt
 here to there," "drain this HP bar to 43%" or "print this line." A renderer then plays
 them one at a time.
 
-Today the renderer is a preview drawn in the page with Showdown's BW sprites and BW2's
-battle text. The goal is a renderer that drives a real BW2 ROM in an emulator, so the
-game's own animations draw the battle.
+Two renderers play them side by side: a preview drawn in the page with Showdown's BW
+sprites and BW2's battle text, and a real BW2 ROM in an emulator, whose own animations,
+sprites and text draw the battle. In your own battles you can also pick your moves in
+BW2's menus.
 
 ## Run it
 
@@ -41,8 +42,12 @@ Savestates need the same EmulatorJS version (4.2.3, in `public/emulatorjs`).
 
 | File | Where it starts |
 |---|---|
-| `pwt-outside.state` | Outside the PWT doors, with a Lv 50 team (made with PWT Unlocked's `pwt new`) |
+| `pwt-outside.state` | Inside the PWT, by the arena doors, with a Lv 50 team (made with PWT Unlocked's `pwt new`) |
 | `battle-move-select.state` | Driftveil Tournament, round 1: Garchomp vs. Golduck at "What will Garchomp do?" |
+| `battle-doubles.state` | Rental Tournament, Double Battle, round 1: Golett and Tirtouga vs. Vanillite and Lampent at "What will Golett do?" |
+
+A doubles battle on Showdown switches the game to `battle-doubles.state` on its own, and
+a singles battle switches it back to the dev server's `STATE`.
 
 ## Where battles come from
 
@@ -81,13 +86,28 @@ Showdown messages ─▶ Session ─▶ Translator ─▶ Commands ─▶ Direct
 | `vite.config.ts` | The `/relay` websocket (accepts taps only from Showdown origins) |
 | `public/showdown-tap.user.js` | The userscript |
 
-Tests run the translator over five real Gen 5 OU replays in `test/fixtures/`.
+Tests run the translator and the BW2 scene over real Gen 5 OU and Doubles OU replays in
+`test/fixtures/`. `test/gaps.test.ts` keeps a list of anything BW2 can't show yet (it's
+empty now), and the app lists the same for the battle on screen.
+
+`scripts/` has tools for testing without a second person:
+
+- `node scripts/showdown-opponent.mjs <your name> [format] [--forfeit-at <turn>]` joins
+  Showdown under an unregistered name and plays the other side, picking random moves.
+  Showdown doesn't let unregistered names send challenges, so you challenge it (the name
+  it prints). For formats that aren't random it brings a Gen 5 team; use the same one
+  on your side (it's `TEAM` in the script).
+- `scripts/fake-showdown.mjs` stands in for Showdown and the userscript entirely.
+- `scripts/dumptext.py <rom> <dir>` dumps the ROM's text banks, which is where the
+  message IDs in `src/emu/messages.ts` come from. `scripts/data/` (git-ignored) holds the
+  battle banks.
 
 ## Playing from BW2
 
 In your own battles, when Showdown asks you to choose, BW2's own menus open. You can tap
 Fight and a move, or Pokémon and a switch, with the mouse on the touch screen, or use the
-keyboard. Your pick goes back to Showdown as `/choose`.
+keyboard. Your pick goes back to Showdown as `/choose`. In doubles, BW2 asks for both
+Pokémon and their targets.
 
 1. Install `/showdown-tap.user.js` (v0.2.0 or later) and battle in a logged-in Showdown
    tab. Pick your lead at team preview in that tab.
@@ -109,20 +129,31 @@ How it works (`src/play.ts`, `src/emu/bw2.ts`):
   for a forced switch. The client runs its normal menu and answers with a
   `BattleAction`.
 - **The choice.** A fight carries the move's number, which matches the request's move
-  slot. A switch carries a party slot, which maps to the Showdown Pokémon written there.
-  The choice goes out as `room|/choose move N|rqid` or `switch N` through the relay, and
-  the userscript sends it with the Showdown client's own `app.send`. Bag and Run have no
-  Showdown equivalent: you're asked again.
-- **Menus nobody needs any more.** A menu opened for a request that has been replaced
-  is closed by answering it (pressing A), so the game cleans up after itself. Requests
-  from the relay's backlog (history replayed when the page loads) don't open menus.
+  slot, and a target battle position. A switch carries a party slot, which maps to the
+  Showdown Pokémon written there. The choice goes out as `room|/choose move N|rqid` or
+  `switch N` through the relay, and the userscript sends it with the Showdown client's
+  own `app.send`. In doubles there's one part per position (`move 1 2, switch 4`):
+  targets are Showdown's (foes 1 and 2, allies −1 and −2) and only go with moves that
+  take one, and a position with nothing to choose passes. Bag and Run have no Showdown
+  equivalent: you're asked again.
+- **Menus nobody needs any more.** A menu opened for a request that has been replaced,
+  or still open when the battle ends, is closed by answering it (pressing A), so the
+  game cleans up after itself. Requests from the relay's backlog (history replayed when
+  the page loads) don't open menus.
 
 Mouse taps need the core's `melonds_touch_mode` set to `Touch`, which `public/emu.html`
-does by default.
+does by default. A tap has to last a frame or so, like a real click; instant synthetic
+clicks (from browser automation) don't register.
 
-Checked against a stand-in for Showdown that played a battle through the relay: a move,
-a switch and a forced switch after a faint, all picked by tapping BW2's menus. Sending
-through a real, logged-in Showdown tab hasn't been tried yet.
+Checked live against a real, logged-in Showdown tab (with `scripts/showdown-opponent.mjs`
+on the other side): in Gen 5 Random Battle, a move, a switch and a forced switch after a
+faint, all picked in BW2's menus; in Gen 5 Doubles OU, moves with picked targets for
+both Pokémon.
+
+The game keeps running while its tab is hidden (say, while you watch your Showdown tab).
+`public/emu.html` tells RetroArch the page is always visible, since it pauses otherwise,
+and while the page is really hidden the core gets its frames from a timer. The bridge's
+timeouts count the game's frames, so a paused game never gets commands skipped.
 
 ## Drawing in BW2
 
@@ -147,12 +178,19 @@ With the dev server started with `STATE=savestates/battle-move-select.state`, th
 happens on its own once the game runs. In any other battle, press **Take over this
 battle**. The director then plays every command in both the preview and the game.
 
+Before taking over, the app keeps a snapshot of the game. When Showdown's battle ends,
+BW2 shows its own result (the victory music, then "Player defeated PKMN Trainer X!",
+"lost against" or "battled to a draw"; "Player" is literal in this ROM's text), and a few
+seconds later the game goes back to that snapshot, ready for the next battle. So the game
+never leaves a battle and never saves the rewritten party.
+
 `src/emu/scene.ts` turns each command into BW2 server commands, in the order BW2's own
 server sends them. It keeps a copy of BW2's side of things: party order by mon ID, HP in
 BW2's units, and which positions have a Pokémon on screen.
 
 | Showdown event | In BW2 |
 |---|---|
+| Battle start | Both trainers renamed to the Showdown players (`src/emu/trainers.ts`): "PKMN Trainer X sent out Y!" |
 | Switch in | Rewrites a benched party slot with the Showdown Pokémon (`src/emu/party.ts`), then `OP_SEND_IN` + `SEND_OUT`: real sprite (species, form, gender, shiny), nickname, level, HP and status in the HP box, "Go! X!" |
 | Switch out | `RECALL_MSG` + `RECALL` |
 | Move | "X used Y!" (`MOVE_MSG`), then the move's animation |
@@ -163,6 +201,11 @@ BW2's units, and which positions have a Pokémon on screen.
 | Ability | The ability popup with the right ability |
 | Weather | Start and end with the game's own animation and text; a replay of the animation each turn |
 | Battle text | Crits, effectiveness, misses, Protect, confusion, Substitute, hazards, can't-move reasons, … from the ROM's text banks (`src/emu/messages.ts`) |
+| Items | Reveals and losses: Air Balloon, Frisk, Trick, Thief, Knock Off, Focus Sash, Eject Button, damage-halving berries |
+| Field and sides | Trick Room, Gravity, Magic Room, Wonder Room; Reflect, Light Screen, Safeguard, Mist, Tailwind, Lucky Chant |
+| Volatiles | Taunt, Encore, Disable, Torment, Yawn, Attract, Ingrain, Aqua Ring, Magnet Rise, Curse, Perish Song, Stockpile, Illusion; their can't-move lines |
+| Charge turns | Fly, Dig, Dive, Bounce, Shadow Force, Solar Beam, Skull Bash, Sky Attack, … |
+| Battle end | The victory music and the result line |
 
 Joining a battle midway applies its history to BW2's battle data only, then sends the
 right Pokémon out before the first new animation.
@@ -173,15 +216,19 @@ stay in order. Gender comes from the PID against the species' gender ratio, and 
 from the IDs. Species data (gender ratio, growth rate, first ability) is read from the
 ROM's `a/0/1/6` at boot (`src/emu/rom.ts`).
 
+Trainer names longer than the PWT's own don't fit its name buffer, so they go into
+buffers of ours in the paused server's command queue (unused while it's paused), and the
+original pointers go back before the game would free them.
+
 Limits:
-- **Singles only.** Doubles and triples positions aren't checked.
-- **The opponent is still BW2's trainer.** "PKMN Trainer Dmitri sent out X!"
-- **The battle can't end normally.** Take-over leaves BW2's own battle logic paused for
-  good. Don't let the game save afterwards: the rewritten party may be copied back.
-- **Some lines are missing.** Lines Gen 5 doesn't have, or that aren't mapped yet (e.g.
-  item reveals, Haze), show only in the preview.
-- **Unreadable nicknames** (e.g. Chinese) show as the species name, since the US
-  game's font has Latin letters only.
+- **Singles and doubles only.** There are no triples or rotation savestates.
+- **The opponent's sprite is still the PWT trainer's**, though the name is Showdown's.
+- **Spread moves** animate toward their first target, and each target's hit flashes in
+  turn rather than all at once.
+- **Some lines are missing.** Lines Gen 5 doesn't have show only in the preview; the app
+  lists anything else BW2 couldn't show for the battle on screen.
+- **Unreadable names** (e.g. Chinese) show as the species name, or "Player"/"Opponent"
+  for trainers, since the US game's font has Latin letters only.
 
 Names and addresses come from [pokebw2](https://github.com/fuddlesworth/pokebw2), a
 clean-room decompilation of Black 2 (overlay 167: logic, client, `btlv_core`; overlay
