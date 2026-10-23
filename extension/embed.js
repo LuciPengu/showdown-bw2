@@ -6,6 +6,12 @@
   'use strict';
   const APP = chrome.runtime.getURL('app.html');
   const APP_ORIGIN = new URL(APP).origin;
+  /** A debug build sends log lines to the dev server (see build-extension.mjs). */
+  const log = (...parts) => {
+    if (!globalThis.BW2_DEBUG_LOG) return;
+    fetch(globalThis.BW2_DEBUG_LOG, { method: 'POST', mode: 'no-cors', body: parts.join(' ') }).catch(() => {});
+  };
+  log('embed: started on', location.pathname);
 
   const frame = document.createElement('iframe');
   frame.src = APP;
@@ -13,6 +19,7 @@
   frame.allow = 'autoplay; gamepad';
   Object.assign(frame.style, { position: 'fixed', border: '0', background: '#000', zIndex: '40' });
   document.body.append(frame);
+  frame.addEventListener('load', () => log('embed: frame loaded'));
 
   /**
    * Showdown's messages so far, for the app each time it starts: the page can
@@ -42,6 +49,8 @@
   window.addEventListener('message', (e) => {
     if (e.source !== frame.contentWindow || e.origin !== APP_ORIGIN) return;
     const m = e.data;
+    if (m?.t === 'log') return log('app:', m.text);
+    if (m?.t !== 'choosing') log('embed: from app', JSON.stringify(m).slice(0, 200));
     if (m?.t === 'ready') {
       listening = true;
       post({ t: 'msgs', data: history });
@@ -70,6 +79,7 @@
    */
   function place() {
     if (!frame.isConnected) {
+      log('embed: the frame was removed; putting it back');
       // A fresh app: it says again what it shows once it's caught up.
       listening = false;
       room = null;
@@ -95,7 +105,10 @@
     }
     park(false);
     s.background = '#000';
-    const height = choosing ? Math.min(r.height * 2, window.innerHeight - r.top) : r.height;
+    // Both screens while BW2 asks for a choice, or just the top one; smaller if the window is too short.
+    const room = window.innerHeight - Math.max(0, r.top) - 4;
+    const height = Math.max(120, Math.min(choosing ? r.height * 2 : r.height, room));
+    const screenHeight = choosing ? height / 2 : height;
     Object.assign(s, {
       left: `${r.left}px`,
       top: `${r.top}px`,
@@ -105,14 +118,15 @@
       height: `${height}px`,
       pointerEvents: 'auto',
     });
-    if (r.height !== lastHeight) {
-      lastHeight = r.height;
-      post({ t: 'size', battleHeight: r.height });
+    if (screenHeight !== lastHeight) {
+      lastHeight = screenHeight;
+      post({ t: 'size', battleHeight: screenHeight });
     }
   }
 
   function park(on) {
     if (parked === on) return;
+    log('embed: parked', on, 'room', room);
     parked = on;
     post({ t: 'parked', on });
   }

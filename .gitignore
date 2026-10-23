@@ -5,3 +5,4 @@ dist/
 savestates/
 scripts/data/
 dist-extension/
+ext.log

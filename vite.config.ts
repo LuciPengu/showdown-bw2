@@ -1,4 +1,4 @@
-import { createReadStream, mkdirSync, statSync, writeFileSync } from 'node:fs';
+import { appendFileSync, createReadStream, mkdirSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { defineConfig, type Plugin, type ViteDevServer } from 'vite';
 import { WebSocket, WebSocketServer } from 'ws';
@@ -108,6 +108,18 @@ function devFiles(): Plugin {
       serve('/rom', 'ROM', 'Start the dev server with ROM=/path/to/game.nds')(server);
       serve('/save', 'SAVE', 'Start the dev server with SAVE=/path/to/game.sav')(server);
       serve('/state', 'STATE', 'Start the dev server with STATE=/path/to/savestate')(server);
+      // A debug build of the extension (BW2_DEBUG=1 npm run build:extension) logs here, to ext.log.
+      server.middlewares.use('/ext-log', (req, res) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        if (req.method !== 'POST') return res.end();
+        const chunks: Buffer[] = [];
+        req.on('data', (c: Buffer) => chunks.push(c));
+        req.on('end', () => {
+          const line = Buffer.concat(chunks).toString().slice(0, 2000).replace(/\n/g, ' ');
+          appendFileSync(`${server.config.root}/ext.log`, `${new Date().toISOString().slice(11, 23)} ${line}\n`);
+          res.end();
+        });
+      });
       server.middlewares.use('/savestates', (req, res, next) => {
         if (req.method !== 'POST') return next();
         const name = decodeURIComponent((req.url ?? '').replace(/^\//, ''));

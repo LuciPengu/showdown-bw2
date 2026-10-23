@@ -19,8 +19,16 @@ const toPage = (m: object) => {
   if (SHOWDOWN.test(page)) parent.postMessage(m, page);
 };
 
+/** Goes to the dev server's ext.log in a debug build of the extension, through embed.js. */
+function log(text: string): void {
+  toPage({ t: 'log', text });
+}
+window.addEventListener('error', (e) => log(`error: ${e.message} at ${e.filename}:${e.lineno}`));
+window.addEventListener('unhandledrejection', (e) => log(`unhandled: ${String((e.reason as Error)?.stack ?? e.reason)}`));
+
 let fade = 0;
 function status(text: string, ok: boolean): void {
+  log(`status (${ok ? 'ok' : 'problem'}): ${text}`);
   const el = $('status');
   el.hidden = false;
   el.textContent = text;
@@ -36,6 +44,7 @@ const game = new Bw2Game({
   clearScreen: () => {
     director.reset();
     startFeeding();
+    applySpeed();
   },
   stateUrls: { singles: 'savestates/battle-move-select.state', doubles: 'savestates/battle-doubles.state' },
   emuPage: 'emu.html',
@@ -44,6 +53,7 @@ const director = new Director(game.renderer);
 
 const session = new Session({
   follow(room) {
+    log(`following ${room}`);
     director.reset();
     choices.stop();
     toPage({ t: 'room', room });
@@ -77,6 +87,7 @@ function receive(message: string): void {
   else session.receive(message);
 }
 function startFeeding(): void {
+  log(`feeding ${waiting?.length ?? 0} waiting messages`);
   const messages = waiting;
   waiting = null;
   messages?.forEach((m) => session.receive(m));
@@ -91,6 +102,34 @@ window.addEventListener('message', (e) => {
   else if (m.t === 'parked') document.documentElement.classList.toggle('parked', !!(m as { on?: boolean }).on);
 });
 
+// How fast the game runs (its animations and text), remembered for next time.
+let speed = 1;
+try {
+  speed = Number(localStorage.getItem('speed')) || 1;
+} catch {
+  // storage unavailable: normal speed
+}
+function applySpeed(): void {
+  try {
+    game.emulator?.setSpeed(speed);
+  } catch {
+    return; // still loading; applied once a battle is taken over
+  }
+  $('speed').hidden = false;
+  for (const b of $('speed').querySelectorAll<HTMLButtonElement>('button')) b.setAttribute('aria-pressed', String(Number(b.dataset.speed) === speed));
+}
+$('speed').addEventListener('click', (e) => {
+  const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-speed]');
+  if (!button) return;
+  speed = Number(button.dataset.speed);
+  try {
+    localStorage.setItem('speed', String(speed));
+  } catch {
+    // not remembered
+  }
+  applySpeed();
+});
+
 // The touch screen shows (embed.js makes room for it) while BW2's menu is open.
 let choosing = false;
 setInterval(() => {
@@ -99,11 +138,15 @@ setInterval(() => {
 }, 250);
 
 async function start(rom: ArrayBuffer): Promise<void> {
+  log(`starting with a ${rom.byteLength}-byte ROM`);
   if (gameCode(rom) !== 'IREO') status(`This ROM's game code is ${gameCode(rom)}; the battle addresses are for US Black 2 (IREO).`, false);
+  log('booting the emulator frame');
   const emu = game.boot($('emu'), rom, async () => {
     const res = await fetch('savestates/battle-move-select.state');
     return { save: null, state: res.ok ? await res.arrayBuffer() : null };
   });
+  log(emu ? 'emulator frame created' : 'boot failed');
+  if (emu) $('emu').querySelector('iframe')?.addEventListener('load', () => log('emulator frame loaded'));
   if (!emu) {
     await forgetRom();
     askForRom();
@@ -126,7 +169,11 @@ $<HTMLInputElement>('rom-file').addEventListener('change', async (e) => {
 });
 
 toPage({ t: 'ready' });
+log(`app loaded; framed in ${page || 'nothing'}`);
 loadRom().then(
   (rom) => (rom ? start(rom) : askForRom()),
-  () => askForRom(),
+  (err) => {
+    log(`couldn't read the stored ROM: ${err}`);
+    askForRom();
+  },
 );

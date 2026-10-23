@@ -22,6 +22,11 @@ if (missing.length) {
 await build({ configFile: path('vite.extension.config.ts'), logLevel: 'warn' });
 
 for (const file of ['manifest.json', 'tap.js', 'embed.js', 'emu.html', 'core-files.js']) cpSync(path(`extension/${file}`), out(file));
+// BW2_DEBUG=1: embed.js sends log lines (its own and the app's) to the dev server's ext.log.
+if (process.env.BW2_DEBUG) {
+  writeFileSync(out('embed.js'), `globalThis.BW2_DEBUG_LOG = 'http://localhost:5173/ext-log';\n${readFileSync(out('embed.js'), 'utf8')}`);
+  console.log('Debug build: logging to the dev server (ext.log).');
+}
 for (const file of ['emu-boot.js', 'emu-ticker.js']) cpSync(path(`public/${file}`), out(file));
 for (const s of SAVESTATES) cpSync(path(`savestates/${s}`), out(`savestates/${s}`));
 

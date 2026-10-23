@@ -7,6 +7,10 @@
   const base = new URL('.', document.currentScript.src).href;
   const boot = window.parent.__emuBoot;
   const status = (text) => boot?.onStatus?.(text);
+  // Problems in this frame go to the app's status line, where they can be seen.
+  window.addEventListener('error', (e) => status(`error: ${e.message} (${e.filename?.split('/').pop()}:${e.lineno})`));
+  window.addEventListener('unhandledrejection', (e) => status(`error: ${e.reason?.message ?? e.reason}`));
+  status('booting');
   if (!boot?.rom) {
     document.body.style.color = '#fff';
     document.body.textContent = 'Open this from the app.';
@@ -22,7 +26,13 @@
   Object.defineProperty(document, 'visibilityState', { get: () => 'visible' });
   document.addEventListener('visibilitychange', (e) => e.stopImmediatePropagation(), true);
   window.addEventListener('blur', (e) => e.stopImmediatePropagation(), true);
-  const ticker = new Worker(`${base}emu-ticker.js`);
+  let ticker;
+  try {
+    ticker = new Worker(`${base}emu-ticker.js`);
+  } catch (err) {
+    status(`error: no frame timer (${err.message}); the game will pause while hidden`);
+    ticker = { set onmessage(_) {} };
+  }
   // Every frame asked for waits here until the browser or the worker delivers it, whichever is
   // first: the worker takes over from a browser that's two frames late.
   const LATE_MS = 2000 / 60;

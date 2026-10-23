@@ -91,6 +91,13 @@ export class Emulator {
     }
   }
 
+  /** Runs the game at `ratio` times its normal speed (1 is normal), with RetroArch's fast-forward. */
+  setSpeed(ratio: number): void {
+    const gm = this.gameManager;
+    gm.setFastForwardRatio(ratio);
+    gm.toggleFastForward(ratio > 1 ? 1 : 0);
+  }
+
   /** How many frames the game has run. */
   frames(): number {
     return this.gameManager.getFrameNum();

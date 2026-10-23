@@ -92,6 +92,7 @@ export class Bw2Game {
       container,
       rom,
       (text) => {
+        if (text.startsWith('error')) return this.status(`Emulator ${text}`, false);
         if (text !== 'started') return this.status(`Emulator: ${text}…`);
         if (window.__emuBoot) window.__emuBoot.rom = new ArrayBuffer(0); // the core has its own copy
         void this.startGame(emu, start);
