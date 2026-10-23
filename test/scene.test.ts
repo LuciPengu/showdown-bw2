@@ -23,6 +23,14 @@ function plan(name: string) {
 }
 
 describe('scene', () => {
+  it('names both trainers when the battle starts, near side first', () => {
+    const start = plan('gen5ou-2703228634.log').find((s) => s.cmd.kind === 'start')!;
+    expect(start.step.trainers).toEqual([
+      { client: 0, name: 'frosssted' },
+      { client: 1, name: 'MajesticKath' },
+    ]);
+  });
+
   it('replaces the savestate’s Pokémon silently, then sends out Showdown’s', () => {
     const steps = plan('gen5ou-2703228634.log');
     const first = steps.find((s) => s.cmd.kind === 'switchIn')!;

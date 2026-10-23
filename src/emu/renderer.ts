@@ -24,6 +24,8 @@ export interface GameLink {
   /** Gives the player up to six party slots and returns their side, reread. */
   growPlayerParty(): Bw2Side;
   writeMoves(client: number, partyIndex: number, moves: BattleMove[]): void;
+  /** Renames a client's trainer. */
+  writeTrainer(client: number, name: string): void;
   /** Presses a button in the game. */
   press(button: 'A'): Promise<void>;
 }
@@ -91,6 +93,7 @@ export class EmulatorRenderer implements Renderer {
       // History drawn instantly still updates the game's battle data; the scene leaves out what would animate.
       const step = this.scene.plan(cmd, instant);
       for (const write of step.writes) this.game.writeMon(write);
+      for (const t of step.trainers) this.game.writeTrainer(t.client, t.name);
       if (!step.cmds.length) return;
       // A menu left open (a choice that's no longer wanted) would block the game: close it first.
       if (battle.choosing) await battle.closeMenu((b) => this.game.press(b));

@@ -30,9 +30,16 @@ export interface MonWrite {
   mon: MonSpec;
 }
 
-/** One step for the game: party slots to rewrite, then a block of server commands. */
+/** A trainer's name to show, by client. */
+export interface TrainerWrite {
+  client: number;
+  name: string;
+}
+
+/** One step for the game: party slots and trainer names to rewrite, then a block of server commands. */
 export interface Step {
   writes: MonWrite[];
+  trainers: TrainerWrite[];
   cmds: ServerCmd[];
 }
 
@@ -93,9 +100,14 @@ export function monSpec(mon: MonView, hp: { hp: number; maxHp: number }, status:
   return { species: num, form, level: mon.level, gender: mon.gender, shiny: mon.shiny, nickname: printableName(mon), hp: value, maxHp, status };
 }
 
-/** The nickname, or the species name if the US games' font can't draw it (it has Latin letters only). */
+/** Whether the US games' font can draw `text`: it has Latin letters only. */
+export function drawable(text: string): boolean {
+  return /^[\u0020-\u00ff\u2018\u2019\u201c\u201d\u2026\u2642\u2640]+$/u.test(text);
+}
+
+/** The nickname, or the species name if the font can't draw it. */
 function printableName(mon: MonView): string {
-  return /^[\u0020-\u00ff\u2018\u2019\u201c\u201d\u2026\u2642\u2640]{1,10}$/u.test(mon.name) ? mon.name : mon.species.slice(0, 10);
+  return drawable(mon.name) && [...mon.name].length <= 10 ? mon.name : mon.species.slice(0, 10);
 }
 
 /** A percentage of `maxHp`, never rounding a living Pokémon down to 0. */
@@ -165,7 +177,7 @@ export class Scene {
    * command that animates.
    */
   plan(cmd: Command, instant = false): Step {
-    const step: Step = { writes: [], cmds: [] };
+    const step: Step = { writes: [], trainers: [], cmds: [] };
     if (!instant) this.refreshScreen(step);
     const screenBefore = [...this.screen.out];
     if (this.popupOut !== null && cmd.kind !== 'ability') {
@@ -378,6 +390,11 @@ export class Scene {
         return;
       }
       case 'start':
+        cmd.trainers.forEach((t, i) => {
+          const name = drawable(t.name) ? t.name : i === 0 ? 'Player' : 'Opponent';
+          step.trainers.push({ client: this.sides[i].client, name });
+        });
+        return;
       case 'charge':
       case 'field':
       case 'end':

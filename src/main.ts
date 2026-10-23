@@ -6,6 +6,7 @@ import { BattleParties } from './emu/party';
 import { EmulatorRenderer, TeeRenderer } from './emu/renderer';
 import { type PersonalTable, loadPersonal } from './emu/rom';
 import { Scene } from './emu/scene';
+import { TrainerNames } from './emu/trainers';
 import { ChoiceBridge } from './play';
 import { PreviewRenderer } from './preview';
 import { Session } from './session';
@@ -25,6 +26,7 @@ const inGame = new EmulatorRenderer(
       return parties!.sides()[0];
     },
     writeMoves: (client, partyIndex, moves) => parties!.writeMoves(client, partyIndex, moves),
+    writeTrainer: (client, name) => trainers!.write(client, name),
     press: (button) => emulator!.press(button, 120, 300),
   },
   (message) => setStatus($('emu-status'), `BW2: ${message}`, false),
@@ -122,6 +124,7 @@ const choices = new ChoiceBridge({
 let emulator: Emulator | null = null;
 let bw2: Bw2Battle | null = null;
 let parties: BattleParties | null = null;
+let trainers: TrainerNames | null = null;
 /** Species data from the ROM, read before the emulator takes the ROM. */
 let personal: PersonalTable | null = null;
 const emuStatus = (text: string, ok = true) => setStatus($('emu-status'), text, ok);
@@ -215,10 +218,12 @@ async function takeOverBattle(emu: Emulator, report = true): Promise<boolean> {
   }
   bw2 = battle;
   parties = new BattleParties(ram, battle.mainModule, personal!);
+  trainers = new TrainerNames(ram, battle.mainModule, battle.server);
   inGame.newGame();
   director.reset(); // the next battle shown starts from this battle's party data
   (window as any).bw.battle = battle;
   (window as any).bw.parties = parties;
+  (window as any).bw.trainers = trainers;
   emuStatus('BW2 is drawing: moves play in the game.', true);
   return true;
 }
