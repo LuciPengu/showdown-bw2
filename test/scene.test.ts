@@ -136,7 +136,7 @@ describe('Showdown decides HP', () => {
     const [after] = steps[i + 1].step.hp;
     expect(after.monId).toBe(subtract[1]); // the Pokémon that was hit
     expect(after.hp + subtract[2]).toBeLessThanOrEqual(after.maxHp);
-    const faint = steps.find((s) => s.cmd.kind === 'faint')!;
+    const faint = plan('gen5ou-2703152825.log').find((s) => s.cmd.kind === 'faint')!;
     expect(faint.step.hp).toEqual([expect.objectContaining({ hp: 0 })]);
     const switchIn = steps.find((s) => s.cmd.kind === 'switchIn')!;
     expect(switchIn.step.hp).toEqual([expect.objectContaining({ hp: switchIn.step.writes[0].mon.hp, maxHp: switchIn.step.writes[0].mon.maxHp })]);
