@@ -1,16 +1,56 @@
 # Showdown in BW2
 
-Pokémon Showdown battles, drawn by Pokémon Black 2 / White 2.
+Play your Pokémon Showdown battles inside Pokémon Black 2.
 
-Showdown decides everything that happens in a battle. This app turns Showdown's battle
-messages into a list of things for the screen to show, such as "play Thunderbolt from
-here to there," "drain this HP bar to 43%" or "print this line." A renderer then plays
-them one at a time.
+A Chrome extension that runs Black 2 in an emulator right in Showdown. In your Gen 5
+battles, BW2's own battle scene, animations and text replace Showdown's, and you pick your
+moves and switches on BW2's touch screen. Showdown still runs the battle: every move,
+roll and HP number is Showdown's, and BW2 only draws it.
 
-Two renderers play them side by side: a preview drawn in the page with Showdown's BW
-sprites and BW2's battle text, and a real BW2 ROM in an emulator, whose own animations,
-sprites and text draw the battle. In your own battles you can also pick your moves in
-BW2's menus.
+## Install
+
+1. Download `showdown-bw2-extension.zip` from the [latest release](../../releases/latest)
+   and unzip it.
+2. In Chrome, open `chrome://extensions`, turn on **Developer mode** (top right), click
+   **Load unpacked**, and pick the unzipped folder.
+3. Open [play.pokemonshowdown.com](https://play.pokemonshowdown.com). A panel in the
+   bottom-right corner asks for your **Pokémon Black 2 ROM** (US version, `.nds`). Pick it
+   once; it stays in your browser.
+
+## Use
+
+- Start or join any **Gen 5** battle: Random Battle, OU, Doubles OU, and so on. BW2 takes
+  over the battle scene within a few seconds.
+- When it's your turn, tap **Fight** or **Pokémon** on BW2's touch screen with your mouse
+  (or use the keyboard). Your pick is sent to Showdown.
+- The buttons to the right of the game set its **speed** (1×, 1.5×, 2×, Max) and
+  **mute** it.
+- Team preview is picked in Showdown as usual; Showdown's own buttons come back for it and
+  after the battle.
+
+Good to know:
+
+- Only Gen 5 battles can be drawn faithfully, in singles and doubles. BW2 has no Fairy
+  type, Megas or later moves.
+- You need your own copy of the game; no ROM is included. The download includes two
+  savestates of Pokémon World Tournament battles, which BW2 needs to draw battles in.
+- Tested with Chrome on macOS and the "251 Edition" of US Black 2, whose battle code is the
+  same as the original game's.
+
+Not affiliated with Nintendo, Game Freak, The Pokémon Company, or Pokémon Showdown.
+
+## License and credits
+
+GPL-3.0 (see `LICENSE`). Built on [EmulatorJS](https://github.com/EmulatorJS/EmulatorJS)
+and its [melonDS](https://github.com/melonDS-emu/melonDS) core (both GPL-3.0), which ship
+with it. BW2's battle internals come from [pokebw2](https://github.com/fuddlesworth/pokebw2),
+a clean-room decompilation of Black 2. Move, item, ability and species data comes from
+[Pokémon Showdown](https://github.com/smogon/pokemon-showdown) (MIT).
+
+# For developers
+
+The rest of this file is about working on the code: a web version of the app that runs
+from a dev server, how the battle is drawn in BW2, and how the extension is built.
 
 ## Run it
 
@@ -58,6 +98,9 @@ your turn to choose. It needs no dev server, relay or userscript.
 ```sh
 npm run build:extension   # needs savestates/battle-move-select.state and battle-doubles.state
 ```
+
+The savestates aren't in the repository; take them from the release zip (its `savestates/`
+folder) or make your own with the web version (see below).
 
 Then in Chrome, open `chrome://extensions`, turn on **Developer mode**, press **Load
 unpacked**, and pick the `dist-extension` folder. (After rebuilding, press the reload
