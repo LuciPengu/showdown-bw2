@@ -49,6 +49,32 @@ Savestates need the same EmulatorJS version (4.2.3, in `public/emulatorjs`).
 A doubles battle on Showdown switches the game to `battle-doubles.state` on its own, and
 a singles battle switches it back to the dev server's `STATE`.
 
+## The browser extension
+
+The extension puts BW2 inside Showdown itself: in each of your battles, BW2's top screen
+takes the place of Showdown's battle scene, and its touch screen opens below when it's
+your turn to choose. It needs no dev server, relay or userscript.
+
+```sh
+npm run build:extension   # needs savestates/battle-move-select.state and battle-doubles.state
+```
+
+Then in Chrome, open `chrome://extensions`, turn on **Developer mode**, press **Load
+unpacked**, and pick the `dist-extension` folder. (After rebuilding, press the reload
+button on the extension's card.) On Showdown, the extension asks for your Black 2 ROM
+once, in the corner, and keeps it in the browser.
+
+| File | What it does |
+|---|---|
+| `extension/tap.js` | Runs in the Showdown page from the start: copies its messages, sends `/choose` commands |
+| `extension/embed.js` | Frames the app over the battle scene of the battle it's showing, and relays messages |
+| `extension/app.html`, `src/ext/app.ts` | The app without the preview, fed by the page; the ROM lives in its IndexedDB |
+| `extension/emu.html`, `extension/core-files.js` | The emulator frame. Extension pages can't run `blob:` scripts, which is how EmulatorJS unpacks and loads its core, so the build unpacks it ahead of time and `core-files.js` loads it from files |
+| `scripts/build-extension.mjs` | Builds `dist-extension/`: the app (`vite.extension.config.ts`), EmulatorJS with only melonDS, the unpacked core, the savestates |
+
+`src/game.ts` (booting, taking over, switching and restarting battles) is shared by the
+web page and the extension.
+
 ## Where battles come from
 
 - **Watch a live battle:** paste a battle link. The page joins Showdown as a guest

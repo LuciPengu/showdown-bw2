@@ -1,0 +1,35 @@
+<!doctype html>
+<!--
+  The extension's BW2 screen, framed over Showdown's battle scene by embed.js.
+  The emulator frame shows both DS screens stacked; only the top one fits in
+  the battle scene, and embed.js makes room for the touch screen when BW2 asks
+  for a choice. --bh is the battle scene's height.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Showdown in BW2</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #000; color: #eee; font: 13px/1.4 system-ui, sans-serif; }
+      #emu { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: calc(var(--bh, 360px) * 4 / 3); height: calc(var(--bh, 360px) * 2); }
+      #emu iframe { display: block; width: 100%; height: 100%; border: 0; }
+      #status { position: absolute; right: 8px; top: calc(var(--bh, 360px) - 30px); margin: 0; max-width: 70%; padding: 3px 8px; border-radius: 4px; background: rgba(0, 0, 0, 0.7); transition: opacity 0.6s; }
+      #status[data-ok='false'] { color: #ffb4a8; }
+      #status.faded { opacity: 0; }
+      #rom { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 16px 20px; background: #1d2228; }
+      #rom[hidden] { display: none; }
+      #rom h1 { margin: 0; font-size: 15px; }
+      #rom p { margin: 0; color: #b9c2cc; }
+    </style>
+  </head>
+  <body>
+    <div id="emu"></div>
+    <form id="rom" hidden>
+      <h1>Showdown in BW2</h1>
+      <p>Choose your Pokémon Black 2 ROM (.nds). It stays in this browser, so you only choose it once.</p>
+      <input id="rom-file" type="file" accept=".nds" />
+    </form>
+    <p id="status" hidden></p>
+    <script type="module" src="../src/ext/app.ts"></script>
+  </body>
+</html>

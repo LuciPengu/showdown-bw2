@@ -4,3 +4,4 @@ dist/
 *.sav
 savestates/
 scripts/data/
+dist-extension/

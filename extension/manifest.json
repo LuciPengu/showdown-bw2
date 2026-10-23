@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Showdown in BW2",
+  "version": "0.1.0",
+  "description": "Draws your Pokémon Showdown Gen 5 battles with Pokémon Black 2's own battle scenes, and lets you pick your moves in its menus.",
+  "permissions": ["unlimitedStorage"],
+  "content_scripts": [
+    {
+      "matches": ["https://play.pokemonshowdown.com/*", "https://*.psim.us/*"],
+      "js": ["tap.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://play.pokemonshowdown.com/*", "https://*.psim.us/*"],
+      "js": ["embed.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["app.html"],
+      "matches": ["https://play.pokemonshowdown.com/*", "https://*.psim.us/*"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}
