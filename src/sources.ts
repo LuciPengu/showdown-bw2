@@ -4,7 +4,8 @@ export type Status = (text: string, ok: boolean) => void;
 
 /** Fetches a finished battle's log. Takes a replay link or a bare id like `gen5ou-2703228634`. */
 export async function fetchReplay(input: string): Promise<{ room: string; log: string }> {
-  const id = /([a-z0-9]+-\d+(?:-[a-z0-9]+)?)(?:\.json|\.log)?\/?(?:\?.*)?$/i.exec(input.trim())?.[1];
+  // Ids can have a server prefix (`smogtours-gen5ou-983138`) and a private replay's `-…pw` suffix.
+  const id = /((?:[a-z0-9]+-)*[a-z0-9]+-\d+(?:-[a-z0-9]+pw)?)(?:\.json|\.log)?\/?(?:\?.*)?$/i.exec(input.trim())?.[1];
   if (!id) throw new Error("That doesn't look like a replay link.");
   const res = await fetch(`https://replay.pokemonshowdown.com/${id}.json`);
   if (!res.ok) throw new Error(`Replay ${id} wasn't found (HTTP ${res.status}).`);
