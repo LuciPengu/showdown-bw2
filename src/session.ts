@@ -100,7 +100,16 @@ export class Session {
   }
 }
 
+/**
+ * Where catching up ends and animating starts: the latest turn, or the start
+ * of the battle if it's only on turn 1, so its send-outs play ("Go! X!").
+ */
 function lastTurnIndex(lines: string[]): number {
-  for (let i = lines.length - 1; i >= 0; i--) if (lines[i].startsWith('|turn|')) return i;
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (!lines[i].startsWith('|turn|')) continue;
+    if (lines[i] !== '|turn|1') return i;
+    const start = lines.lastIndexOf('|start|', i);
+    return start >= 0 ? start : i;
+  }
   return 0;
 }
