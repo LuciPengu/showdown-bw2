@@ -6,8 +6,19 @@ const u32 = (b: Uint8Array, at: number) => (b[at] | (b[at + 1] << 8) | (b[at + 2
 
 /** A file's bytes by its path in the ROM's file system, like `a/0/1/6`. */
 export function romFile(rom: Uint8Array, path: string): Uint8Array {
-  const fnt = u32(rom, 0x40);
   const fat = u32(rom, 0x48);
+  const fileId = romFileId(rom, path);
+  return rom.subarray(u32(rom, fat + fileId * 8), u32(rom, fat + fileId * 8 + 4));
+}
+
+/** Where a file's start and end offsets are in the ROM's file allocation table. */
+export function fatEntry(rom: Uint8Array, path: string): number {
+  return u32(rom, 0x48) + romFileId(rom, path) * 8;
+}
+
+/** A file's number in the ROM's file system, by its path. */
+export function romFileId(rom: Uint8Array, path: string): number {
+  const fnt = u32(rom, 0x40);
   let dir = 0; // the root is directory 0xF000
   const parts = path.split('/');
   for (let p = 0; p < parts.length; p++) {
@@ -31,11 +42,7 @@ export function romFile(rom: Uint8Array, path: string): Uint8Array {
           break;
         }
       } else {
-        if (name === parts[p] && p === parts.length - 1) {
-          const start = u32(rom, fat + fileId * 8);
-          const end = u32(rom, fat + fileId * 8 + 4);
-          return rom.subarray(start, end);
-        }
+        if (name === parts[p] && p === parts.length - 1) return fileId;
         fileId++;
       }
     }

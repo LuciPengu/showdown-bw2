@@ -313,6 +313,30 @@ Trainer names longer than the PWT's own don't fit its name buffer, so they go in
 buffers of ours in the paused server's command queue (unused while it's paused), and the
 original pointers go back before the game would free them.
 
+### Changing the cart while the game runs
+
+To show what BW2 doesn't have, like later Pokémon, moves and the Fairy type,
+the app rewrites the game's files as the game reads them: in melonDS's copy of
+the ROM in the WebAssembly heap (`src/emu/romimage.ts`). Each write goes to
+every copy of the ROM found there. Nothing changes in the game's code. What
+was found out live, starting from the PWT savestates:
+
+- **Sprites** (`a/0/0/4`, 20 files per species) are read from the cart on each
+  send-out, through its archive table. A replaced file that doesn't fit goes
+  into 16 MB of room added at the end of the ROM before it boots. The archive
+  is stretched to the ROM's end in the file allocation table, and in the copy of
+  that table the game keeps in RAM. A savestate brings the old copy back, so
+  `Emulator.loadState` stretches it again each time.
+- **Text** is read from the cart for each message, but the game holds its text
+  banks open and remembers where each one starts, so a bank can't move or
+  grow. A longer line goes into the bytes of lines that won't be shown
+  (`src/emu/text.ts`). Each line's key is 0x7C89 + 0x2983 × its number,
+  rotated left 3 bits per character.
+- **Move data** (`a/0/2/1`), meaning type, category and PP, is read when the
+  action menu opens, and so is the move's name (bank 403). Type 17 doesn't
+  exist in BW2: the menu draws the contest "Cool" icon (the next one in the
+  sheet) on a black button.
+
 Limits:
 - **Singles and doubles only.** There are no triples or rotation savestates.
 - **The opponent's sprite is still the PWT trainer's**, though the name is Showdown's.

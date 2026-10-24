@@ -8,6 +8,7 @@ import { Emulator, gameCode } from './emu/emulator';
 import { BattleParties } from './emu/party';
 import { EmulatorRenderer, type Lead } from './emu/renderer';
 import { type PersonalTable, loadPersonal } from './emu/rom';
+import { withScratch } from './emu/romimage';
 import { Scene, drawable } from './emu/scene';
 import { TrainerNames } from './emu/trainers';
 
@@ -106,7 +107,7 @@ export class Bw2Game {
     this.parties = null;
     const emu = Emulator.boot(
       container,
-      rom,
+      withScratch(rom),
       (text) => {
         if (text.startsWith('error')) return this.status(`Emulator ${text}`, false);
         if (text !== 'started') return this.status(`Emulator: ${text}…`);

@@ -1,6 +1,7 @@
 // The BW2 emulator: EmulatorJS (melonDS core) in an iframe, plus access to its RAM.
 
 import { DsRam, findMainRam } from './ram';
+import { Cart, type RomProbe, findRomCopies, romProbe, stretchInRam } from './romimage';
 
 interface EmuBoot {
   rom: ArrayBuffer;
@@ -26,11 +27,16 @@ export function gameCode(rom: ArrayBuffer): string {
 
 export class Emulator {
   private ramCache: DsRam | null = null;
+  private cartCache: Cart | null = null;
   private readonly rom: Uint8Array;
+  private readonly romSize: number;
+  private readonly probe: RomProbe;
 
   private constructor(private readonly frame: HTMLIFrameElement, rom: ArrayBuffer) {
     // The header and the start of ARM9 are all findMainRam needs; don't hold the whole ROM.
     this.rom = new Uint8Array(rom.slice(0, 0x8000));
+    this.romSize = rom.byteLength;
+    this.probe = romProbe(new Uint8Array(rom));
   }
 
   /** Boots `rom` in a new frame (the page `page`) inside `container`, replacing what was there. */
@@ -51,9 +57,15 @@ export class Emulator {
     return gm;
   }
 
-  /** Loads an EmulatorJS savestate (same EmulatorJS version and core). */
+  /**
+   * Loads an EmulatorJS savestate (same EmulatorJS version and core), then
+   * makes the files moved into the ROM's added room reachable from it.
+   */
   loadState(state: Uint8Array): void {
     this.gameManager.loadState(state);
+    const ram = this.ram();
+    const cart = this.cart();
+    if (ram && cart && !stretchInRam(ram, cart)) console.warn("The game's file table wasn't found in RAM: new sprites won't load.");
   }
 
   /** The current savestate. */
@@ -151,6 +163,17 @@ export class Emulator {
     if (base === null) return null;
     this.ramCache = new DsRam(() => this.heap()!, base);
     return this.ramCache;
+  }
+
+  /** The cartridge as the game reads it, or null until the core has loaded the ROM. */
+  cart(): Cart | null {
+    if (this.cartCache) return this.cartCache;
+    const heap = this.heap();
+    if (!heap) return null;
+    const copies = findRomCopies(heap, this.probe);
+    if (!copies.length) return null;
+    this.cartCache = new Cart(() => this.heap()!, copies, this.romSize);
+    return this.cartCache;
   }
 
   destroy(): void {
