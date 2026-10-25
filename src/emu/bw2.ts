@@ -13,7 +13,7 @@ const S_ADAPTERS = 0x021dd86c; // BtlAdapter *sAdapters[4] (btl_adapter.c)
 const MAIN_PROC_NORMAL = 0x021b19d5; // BattleClient_MainProcNormal | 1 (Thumb)
 
 const ADAPTER = { returnData: 0x04, returnSize: 0x08, returned: 0x0c, cmd: 0x10, size: 0x12, data: 0x14 } as const;
-const CLIENT = { mainModule: 0x00, mainProc: 0x28, adapter: 0x50, clientType: 0x1af, mainSeq: 0x1b0 } as const;
+const CLIENT = { mainModule: 0x00, mainProc: 0x28, adapter: 0x50, cmdLimitTime: 0xec, clientType: 0x1af, mainSeq: 0x1b0, cmdLimitOver: 0x1b5 } as const;
 const MAIN_MODULE = { setup: 0x00, server: 0x08 } as const;
 /** BtlSetup: the battle style (0 singles, 1 doubles, 2 triples, 3 rotation), and the victory music. */
 const SETUP = { style: 0x04, winBgm: 0x1a } as const;
@@ -111,11 +111,15 @@ export class Bw2Battle {
   }
 
   /**
-   * Closes an open menu the way a player would, by answering it (A until the
-   * client replies), so the game cleans it up itself. The answer is ignored:
+   * Closes an open menu the way the game does when a link battle's turn timer
+   * runs out (CheckActionSelectForceQuit): it picks for the player and
+   * replies, with nothing pressed on screen. Failing that, it answers the menu
+   * like a player would (A until the client replies). The answer is ignored:
    * the server is paused.
    */
   async closeMenu(press: (button: 'A') => Promise<void>, timeoutMs = 10000): Promise<void> {
+    if (!this.choosing) return;
+    if (await this.timeUp()) return;
     const end = this.clock() + timeoutMs;
     while (this.choosing) {
       if (this.clock() > end) throw new Error("BW2's battle menu didn't close");
@@ -124,14 +128,28 @@ export class Bw2Battle {
     }
   }
 
+  /** Runs out the menu's time limit, and waits for the client to reply. True if it did. */
+  private async timeUp(timeoutMs = 3000): Promise<boolean> {
+    const r = this.ram;
+    r.write16(this.client + CLIENT.cmdLimitTime, 1);
+    r.write8(this.client + CLIENT.cmdLimitOver, 1);
+    const end = this.clock() + timeoutMs;
+    while (this.choosing && this.clock() < end) await sleep(30);
+    // No time limit for the next menu.
+    r.write16(this.client + CLIENT.cmdLimitTime, 0);
+    r.write8(this.client + CLIENT.cmdLimitOver, 0);
+    return !this.choosing;
+  }
+
   /**
    * Stops the game's own battle logic and gets the client idle. If the player
-   * is choosing an action, `press` answers the menu (Fight, then the first
-   * move) so it closes the way it normally does; the paused logic never acts
-   * on the answer.
+   * is choosing an action, the menu's time runs out (or failing that, `press`
+   * answers it), so it closes the way it normally does; the paused logic never
+   * acts on the answer.
    */
   async takeOver(press: (button: 'A') => Promise<void>, timeoutMs = 10000): Promise<void> {
     this.ram.write8(this.server + SERVER.state, SERVER_STATE_DONE);
+    if (this.choosing) await this.timeUp();
     const end = this.clock() + timeoutMs;
     while (!this.idle) {
       if (this.clock() > end) throw new Error("BW2's battle menu didn't close");
