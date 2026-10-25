@@ -18,6 +18,7 @@ const game = new Bw2Game({
   stateUrls: { singles: '/state', doubles: '/savestates/battle-doubles.state' },
   introUrls: { singles: '/savestates/intro-singles.state', doubles: '/savestates/intro-doubles.state' },
   emuPage: '/emu.html',
+  spriteUrl: (dir, id) => `/showdown-sprites/${dir}/${id}.png`,
 });
 const inGame = game.renderer;
 const director = new Director(new TeeRenderer([renderer, inGame]));

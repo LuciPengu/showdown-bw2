@@ -6,6 +6,9 @@
   "permissions": [
     "unlimitedStorage"
   ],
+  "host_permissions": [
+    "https://play.pokemonshowdown.com/sprites/*"
+  ],
   "content_scripts": [
     {
       "matches": [

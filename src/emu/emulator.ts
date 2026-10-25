@@ -63,9 +63,14 @@ export class Emulator {
    */
   loadState(state: Uint8Array): void {
     this.gameManager.loadState(state);
-    const ram = this.ram();
-    const cart = this.cart();
-    if (ram && cart && !stretchInRam(ram, cart)) console.warn("The game's file table wasn't found in RAM: new sprites won't load.");
+    // The core may take the state a frame or so later; stretching again is harmless.
+    for (const ms of [0, 50, 200, 500, 1000]) {
+      setTimeout(() => {
+        const ram = this.ram();
+        const cart = this.cart();
+        if (ram && cart && !stretchInRam(ram, cart) && ms === 1000) console.warn("The game's file table wasn't found in RAM: new sprites won't load.");
+      }, ms);
+    }
   }
 
   /** The current savestate. */

@@ -10,6 +10,7 @@ import { EmulatorRenderer, type Lead } from './emu/renderer';
 import { BorrowingDex, type CartWork } from './emu/dex';
 import { CartLender } from './emu/lender';
 import { type PersonalTable, loadFormCounts, loadPersonal } from './emu/rom';
+import { type SpriteUrl, showdownSpriteUrl, showdownSprites } from './emu/sprites';
 import { withScratch } from './emu/romimage';
 import { Scene, drawable } from './emu/scene';
 import { TrainerNames } from './emu/trainers';
@@ -27,6 +28,8 @@ export interface GameHost {
   introUrls?: Partial<Record<GameType, string>>;
   /** The emulator frame's page. */
   emuPage: string;
+  /** Where Showdown's sprites can be fetched from, for later Pokémon (its own server doesn't allow other pages). */
+  spriteUrl?: SpriteUrl;
   /** Something worth knowing while debugging, not worth showing the player. */
   note?(text: string): void;
 }
@@ -97,7 +100,7 @@ export class Bw2Game {
     if (!work.length) return Promise.resolve();
     const cart = this.emulator?.cart();
     if (!cart) return Promise.resolve();
-    this.lender ??= new CartLender(cart, async () => {});
+    this.lender ??= new CartLender(cart, showdownSprites(this.host.spriteUrl ?? showdownSpriteUrl));
     return this.lender.apply(work).catch((e) => this.host.note?.(`couldn't borrow a slot: ${(e as Error).message}`));
   }
 

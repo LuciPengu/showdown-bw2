@@ -143,5 +143,10 @@ function devFiles(): Plugin {
 
 export default defineConfig({
   plugins: [relay(), devFiles()],
-  server: { port: 5173, strictPort: true },
+  server: {
+    port: 5173,
+    strictPort: true,
+    // Showdown's sprites, for later Pokémon: its server doesn't let other sites read them.
+    proxy: { '/showdown-sprites': { target: 'https://play.pokemonshowdown.com', changeOrigin: true, rewrite: (path) => path.replace(/^\/showdown-sprites/, '/sprites') } },
+  },
 });
