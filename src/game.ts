@@ -8,10 +8,12 @@ import { Emulator, gameCode } from './emu/emulator';
 import { BattleParties } from './emu/party';
 import { EmulatorRenderer, type Lead } from './emu/renderer';
 import { BorrowingDex, type CartWork } from './emu/dex';
+import { fairyInRam, fairyOnCart } from './emu/fairy';
 import { CartLender } from './emu/lender';
 import { type PersonalTable, loadFormCounts, loadPersonal } from './emu/rom';
 import { type SpriteUrl, showdownSpriteUrl, showdownSprites } from './emu/sprites';
 import { withScratch } from './emu/romimage';
+import type { DsRam } from './emu/ram';
 import { Scene, drawable } from './emu/scene';
 import { TrainerNames } from './emu/trainers';
 
@@ -63,6 +65,8 @@ export class Bw2Game {
   readonly dex = new BorrowingDex((species) => this.formCounts(species));
   /** What the borrowed slots need on the cart. */
   private lender: CartLender | null = null;
+  /** Whether the Fairy type's label is on the cart. */
+  private fairyLabel = false;
 
   constructor(private readonly host: GameHost) {
     this.renderer = new EmulatorRenderer(
@@ -93,6 +97,16 @@ export class Bw2Game {
       },
       (message) => host.status(`BW2: ${message}`, false),
     );
+  }
+
+  /** What BW2 needs in a battle to show later things: the Fairy type (fairy.ts). */
+  private patchBattle(ram: DsRam): void {
+    const cart = this.emulator?.cart();
+    if (cart && !this.fairyLabel) {
+      fairyOnCart(cart);
+      this.fairyLabel = true;
+    }
+    fairyInRam(ram);
   }
 
   /** Does what borrowed slots need on the cart (see dex.ts). */
@@ -132,6 +146,7 @@ export class Bw2Game {
     this.battle = null;
     this.parties = null;
     this.lender = null;
+    this.fairyLabel = false;
     this.dex.reset();
     const emu = Emulator.boot(
       container,
@@ -189,6 +204,7 @@ export class Bw2Game {
       return false;
     }
     this.battle = battle;
+    this.patchBattle(ram);
     this.parties = new BattleParties(ram, battle.mainModule, this.personal!);
     this.trainers = new TrainerNames(ram, battle.mainModule, battle.server);
     this.renderer.newGame(perSide(battle.style));
@@ -241,6 +257,7 @@ export class Bw2Game {
       return false;
     }
     battle.clock = () => (emu.frames() * 1000) / 60;
+    this.patchBattle(ram);
     const parties = new BattleParties(ram, battle.mainModule, this.personal);
     const trainers = new TrainerNames(ram, battle.mainModule, battle.server);
     names.forEach((name, client) => name && drawable(name) && trainers.write(client, name));
@@ -257,6 +274,7 @@ export class Bw2Game {
       await sleep(50);
     }
     battle.pauseLogic();
+    this.patchBattle(ram);
     this.battle = battle;
     this.parties = parties;
     this.trainers = trainers;
