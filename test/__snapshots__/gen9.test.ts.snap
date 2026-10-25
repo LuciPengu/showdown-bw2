@@ -1,0 +1,29 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`shows Gen 9 battles, borrowing what BW2 lacks > gaps 1`] = `[]`;
+
+exports[`shows Gen 9 battles, borrowing what BW2 lacks > lines in English 1`] = `
+[
+  "Arboliva's HP was restored.",
+  "Glimmora: Toxic Debris!",
+  "Grass grew to cover the battlefield!",
+  "Great Tusk was freed from Leech Seed!",
+  "Great Tusk's Attack was heightened!",
+  "Lunala's HP was restored.",
+  "Raging Bolt's Sp. Atk was heightened!",
+  "The effects of Raging Bolt's Protosynthesis wore off!",
+  "The effects of Walking Wake's Protosynthesis wore off!",
+  "The foe's Duraludon's HP was restored.",
+  "The foe's Enamorus's Weakness Policy was used up!",
+  "The foe's Kingambit gained strength from the fallen!",
+  "The foe's Talonflame was hurt by Spiky Shield!",
+  "The foe's Tropius harvested one Sitrus Berry!",
+  "The foe's ヒノアラシ: Poltergeist!",
+  "The grass disappeared from the battlefield.",
+  "The harsh sunlight activated Great Tusk's Protosynthesis!",
+  "The harsh sunlight activated Raging Bolt's Protosynthesis!",
+  "The harsh sunlight activated Walking Wake's Protosynthesis!",
+  "The power of the foe's ヒノアラシ's Fire-type moves rose!",
+  "Walking Wake's Speed was heightened!",
+]
+`;

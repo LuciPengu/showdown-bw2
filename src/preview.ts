@@ -174,7 +174,7 @@ export class PreviewRenderer implements Renderer {
 
   private renderStatus(): void {
     const parts = [this.turn ? `Turn ${this.turn}` : ''];
-    if (this.weather) parts.push({ RainDance: 'Rain', SunnyDay: 'Sun', Sandstorm: 'Sandstorm', Hail: 'Hail' }[this.weather]);
+    if (this.weather) parts.push({ RainDance: 'Rain', SunnyDay: 'Sun', Sandstorm: 'Sandstorm', Hail: 'Hail', Snow: 'Snow' }[this.weather]);
     this.status.textContent = parts.filter(Boolean).join(' · ');
   }
 

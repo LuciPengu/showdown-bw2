@@ -6,7 +6,7 @@
 import { DONORS } from '../bw/later';
 import type { CartWork } from './dex';
 import type { Cart, CartArchive } from './romimage';
-import { BANK, LiveBank, encodeText } from './text';
+import { BANK, BORROWED_LINES, LiveBank, encodeText } from './text';
 
 /** Where a species' sprites and icon go. */
 export interface SpriteSlots {
@@ -35,7 +35,7 @@ export class CartLender {
   private readonly iconFiles = new Map<number, Uint8Array>();
   /** Species whose personal data was changed, as it came. */
   private readonly personalRecords = new Map<number, Uint8Array>();
-  private readonly banks: Record<'names' | 'messages' | 'abilities' | 'items', LiveBank>;
+  private readonly banks: Record<'names' | 'messages' | 'abilities' | 'items' | 'std' | 'set', LiveBank>;
   /** Move data records changed, as they came. */
   private readonly moveRecords = new Map<number, Uint8Array>();
   /** Banks whose donors' room is lent. */
@@ -51,7 +51,14 @@ export class CartLender {
     this.personal = cart.archive('a/0/1/6');
     this.icons = cart.archive('a/0/0/7');
     const bank = (n: number) => new LiveBank(cart, this.text, n);
-    this.banks = { names: bank(BANK.moves), messages: bank(BANK.moveMessages), abilities: bank(BANK.abilities), items: bank(BANK.items) };
+    this.banks = {
+      names: bank(BANK.moves),
+      messages: bank(BANK.moveMessages),
+      abilities: bank(BANK.abilities),
+      items: bank(BANK.items),
+      std: bank(BANK.std),
+      set: bank(BANK.set),
+    };
   }
 
   /** Does `work`. Text and move data are written before this returns; sprites may take a moment longer. */
@@ -60,6 +67,7 @@ export class CartLender {
     for (const w of work) {
       if (w.kind === 'move') this.move(w);
       else if (w.kind === 'name') this.name(w);
+      else if (w.kind === 'line') this.line(w);
       else {
         this.baseHp(w.species, w.baseHp);
         pending.push(this.writeSprites({ sprites: this.sprites, icons: this.icons, setIcon: (species, icon) => this.setIcon(species, icon) }, w));
@@ -126,6 +134,15 @@ export class CartLender {
       this.lend('items', () => this.banks.items.lend(DONORS.itemRoom));
       this.banks.items.write(w.num, encodeText(w.name));
     }
+  }
+
+  private line(w: Extract<CartWork, { kind: 'line' }>): void {
+    this.lend('lines', () => {
+      this.banks.std.lend(BORROWED_LINES.stdRoom);
+      this.banks.set.lend(BORROWED_LINES.set.flatMap((l) => [l, l + 1, l + 2]));
+    });
+    const bank = this.banks[w.bank];
+    w.text.forEach((text, i) => bank.write(w.line + i, encodeText(text)));
   }
 
   /** Lends a bank's donors' room, once a battle. */

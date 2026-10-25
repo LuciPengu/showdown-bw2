@@ -29,6 +29,19 @@ export const BANK = {
   std: 19,
 } as const;
 
+/**
+ * Battle lines that can lend their place to lines BW2 doesn't have.
+ * Std (no Pokémon named): disobedience and Pokéstar lines, which Showdown
+ * battles never show; lines take turns with the first four, and all lend their
+ * room. Set (about a Pokémon, three wordings: yours, wild, the foe's): lines of
+ * moves Gen 9 doesn't have (Foresight, Grudge, Sky Drop, Telekinesis).
+ */
+export const BORROWED_LINES = {
+  std: [188, 190, 192, 194],
+  stdRoom: [188, 189, 190, 191, 192, 193, 194, 195, 196],
+  set: [369, 632, 635, 1125, 1143],
+} as const;
+
 export const LINE_BREAK = 0xfffe;
 const END = 0xffff;
 /** Placeholder kinds (dumptext.py): the tag is 0x0100 | kind. */

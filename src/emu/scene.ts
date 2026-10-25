@@ -4,6 +4,7 @@
 
 import type { Command, MonView, Side, Slot, Stat, Status, Weather } from '../bw/commands';
 import { type ServerCmd, SC } from '../bw/servercmd';
+import { describe, makeNamer } from '../bw/english';
 import { toID } from '../showdown/protocol';
 import { type CartWork, type Dex, nativeDex } from './dex';
 import { MSG, type MsgRequest, type MsgResult, SILENT, textMessage } from './messages';
@@ -74,12 +75,23 @@ const STAT_NUMBERS: Record<Stat, number> = { atk: 1, def: 2, spa: 3, spd: 4, spe
 const CONDITIONS: Record<Status, number> = { par: 1, slp: 2, frz: 3, brn: 4, psn: 5, tox: 5 };
 /** The gauge's status icons: the condition, and one past poison for bad poison. */
 const GAUGE_ICONS: Record<Status, number> = { par: 1, slp: 2, frz: 3, brn: 4, psn: 5, tox: 6 };
-const WEATHERS: Record<Weather, number> = { SunnyDay: 1, RainDance: 2, Hail: 3, Sandstorm: 4 };
+/** BW2's weathers; Snow (Gen 9, which has no Hail) shows as Hail, its lines reworded. */
+const WEATHERS: Record<Weather, number> = { SunnyDay: 1, RainDance: 2, Hail: 3, Sandstorm: 4, Snow: 3 };
+/** Hail's std lines (start, end, continues) as Snow's. */
+const SNOW_LINES: [number, string][] = [
+  [0x57, 'It started to snow!'],
+  [0x5c, 'The snow stopped.'],
+  [0x60, 'The snow continues to fall.'],
+];
+/** A sparkle (Cosmic Power's animation) for Terastallization. */
+const TERA_ANIMATION = 322;
+/** About how many letters fit on a line of BW2's message box. */
+const LINE_LETTERS = 30;
 const RECALL_EFFECT = 0x26c; // what the server passes SC_RECALL for a switch
 /** Status animations (SC_EFFECT_BY_POS), on infliction and when the status acts. */
 const STATUS_EFFECTS: Record<Status, number> = { slp: 0x256, psn: 0x257, tox: 0x257, brn: 0x258, frz: 0x259, par: 0x25a };
 /** Weather start animations (SC_EFFECT), replayed while it lasts. */
-const WEATHER_EFFECTS: Record<Weather, number> = { SunnyDay: 0x26b, RainDance: 0x268, Hail: 0x269, Sandstorm: 0x26a };
+const WEATHER_EFFECTS: Record<Weather, number> = { SunnyDay: 0x26b, RainDance: 0x268, Hail: 0x269, Sandstorm: 0x26a, Snow: 0x269 };
 const WEATHER_HIT_EFFECT = 0x290; // sand or hail hitting a Pokémon
 /** The std lines BW2 ends a trainer battle with, about the opponent's client: "Player defeated X!", lost, draw. */
 const RESULT_MSG = { win: 0x2c, lose: 0x2e, draw: 0x2f } as const;
@@ -141,6 +153,8 @@ export class Scene {
   private stale = new Set<number>();
   /** The trainers' Showdown names, near side first. */
   private names: [string, string] = ['', ''];
+  /** The command being planned, for its English line where BW2 has none. */
+  private current: Command | null = null;
   /** What BW2 couldn't show (no line or animation mapped yet), with counts. */
   readonly gaps = new Map<string, number>();
 
@@ -226,7 +240,9 @@ export class Scene {
       if (!instant) step.cmds.push([SC.ABILITY_POPUP_OUT, this.popupOut]);
       this.popupOut = null;
     }
+    this.current = cmd;
     this.add(cmd, step);
+    this.current = null;
     step.work = this.dex.takeWork();
     if (instant) {
       if (cmd.kind === 'switchIn') this.stale.add(cmd.slot.side * 4 + cmd.slot.pos);
@@ -394,6 +410,7 @@ export class Scene {
         return;
       }
       case 'weather': {
+        if (cmd.weather === 'Snow') for (const [line, text] of SNOW_LINES) this.dex.reword(line, text);
         if (cmd.weather && cmd.upkeep) {
           c.push([SC.EFFECT, WEATHER_EFFECTS[cmd.weather]]);
           this.say(c, this.text({ kind: 'weatherUpkeep', weather: cmd.weather }), `${cmd.weather} continues`);
@@ -411,6 +428,14 @@ export class Scene {
         const species = this.dex.species(cmd.mon.species);
         if (species?.native) c.push([SC.CHANGE_FORM, this.monAt(cmd.slot), species.form]);
         else this.gap(`form change: ${cmd.mon.species}`);
+        return;
+      }
+      case 'tera': {
+        const monId = this.monAt(cmd.slot);
+        const line = this.dex.line('set', `{nickname:0} terastallized into\nthe ${cmd.type} type!`);
+        c.push([SC.MOVE_ANIM, this.pos(cmd.slot), this.pos(cmd.slot), TERA_ANIMATION, 0]);
+        if (line === null) return this.gap(`tera: ${cmd.type}`);
+        c.push([SC.MSG_SET, line, monId]);
         return;
       }
       case 'transform': {
@@ -471,11 +496,25 @@ export class Scene {
     this.gaps.set(what, (this.gaps.get(what) ?? 0) + 1);
   }
 
-  /** Adds a line of text, or notes that BW2 has none for it. */
+  /**
+   * Adds a line of text. Where BW2 has none, it shows the line in English in a
+   * borrowed line, or else notes the gap.
+   */
   private say(c: ServerCmd[], msg: MsgResult, what: string): void {
     if (msg === SILENT) return;
-    if (msg) c.push(msg);
+    if (msg) return void c.push(msg);
+    const english = this.english();
+    const line = english && this.dex.line('std', english);
+    if (line !== null && line !== '') c.push([SC.MSG_STD, line]);
     else this.gap(what);
+  }
+
+  /** The command being planned in English, wrapped for BW2's message box, with Pokémon by nickname. */
+  private english(): string | null {
+    if (!this.current) return null;
+    const namer = makeNamer((slot) => this.written[slot.side].get(slot.pos));
+    const text = describe(this.current, namer, (side) => this.names[side] || 'The foe');
+    return text ? wrap(text) : null;
   }
 
   private message(c: ServerCmd[], key: 'dragged', monId: number): void {
@@ -505,4 +544,15 @@ export class Scene {
   private slotKey(slot: Slot): number {
     return slot.side * 4 + slot.pos;
   }
+}
+
+/** A line broken in two for BW2's message box: at the last space that fits, the rest cut to fit. */
+export function wrap(text: string): string {
+  if (text.length <= LINE_LETTERS) return text;
+  let at = text.lastIndexOf(' ', LINE_LETTERS);
+  if (at <= 0) at = LINE_LETTERS;
+  const first = text.slice(0, at);
+  let rest = text.slice(at).trimStart();
+  if (rest.length > LINE_LETTERS) rest = `${rest.slice(0, LINE_LETTERS - 1)}…`;
+  return `${first}\n${rest}`;
 }

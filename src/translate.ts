@@ -12,7 +12,7 @@ const IGNORED = new Set([
 ]);
 
 const STATS = new Set<string>(['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion']);
-const WEATHERS = new Set<string>(['RainDance', 'SunnyDay', 'Sandstorm', 'Hail']);
+const WEATHERS = new Set<string>(['RainDance', 'SunnyDay', 'Sandstorm', 'Hail', 'Snow']);
 const HIT_TEXT: Record<string, TextKey> = { '-crit': 'crit', '-supereffective': 'superEffective', '-resisted': 'resisted' };
 
 export interface TranslatorOptions {
@@ -210,6 +210,12 @@ export class Translator {
       }
       case '-endability':
         return this.text(out, 'endAbility', args[0], [stripPrefix(args[1] ?? '')], from);
+      case '-terastallize': {
+        const slot = this.slot(args[0]);
+        if (!slot) break;
+        out.push({ kind: 'tera', slot, type: args[1] ?? '' });
+        return;
+      }
       case '-transform': {
         const slot = this.slot(args[0]);
         const into = this.slot(args[1]);
@@ -259,12 +265,19 @@ export class Translator {
         return this.text(out, 'nothing', args[0], []);
       case '-hitcount':
         return this.text(out, 'hitCount', args[0], [args[1] ?? '']);
+      // Showdown shows nothing for these when [silent] (Protosynthesis ending, Supreme Overlord's count).
       case '-start':
+        if ('silent' in kw) return;
         return this.text(out, 'volatileStart', args[0], args.slice(1).map(stripPrefix), from, kw.of);
       case '-end':
+        if ('silent' in kw) return;
         return this.text(out, 'volatileEnd', args[0], args.slice(1).map(stripPrefix), from);
-      case '-activate':
-        return this.text(out, 'activate', args[0], args.slice(1).map(stripPrefix), from, kw.of);
+      case '-activate': {
+        if ('silent' in kw) return;
+        // [fromitem]: Booster Energy set off Protosynthesis or Quark Drive.
+        const how = 'fromitem' in kw ? ['fromitem'] : [];
+        return this.text(out, 'activate', args[0], [...args.slice(1).map(stripPrefix), ...how], from, kw.of);
+      }
       case '-singleturn':
         return this.text(out, 'singleTurn', args[0], [stripPrefix(args[1] ?? '')], from);
       case '-singlemove':

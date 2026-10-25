@@ -24,8 +24,8 @@ export const SILENT = 'silent';
 
 const STATUS_GAINED: Record<Status, number> = { brn: 0xff, par: 0x111, slp: 0x132, frz: 0x120, psn: 0xea, tox: 0xed };
 const STATUS_CURED: Partial<Record<Status, number>> = { brn: 0x108, par: 0x117, psn: 0xf6, tox: 0xf6, slp: 0x138, frz: 0x126 };
-/** Std weather lines; sun and rain have no "continues" line in Gen 5. */
-const WEATHER_UPKEEP: Partial<Record<Weather, number>> = { Sandstorm: 0x5f, Hail: 0x60 };
+/** Std weather lines; sun and rain have no "continues" line in Gen 5. Snow rewords Hail's (scene.ts). */
+const WEATHER_UPKEEP: Partial<Record<Weather, number>> = { Sandstorm: 0x5f, Hail: 0x60, Snow: 0x60 };
 /** Side conditions set and removed (std, argument: the side's client). */
 const SIDE: Record<string, [set: number, removed?: number]> = {
   'Stealth Rock': [0x9c, 0x9e],

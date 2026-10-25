@@ -21,6 +21,7 @@ const WEATHER_TEXT: Record<Weather, [start: string, upkeep: string, end: string]
   SunnyDay: ['The sunlight turned harsh!', 'The sunlight is strong.', 'The sunlight faded.'],
   Sandstorm: ['A sandstorm kicked up!', 'The sandstorm rages.', 'The sandstorm subsided.'],
   Hail: ['It started to hail!', 'Hail continues to fall.', 'The hail stopped.'],
+  Snow: ['It started to snow!', 'The snow continues to fall.', 'The snow stopped.'],
 };
 
 const CANT: Record<string, string> = {
@@ -88,6 +89,8 @@ export function describe(cmd: Command, n: Namer, trainerName: (side: 0 | 1) => s
       return `[${n(cmd.slot)}'s ${cmd.ability}]`;
     case 'formChange':
       return `${n(cmd.slot)} changed form!`;
+    case 'tera':
+      return `${n(cmd.slot)} terastallized into the ${cmd.type} type!`;
     case 'transform':
       return `${n(cmd.slot)} transformed into ${n(cmd.into, false).replace(/^the foe's /, '')}!`;
     case 'weather': {
@@ -96,7 +99,7 @@ export function describe(cmd: Command, n: Namer, trainerName: (side: 0 | 1) => s
       return WEATHER_TEXT[w][cmd.upkeep ? 1 : 0];
     }
     case 'field':
-      return `${cmd.condition} ${cmd.active ? 'took effect' : 'wore off'}!`;
+      return fieldText(cmd.condition, cmd.active);
     case 'sideCondition':
       return sideText(cmd.condition, cmd.active, cmd.side === 0 ? 'your team' : 'the foe\'s team');
     case 'text':
@@ -138,6 +141,20 @@ function hpText(from: Effect | undefined, change: 'damage' | 'heal' | 'set', who
   return `${who} was hurt by ${name}!`;
 }
 
+/** Terrains (Gen 6 on) as the later games word them; other field conditions plainly. */
+const TERRAINS: Record<string, [start: string, end: string]> = {
+  'Electric Terrain': ['An electric current ran across the battlefield!', 'The electricity disappeared from the battlefield.'],
+  'Grassy Terrain': ['Grass grew to cover the battlefield!', 'The grass disappeared from the battlefield.'],
+  'Misty Terrain': ['Mist swirled around the battlefield!', 'The mist disappeared from the battlefield.'],
+  'Psychic Terrain': ['The battlefield got weird!', 'The weirdness disappeared from the battlefield!'],
+};
+
+function fieldText(condition: string, active: boolean): string {
+  const terrain = TERRAINS[condition];
+  if (terrain) return terrain[active ? 0 : 1];
+  return `${condition} ${active ? 'took effect' : 'wore off'}!`;
+}
+
 function sideText(condition: string, active: boolean, team: string): string {
   const cap = team[0].toUpperCase() + team.slice(1);
   if (condition === 'Stealth Rock') return active ? `Pointed stones float in the air around ${team}!` : `The pointed stones disappeared from around ${team}!`;
@@ -159,12 +176,26 @@ function textLine(cmd: Extract<Command, { kind: 'text' }>, n: Namer): string | n
     case 'noTarget': return 'But there was no target...';
     case 'nothing': return 'But nothing happened!';
     case 'hitCount': return `Hit ${a} time${a === '1' ? '' : 's'}!`;
-    case 'volatileStart': return a === 'Substitute' ? `${who} put in a substitute!` : a === 'confusion' ? `${who} became confused!` : `${who}: ${a} started.`;
-    case 'volatileEnd': return a === 'Substitute' ? `${who}'s substitute faded!` : a === 'confusion' ? `${who} snapped out of its confusion!` : `${who}: ${a} ended.`;
-    case 'activate': return a === 'Protect' ? `${who} protected itself!` : a === 'confusion' ? `${who} is confused!` : `${who}: ${a}!`;
+    case 'volatileStart': {
+      const boosted = /^(?:protosynthesis|quarkdrive)(atk|def|spa|spd|spe)$/.exec(a);
+      if (boosted) return `${who}'s ${STAT_NAMES[boosted[1] as Stat]} was heightened!`;
+      if (a === 'Flash Fire') return `The power of ${n(cmd.slot, false)}'s Fire-type moves rose!`;
+      return a === 'Substitute' ? `${who} put in a substitute!` : a === 'confusion' ? `${who} became confused!` : `${who}: ${a} started.`;
+    }
+    case 'volatileEnd':
+      if (a === 'Leech Seed' && cmd.from?.name === 'Rapid Spin') return `${who} was freed from Leech Seed!`;
+      if (a === 'Protosynthesis' || a === 'Quark Drive') return `The effects of ${n(cmd.slot, false)}'s ${a} wore off!`;
+      return a === 'Substitute' ? `${who}'s substitute faded!` : a === 'confusion' ? `${who} snapped out of its confusion!` : `${who}: ${a} ended.`;
+    case 'activate':
+      if (a === 'Protosynthesis' || a === 'Quark Drive') {
+        if (cmd.args.includes('fromitem')) return `${who} used its Booster Energy to activate ${a}!`;
+        return `The ${a === 'Protosynthesis' ? 'harsh sunlight' : 'Electric Terrain'} activated ${n(cmd.slot, false)}'s ${a}!`;
+      }
+      if (a === 'Supreme Overlord') return `${who} gained strength from the fallen!`;
+      return a === 'Protect' ? `${who} protected itself!` : a === 'confusion' ? `${who} is confused!` : `${who}: ${a}!`;
     case 'singleTurn': return a === 'Protect' ? `${who} protected itself!` : `${who}: ${a}!`;
     case 'singleMove': return `${who}: ${a}!`;
-    case 'item': return `${who} has ${a}!`;
+    case 'item': return cmd.from?.name === 'Harvest' ? `${who} harvested one ${a}!` : `${who} has ${a}!`;
     case 'endItem': return cmd.from?.name === 'Knock Off' ? `${n(cmd.target)} knocked off ${n(cmd.slot, false)}'s ${a}!` : `${who}'s ${a} was used up!`;
     case 'endAbility': return `${who}'s ${a} was suppressed!`;
     case 'cureTeam': return 'A bell chimed!';

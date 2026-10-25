@@ -1,0 +1,275 @@
+|j|☆yungcheekless
+|j|☆goooombo
+|t:|1792889255
+|gametype|singles
+|player|p1|yungcheekless|acetrainersnowf|2090
+|player|p2|goooombo|backpacker|2044
+|gen|9
+|tier|[Gen 9] Random Battle
+|rated|
+|rule|Species Clause: Limit one of each Pokemon
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|rule|Illusion Level Mod: Illusion disguises the Pokemon's true level
+|
+|t:|1792889255
+|teamsize|p1|6
+|teamsize|p2|6
+|start
+|switch|p1a: Milotic|Milotic, L83, F|293/293
+|switch|p2a: Spectrier|Spectrier, L75|274/274
+|turn|1
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by goooombo)
+|
+|t:|1792889270
+|switch|p1a: Lokix|Lokix, L82, M|251/251
+|move|p2a: Spectrier|Nasty Plot|p2a: Spectrier
+|-boost|p2a: Spectrier|spa|2
+|
+|upkeep
+|turn|2
+|
+|t:|1792889277
+|move|p2a: Spectrier|Will-O-Wisp|p1a: Lokix|[miss]
+|-miss|p2a: Spectrier|p1a: Lokix
+|move|p1a: Lokix|Knock Off|p2a: Spectrier
+|-supereffective|p2a: Spectrier
+|-damage|p2a: Spectrier|0 fnt
+|-enditem|p2a: Spectrier|Life Orb|[from] move: Knock Off|[of] p1a: Lokix
+|faint|p2a: Spectrier
+|-damage|p1a: Lokix|226/251|[from] item: Life Orb
+|
+|upkeep
+|c|☆yungcheekless|sorry ab that
+|
+|t:|1792889283
+|switch|p2a: Glimmora|Glimmora, L75, M|248/248
+|-item|p2a: Glimmora|Air Balloon
+|turn|3
+|c|☆yungcheekless|mb
+|
+|t:|1792889293
+|switch|p1a: Milotic|Milotic, L83, F|293/293
+|move|p2a: Glimmora|Stealth Rock|p1a: Milotic
+|-sidestart|p1: yungcheekless|move: Stealth Rock
+|
+|upkeep
+|turn|4
+|
+|t:|1792889301
+|switch|p2a: Enamorus|Enamorus-Therian, L83, F|259/259
+|move|p1a: Milotic|Scald|p2a: Enamorus
+|-crit|p2a: Enamorus
+|-damage|p2a: Enamorus|129/259
+|
+|upkeep
+|turn|5
+|
+|t:|1792889309
+|move|p1a: Milotic|Ice Beam|p2a: Enamorus
+|-supereffective|p2a: Enamorus
+|-damage|p2a: Enamorus|7/259
+|-enditem|p2a: Enamorus|Weakness Policy
+|-boost|p2a: Enamorus|atk|2|[from] item: Weakness Policy
+|-boost|p2a: Enamorus|spa|2|[from] item: Weakness Policy
+|move|p2a: Enamorus|Agility|p2a: Enamorus
+|-boost|p2a: Enamorus|spe|2
+|
+|upkeep
+|turn|6
+|
+|t:|1792889314
+|move|p2a: Enamorus|Moonblast|p1a: Milotic
+|-damage|p1a: Milotic|112/293
+|move|p1a: Milotic|Haze|p1a: Milotic
+|-clearallboost
+|
+|-heal|p1a: Milotic|130/293|[from] item: Leftovers
+|upkeep
+|turn|7
+|
+|t:|1792889318
+|move|p1a: Milotic|Recover|p1a: Milotic
+|-heal|p1a: Milotic|277/293
+|move|p2a: Enamorus|Moonblast|p1a: Milotic
+|-damage|p1a: Milotic|184/293
+|
+|-heal|p1a: Milotic|202/293|[from] item: Leftovers
+|upkeep
+|turn|8
+|
+|t:|1792889328
+|switch|p2a: Duraludon|Duraludon, L82, M|249/249
+|move|p1a: Milotic|Scald|p2a: Duraludon
+|-resisted|p2a: Duraludon
+|-damage|p2a: Duraludon|204/249
+|
+|-heal|p1a: Milotic|220/293|[from] item: Leftovers
+|upkeep
+|turn|9
+|
+|t:|1792889335
+|switch|p1a: Electivire|Electivire, L84, M|263/263
+|-damage|p1a: Electivire|231/263|[from] Stealth Rock
+|move|p2a: Duraludon|Dragon Tail|p1a: Electivire
+|-damage|p1a: Electivire|162/263
+|drag|p1a: Lokix|Lokix, L82, M|226/251
+|-damage|p1a: Lokix|164/251|[from] Stealth Rock
+|
+|upkeep
+|turn|10
+|
+|t:|1792889349
+|switch|p1a: Arboliva|Arboliva, L91, F|290/290
+|-damage|p1a: Arboliva|254/290|[from] Stealth Rock
+|switch|p2a: Enamorus|Enamorus-Therian, L83, F|7/259
+|
+|-heal|p1a: Arboliva|272/290|[from] item: Leftovers
+|upkeep
+|turn|11
+|
+|t:|1792889356
+|move|p2a: Enamorus|Mystical Fire|p1a: Arboliva
+|-supereffective|p1a: Arboliva
+|-damage|p1a: Arboliva|162/290
+|-unboost|p1a: Arboliva|spa|1
+|-fieldstart|move: Grassy Terrain|[from] ability: Seed Sower|[of] p1a: Arboliva
+|move|p1a: Arboliva|Hyper Voice|p2a: Enamorus
+|-damage|p2a: Enamorus|0 fnt
+|faint|p2a: Enamorus
+|
+|-heal|p1a: Arboliva|180/290|[from] Grassy Terrain
+|-heal|p1a: Arboliva|198/290|[from] item: Leftovers
+|upkeep
+|
+|t:|1792889362
+|switch|p2a: Glimmora|Glimmora, L75, M|248/248
+|-item|p2a: Glimmora|Air Balloon
+|turn|12
+|
+|t:|1792889365
+|move|p2a: Glimmora|Sludge Wave|p1a: Arboliva
+|-supereffective|p1a: Arboliva
+|-damage|p1a: Arboliva|40/290
+|move|p1a: Arboliva|Earth Power|p2a: Glimmora
+|-immune|p2a: Glimmora
+|
+|-heal|p1a: Arboliva|58/290|[from] Grassy Terrain
+|-heal|p1a: Arboliva|76/290|[from] item: Leftovers
+|upkeep
+|turn|13
+|
+|t:|1792889371
+|move|p2a: Glimmora|Sludge Wave|p1a: Arboliva
+|-supereffective|p1a: Arboliva
+|-damage|p1a: Arboliva|0 fnt
+|faint|p1a: Arboliva
+|
+|upkeep
+|
+|t:|1792889375
+|switch|p1a: Lunala|Lunala, L70|308/308
+|-damage|p1a: Lunala|270/308|[from] Stealth Rock
+|turn|14
+|
+|t:|1792889379
+|switch|p2a: Duraludon|Duraludon, L82, M|204/249
+|move|p1a: Lunala|Calm Mind|p1a: Lunala
+|-boost|p1a: Lunala|spa|1
+|-boost|p1a: Lunala|spd|1
+|
+|-heal|p2a: Duraludon|219/249|[from] Grassy Terrain
+|-heal|p1a: Lunala|289/308|[from] Grassy Terrain
+|-heal|p1a: Lunala|308/308|[from] item: Leftovers
+|upkeep
+|turn|15
+|
+|t:|1792889383
+|-terastallize|p1a: Lunala|Fairy
+|move|p1a: Lunala|Calm Mind|p1a: Lunala
+|-boost|p1a: Lunala|spa|1
+|-boost|p1a: Lunala|spd|1
+|move|p2a: Duraludon|Dragon Tail|p1a: Lunala
+|-immune|p1a: Lunala
+|
+|-heal|p2a: Duraludon|234/249|[from] Grassy Terrain
+|-fieldend|move: Grassy Terrain
+|upkeep
+|turn|16
+|
+|t:|1792889390
+|move|p2a: Duraludon|Flash Cannon|p1a: Lunala
+|-supereffective|p1a: Lunala
+|-damage|p1a: Lunala|257/308
+|move|p1a: Lunala|Calm Mind|p1a: Lunala
+|-boost|p1a: Lunala|spa|1
+|-boost|p1a: Lunala|spd|1
+|
+|-heal|p1a: Lunala|276/308|[from] item: Leftovers
+|upkeep
+|turn|17
+|inactive|goooombo has 120 seconds left.
+|
+|t:|1792889423
+|switch|p2a: Glimmora|Glimmora, L75, M|248/248
+|-item|p2a: Glimmora|Air Balloon
+|move|p1a: Lunala|Moonlight|p1a: Lunala
+|-heal|p1a: Lunala|308/308
+|
+|upkeep
+|turn|18
+|
+|t:|1792889427
+|move|p1a: Lunala|Psyshock|p2a: Glimmora
+|-supereffective|p2a: Glimmora
+|-damage|p2a: Glimmora|0 fnt
+|-enditem|p2a: Glimmora|Air Balloon
+|faint|p2a: Glimmora
+|
+|upkeep
+|
+|t:|1792889432
+|switch|p2a: Espathra|Espathra, L80, M|283/283
+|turn|19
+|
+|t:|1792889435
+|move|p2a: Espathra|Calm Mind|p2a: Espathra
+|-boost|p2a: Espathra|spa|1
+|-boost|p2a: Espathra|spd|1
+|move|p1a: Lunala|Moongeist Beam|p2a: Espathra
+|-supereffective|p2a: Espathra
+|-damage|p2a: Espathra|0 fnt
+|faint|p2a: Espathra
+|
+|upkeep
+|
+|t:|1792889438
+|switch|p2a: Talonflame|Talonflame, L83, F|265/265
+|turn|20
+|
+|t:|1792889440
+|move|p2a: Talonflame|Brave Bird|p1a: Lunala
+|-damage|p1a: Lunala|245/308
+|-damage|p2a: Talonflame|244/265|[from] Recoil
+|move|p1a: Lunala|Moongeist Beam|p2a: Talonflame
+|-damage|p2a: Talonflame|0 fnt
+|faint|p2a: Talonflame
+|
+|-heal|p1a: Lunala|264/308|[from] item: Leftovers
+|upkeep
+|
+|t:|1792889442
+|switch|p2a: Duraludon|Duraludon, L82, M|234/249
+|turn|21
+|
+|t:|1792889443
+|move|p2a: Duraludon|Flash Cannon|p1a: Lunala
+|-supereffective|p1a: Lunala
+|-damage|p1a: Lunala|184/308
+|move|p1a: Lunala|Moongeist Beam|p2a: Duraludon
+|-damage|p2a: Duraludon|0 fnt
+|faint|p2a: Duraludon
+|
+|win|yungcheekless
+|raw|yungcheekless's rating: 2090 &rarr; <strong>2107</strong><br />(+17 for winning)
+|raw|goooombo's rating: 2044 &rarr; <strong>2027</strong><br />(-17 for losing)

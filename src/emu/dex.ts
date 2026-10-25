@@ -9,6 +9,7 @@ import { DONORS, LATER_ABILITIES, LATER_ITEMS, LATER_MOVES, LATER_SPECIES } from
 import { MOVE_NUMBERS } from '../bw/moves';
 import { SPECIES } from '../bw/species';
 import { toID } from '../showdown/protocol';
+import { BORROWED_LINES } from './text';
 
 export interface DexSpecies {
   /** The species number BW2 is given: the Pokémon's own, or the one whose slot it borrows. */
@@ -24,7 +25,9 @@ export interface DexSpecies {
 export type CartWork =
   | { kind: 'sprite'; species: number; spriteId: string; baseHp: number }
   | { kind: 'move'; move: number; name: string; type: number; category: number; pp: number; power: number; accuracy: number }
-  | { kind: 'name'; what: 'ability' | 'item'; num: number; name: string };
+  | { kind: 'name'; what: 'ability' | 'item'; num: number; name: string }
+  /** A battle line's text: one for std, three for set (yours, wild, the foe's). */
+  | { kind: 'line'; bank: 'std' | 'set'; line: number; text: string[] };
 
 export interface Dex {
   species(name: string): DexSpecies | null;
@@ -34,6 +37,14 @@ export interface Dex {
   moveAnimation(name: string): number | null;
   ability(name: string): number | null;
   item(name: string): number | null;
+  /**
+   * A std line showing `text` (no placeholders), or a set line about a
+   * Pokémon from `template`, which starts with `{nickname:0}`. Null when
+   * lines can't be borrowed.
+   */
+  line(bank: 'std' | 'set', text: string): number | null;
+  /** Rewords one of BW2's own std lines for this battle (Hail's, for Snow). */
+  reword(line: number, text: string): void;
   /** Cart work for what was borrowed since last asked. */
   takeWork(): CartWork[];
 }
@@ -55,6 +66,8 @@ export const nativeDex: Dex = {
   moveAnimation: (name) => MOVE_NUMBERS[moveKey(name)] ?? null,
   ability: (name) => ABILITY_NUMBERS[toID(name)] ?? null,
   item: (name) => ITEM_NUMBERS[toID(name)] ?? null,
+  line: () => null,
+  reword: () => {},
   takeWork: () => [],
 };
 
@@ -72,6 +85,9 @@ export class BorrowingDex implements Dex {
   /** Which name each ability and item donor holds now. */
   private readonly lent = { ability: new Map<number, string>(), item: new Map<number, string>() };
   private nextLent = { ability: 0, item: 0 };
+  private nextLine = { std: 0, set: 0 };
+  /** BW2's own lines reworded this battle. */
+  private reworded = new Set<number>();
   private work: CartWork[] = [];
 
   constructor(private readonly forms: (num: number) => number) {}
@@ -84,6 +100,7 @@ export class BorrowingDex implements Dex {
     this.takenMoves.clear();
     this.lent.ability.clear();
     this.lent.item.clear();
+    this.reworded.clear();
     this.work = [];
   }
 
@@ -161,6 +178,23 @@ export class BorrowingDex implements Dex {
     lent.set(num, later);
     this.work.push({ kind: 'name', what, num, name: later });
     return num;
+  }
+
+  line(bank: 'std' | 'set', text: string): number {
+    const lines = BORROWED_LINES[bank];
+    const line = lines[this.nextLine[bank]++ % lines.length];
+    if (bank === 'std') this.work.push({ kind: 'line', bank, line, text: [text] });
+    else {
+      const rest = text.replace(/^\{nickname:0\}/, '');
+      this.work.push({ kind: 'line', bank, line, text: [text, `The wild {nickname:0}${rest}`, `The foe's {nickname:0}${rest}`] });
+    }
+    return line;
+  }
+
+  reword(line: number, text: string): void {
+    if (this.reworded.has(line)) return;
+    this.reworded.add(line);
+    this.work.push({ kind: 'line', bank: 'std', line, text: [text] });
   }
 
   takeWork(): CartWork[] {

@@ -18,7 +18,7 @@ export interface Slot {
 
 export type GameType = 'singles' | 'doubles' | 'triples' | 'rotation';
 export type Stat = 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'accuracy' | 'evasion';
-export type Weather = 'RainDance' | 'SunnyDay' | 'Sandstorm' | 'Hail';
+export type Weather = 'RainDance' | 'SunnyDay' | 'Sandstorm' | 'Hail' | 'Snow';
 
 /** `maxHp` is 100 when Showdown only reveals a percentage. */
 export interface Hp {
@@ -94,6 +94,8 @@ export type Command =
   | { kind: 'ability'; slot: Slot; ability: string }
   | { kind: 'formChange'; slot: Slot; mon: MonView }
   | { kind: 'transform'; slot: Slot; into: Slot }
+  /** Terastallization (Gen 9): the Pokémon takes on its Tera type. */
+  | { kind: 'tera'; slot: Slot; type: string }
   | { kind: 'weather'; weather: Weather | null; upkeep: boolean; from?: Effect }
   /** `slot` is who started it, if Showdown says. */
   | { kind: 'field'; condition: string; active: boolean; slot?: Slot }
