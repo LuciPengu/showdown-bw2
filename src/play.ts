@@ -81,7 +81,9 @@ export function toChoice(
  * The whole /choose command for BW2's answers to a request: one part per
  * active position, in order. BW2's action menu answers once per position (an
  * empty action for a fainted one); its forced-switch menu answers only for
- * the positions it asked about. Positions with nothing to choose pass.
+ * the positions it asked about. Positions with nothing to choose pass. BW2
+ * has no Mega button, so the first Pokémon that can Mega Evolve does as it
+ * attacks (a side Mega Evolves once a battle).
  */
 export function toChoices(
   actions: Bw2Action[],
@@ -95,6 +97,7 @@ export function toChoices(
   const byPosition = actions.length >= count;
   const parts: string[] = [];
   let next = 0;
+  let mega = false;
   for (let i = 0; i < count; i++) {
     const action = !needs(i) ? undefined : byPosition ? actions[i] : actions[next++];
     if (!action) {
@@ -103,7 +106,9 @@ export function toChoices(
     }
     const part = toChoice(action, req, nameAt, i, dex);
     if (!part) return null;
-    parts.push(part);
+    const megaHere: boolean = !mega && action.kind === 'fight' && !!req.active?.[i]?.canMegaEvo;
+    mega ||= megaHere;
+    parts.push(megaHere ? `${part} mega` : part);
   }
   return count === 1 ? parts[0] : parts.join(', ');
 }

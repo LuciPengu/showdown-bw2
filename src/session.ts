@@ -22,7 +22,12 @@ export interface ShowdownRequest {
   wait?: boolean;
   teamPreview?: boolean;
   forceSwitch?: boolean[];
-  active?: { moves: { move: string; id: string; pp: number; maxpp: number; target?: string; disabled?: boolean | string }[]; trapped?: boolean }[];
+  active?: {
+    moves: { move: string; id: string; pp: number; maxpp: number; target?: string; disabled?: boolean | string }[];
+    trapped?: boolean;
+    /** It holds its Mega Stone and its side hasn't Mega Evolved yet. */
+    canMegaEvo?: boolean;
+  }[];
   side: {
     id: string;
     pokemon: {

@@ -83,3 +83,17 @@ describe('doubles scene', () => {
     expect(anim.slice(1, 3)).toEqual([1, 0]); // p2a is position 1, p1a position 0
   });
 });
+
+describe('Mega Evolution', () => {
+  it('Mega Evolves the first Pokémon that can, as it attacks, since BW2 has no Mega button', () => {
+    const both = { ...request, active: [{ moves, canMegaEvo: true }, { moves, canMegaEvo: true }] };
+    const fight = [
+      { kind: 'fight', move: 89, target: 1 },
+      { kind: 'fight', move: 337, target: 3 },
+    ] as const;
+    expect(toChoices([...fight], both, nameAt)).toBe('move 1 mega, move 2 2');
+    const second = { ...request, active: [{ moves }, { moves, canMegaEvo: true }] };
+    expect(toChoices([...fight], second, nameAt)).toBe('move 1, move 2 2 mega');
+    expect(toChoices([{ kind: 'switch', partyIndex: 2 }, ...fight.slice(1)], second, nameAt)).toBe('switch 3, move 2 2 mega');
+  });
+});
