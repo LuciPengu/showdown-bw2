@@ -113,6 +113,7 @@ $('speeds').addEventListener('click', (e) => {
 // Playing from BW2's menus: Showdown's requests open them, and the pick goes back through the relay.
 const choices = new ChoiceBridge({
   battle: () => game.live(),
+  bagButton: () => game.bagButton,
   renderer: inGame,
   caughtUp: () => director.idle,
   writeActiveMoves: (position, moves) => game.parties?.writeMoves(0, position, moves),

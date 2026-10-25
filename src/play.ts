@@ -2,6 +2,7 @@
 // open, and the pick is sent back to Showdown as a /choose command.
 
 import type { Status } from './bw/commands';
+import type { BagButton, Gimmick } from './emu/bagbutton';
 import type { Bw2Action, Bw2Battle } from './emu/bw2';
 import { type Dex, nativeDex } from './emu/dex';
 import type { BattleMove } from './emu/party';
@@ -81,15 +82,17 @@ export function toChoice(
  * The whole /choose command for BW2's answers to a request: one part per
  * active position, in order. BW2's action menu answers once per position (an
  * empty action for a fainted one); its forced-switch menu answers only for
- * the positions it asked about. Positions with nothing to choose pass. BW2
- * has no Mega button, so the first Pokémon that can Mega Evolve does as it
- * attacks (a side Mega Evolves once a battle).
+ * the positions it asked about. Positions with nothing to choose pass. A
+ * Pokémon Mega Evolves or Terastallizes as it attacks if that was chosen on
+ * the Bag button (`gimmicks`, by position) and Showdown allows it; a side
+ * does each once a battle.
  */
 export function toChoices(
   actions: Bw2Action[],
   req: ShowdownRequest,
   nameAt: (partyIndex: number) => string | undefined,
   dex: Dex = nativeDex,
+  gimmicks: (Gimmick | null)[] = [],
 ): string | null {
   const count = Math.max(req.active?.length ?? 0, req.forceSwitch?.length ?? 0, 1);
   const needs = (i: number) =>
@@ -97,7 +100,7 @@ export function toChoices(
   const byPosition = actions.length >= count;
   const parts: string[] = [];
   let next = 0;
-  let mega = false;
+  const used = new Set<Gimmick>();
   for (let i = 0; i < count; i++) {
     const action = !needs(i) ? undefined : byPosition ? actions[i] : actions[next++];
     if (!action) {
@@ -106,15 +109,20 @@ export function toChoices(
     }
     const part = toChoice(action, req, nameAt, i, dex);
     if (!part) return null;
-    const megaHere: boolean = !mega && action.kind === 'fight' && !!req.active?.[i]?.canMegaEvo;
-    mega ||= megaHere;
-    parts.push(megaHere ? `${part} mega` : part);
+    const gimmick = action.kind === 'fight' ? gimmicks[i] : null;
+    const allowed = gimmick === 'mega' ? !!req.active?.[i]?.canMegaEvo : gimmick === 'tera' ? !!req.active?.[i]?.canTerastallize : false;
+    if (gimmick && allowed && !used.has(gimmick)) {
+      used.add(gimmick);
+      parts.push(`${part} ${gimmick === 'mega' ? 'mega' : 'terastallize'}`);
+    } else parts.push(part);
   }
   return count === 1 ? parts[0] : parts.join(', ');
 }
 
 export interface ChoiceBridgeDeps {
   battle(): Bw2Battle | null;
+  /** The Bag button as a Mega and Tera button, if the game has it. */
+  bagButton?(): BagButton | null;
   renderer: EmulatorRenderer;
   /** Whether everything Showdown sent so far has been shown. */
   caughtUp(): boolean;
@@ -195,9 +203,12 @@ export class ChoiceBridge {
       this.deps.status(forced ? 'Choose a Pokémon to send in, in the game.' : 'Your move: choose in the game.', true);
       // A forced switch names the battle positions to fill: the player's are 0, 2, 4.
       const fainted = forced ? req.forceSwitch!.flatMap((f, i) => (f ? [i * 2] : [])) : null;
+      const bag = forced ? null : (this.deps.bagButton?.() ?? null);
+      bag?.offer((req.active ?? []).map((a) => (a.canMegaEvo ? 'mega' : a.canTerastallize ? 'tera' : null)));
       const actions = await battle.ask(fainted, asking.signal);
       if (this.request !== req) return; // superseded while the menu was open
-      const choice = actions.length ? toChoices(actions, req, (i) => this.deps.renderer.playerAt(i), this.deps.renderer.dex) : null;
+      const gimmicks = bag?.choices() ?? [];
+      const choice = actions.length ? toChoices(actions, req, (i) => this.deps.renderer.playerAt(i), this.deps.renderer.dex, gimmicks) : null;
       if (!choice) {
         this.deps.status("Showdown doesn't have that choice. Pick again.", false);
         return;
@@ -212,6 +223,7 @@ export class ChoiceBridge {
     } catch (err) {
       if ((err as Error).message !== 'cancelled') this.deps.status((err as Error).message, false);
     } finally {
+      this.deps.bagButton?.()?.clear();
       if (this.asking === asking) this.asking = null;
     }
   }

@@ -36,6 +36,9 @@ the old version until you do.
   from where it is.)
 - When it's your turn, tap **Fight** or **Pokémon** on BW2's touch screen with your mouse
   (or use the keyboard). Your pick is sent to Showdown.
+- When your Pokémon can Mega Evolve or Terastallize, the **Bag** button says **MEGA** or
+  **TERA**. Tap it (it lights up) and then pick a move: the Pokémon Mega Evolves or
+  Terastallizes as it attacks. Tap it again to change your mind.
 - The buttons to the right of the game set its **speed** (1×, 1.5×, 2×, Max) and
   **mute** it.
 - Team preview is picked in Showdown as usual; Showdown's own buttons come back for it and

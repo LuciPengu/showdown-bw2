@@ -27,6 +27,8 @@ export interface ShowdownRequest {
     trapped?: boolean;
     /** It holds its Mega Stone and its side hasn't Mega Evolved yet. */
     canMegaEvo?: boolean;
+    /** Its Tera type, when its side hasn't Terastallized yet. */
+    canTerastallize?: string;
   }[];
   side: {
     id: string;

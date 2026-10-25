@@ -6,6 +6,8 @@ import { Cart, type RomProbe, findRomCopies, romProbe, stretchInRam } from './ro
 interface EmuBoot {
   rom: ArrayBuffer;
   onStatus(text: string): void;
+  /** Called after each frame the game runs. */
+  onFrame?(): void;
 }
 
 declare global {
@@ -41,14 +43,24 @@ export class Emulator {
 
   /** Boots `rom` in a new frame (the page `page`) inside `container`, replacing what was there. */
   static boot(container: HTMLElement, rom: ArrayBuffer, onStatus: (text: string) => void, page = '/emu.html'): Emulator {
-    window.__emuBoot = { rom, onStatus };
+    const boot: EmuBoot = { rom, onStatus };
+    window.__emuBoot = boot;
     const frame = document.createElement('iframe');
     frame.src = page;
     frame.title = 'Pokémon Black 2 / White 2';
     frame.allow = 'autoplay; fullscreen; gamepad';
     frame.className = 'emu-frame';
     container.replaceChildren(frame);
-    return new Emulator(frame, rom);
+    const emu = new Emulator(frame, rom);
+    emu.boot = boot;
+    return emu;
+  }
+
+  private boot: EmuBoot | null = null;
+
+  /** Runs `fn` after each frame the game runs. */
+  set onFrame(fn: (() => void) | undefined) {
+    if (this.boot) this.boot.onFrame = fn;
   }
 
   private get gameManager(): Record<string, any> {

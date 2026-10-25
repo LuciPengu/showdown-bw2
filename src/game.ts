@@ -3,6 +3,7 @@
 // by the web page (main.ts) and the browser extension (ext/app.ts).
 
 import type { GameType } from './bw/commands';
+import { BagButton, BagLabels } from './emu/bagbutton';
 import { Bw2Battle } from './emu/bw2';
 import { Emulator, gameCode } from './emu/emulator';
 import { BattleParties } from './emu/party';
@@ -67,6 +68,8 @@ export class Bw2Game {
   private lender: CartLender | null = null;
   /** Whether the Fairy type's label is on the cart. */
   private fairyLabel = false;
+  /** The Bag button as a Mega and Tera button (bagbutton.ts), once its labels are on the cart. */
+  bagButton: BagButton | null = null;
 
   constructor(private readonly host: GameHost) {
     this.renderer = new EmulatorRenderer(
@@ -99,7 +102,7 @@ export class Bw2Game {
     );
   }
 
-  /** What BW2 needs in a battle to show later things: the Fairy type (fairy.ts). */
+  /** What BW2 needs in a battle to show later things: the Fairy type (fairy.ts), the Mega and Tera button. */
   private patchBattle(ram: DsRam): void {
     const cart = this.emulator?.cart();
     if (cart && !this.fairyLabel) {
@@ -107,6 +110,27 @@ export class Bw2Game {
       this.fairyLabel = true;
     }
     fairyInRam(ram);
+    this.patchTouchScreen(ram);
+  }
+
+  /**
+   * Letters MEGA and TERA into the touch screen's tiles, which BW2 reads as it
+   * sets the touch screen up: before a battle is built, so its first menu has
+   * them (a battle joined half-way has them once the touch screen is set up
+   * again, after the Pokémon menu).
+   */
+  private patchTouchScreen(ram: DsRam): void {
+    const emu = this.emulator;
+    const cart = emu?.cart();
+    if (!emu || !cart || this.bagButton) return;
+    const labels = new BagLabels(cart);
+    if (!labels.ready) return void this.host.note?.("the touch screen's Bag button wasn't found on the cart");
+    const button = new BagButton(ram, labels);
+    this.bagButton = button;
+    emu.onFrame = () => {
+      const battle = this.live();
+      if (battle) button.frame(battle.client);
+    };
   }
 
   /** Does what borrowed slots need on the cart (see dex.ts). */
@@ -147,6 +171,7 @@ export class Bw2Game {
     this.parties = null;
     this.lender = null;
     this.fairyLabel = false;
+    this.bagButton = null;
     this.dex.reset();
     const emu = Emulator.boot(
       container,
@@ -245,8 +270,9 @@ export class Bw2Game {
     this.status('Starting the battle…');
     emu.loadState(new Uint8Array(await res.arrayBuffer()));
     await sleep(300);
-    await emu.press('A', 120, 0); // past the PWT's last line, into the battle
     const ram = emu.ram();
+    if (ram) this.patchTouchScreen(ram); // before the battle sets up the touch screen
+    await emu.press('A', 120, 0); // past the PWT's last line, into the battle
     let battle: Bw2Battle | null = null;
     for (let tries = 0; ram && !battle && tries < 600; tries++) {
       await sleep(16);

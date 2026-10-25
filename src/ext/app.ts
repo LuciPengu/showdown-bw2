@@ -81,6 +81,7 @@ const session = new Session({
 
 const choices = new ChoiceBridge({
   battle: () => game.live(),
+  bagButton: () => game.bagButton,
   renderer: game.renderer,
   caughtUp: () => director.idle,
   writeActiveMoves: (position, moves) => game.parties?.writeMoves(0, position, moves),

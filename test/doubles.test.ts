@@ -84,16 +84,22 @@ describe('doubles scene', () => {
   });
 });
 
-describe('Mega Evolution', () => {
-  it('Mega Evolves the first Pokémon that can, as it attacks, since BW2 has no Mega button', () => {
-    const both = { ...request, active: [{ moves, canMegaEvo: true }, { moves, canMegaEvo: true }] };
-    const fight = [
-      { kind: 'fight', move: 89, target: 1 },
-      { kind: 'fight', move: 337, target: 3 },
-    ] as const;
-    expect(toChoices([...fight], both, nameAt)).toBe('move 1 mega, move 2 2');
-    const second = { ...request, active: [{ moves }, { moves, canMegaEvo: true }] };
-    expect(toChoices([...fight], second, nameAt)).toBe('move 1, move 2 2 mega');
-    expect(toChoices([{ kind: 'switch', partyIndex: 2 }, ...fight.slice(1)], second, nameAt)).toBe('switch 3, move 2 2 mega');
+describe('Mega Evolution and Terastallization', () => {
+  const fight = [
+    { kind: 'fight', move: 89, target: 1 },
+    { kind: 'fight', move: 337, target: 3 },
+  ] as const;
+
+  it('Mega Evolves or Terastallizes as chosen on the Bag button, where Showdown allows it', () => {
+    const both = { ...request, active: [{ moves, canMegaEvo: true }, { moves, canMegaEvo: true, canTerastallize: 'Fairy' }] };
+    expect(toChoices([...fight], both, nameAt)).toBe('move 1, move 2 2');
+    expect(toChoices([...fight], both, nameAt, undefined, ['mega', null])).toBe('move 1 mega, move 2 2');
+    expect(toChoices([...fight], both, nameAt, undefined, [null, 'tera'])).toBe('move 1, move 2 2 terastallize');
+    // Not allowed: the first can't Terastallize.
+    expect(toChoices([...fight], both, nameAt, undefined, ['tera', null])).toBe('move 1, move 2 2');
+    // Once a side: only the first of two Megas.
+    expect(toChoices([...fight], both, nameAt, undefined, ['mega', 'mega'])).toBe('move 1 mega, move 2 2');
+    // A switch doesn't Mega Evolve.
+    expect(toChoices([{ kind: 'switch', partyIndex: 2 }, fight[1]], both, nameAt, undefined, ['mega', null])).toBe('switch 3, move 2 2');
   });
 });

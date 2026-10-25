@@ -41,6 +41,7 @@
     if (entry.done) return;
     entry.done = true;
     entry.callback(time);
+    boot.onFrame?.(); // the app looks at the game after each frame
   };
   ticker.onmessage = () => {
     const now = performance.now();
