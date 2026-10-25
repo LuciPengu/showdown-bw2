@@ -37,6 +37,9 @@ const SIDE: Record<string, [set: number, removed?: number]> = {
   Mist: [0x88, 0x8a],
   Tailwind: [0x8c, 0x8e],
   'Lucky Chant': [0x90, 0x92],
+  // Used, not set: "Wide Guard protected your team!" (Showdown's -singleturn).
+  'Wide Guard': [0xa0],
+  'Quick Guard': [0xa2],
 };
 /** Whole-field conditions: started (set, about who used it, or std), ended (std). */
 const FIELD: Record<string, [start: number, end: number, startIsSet?: boolean]> = {
@@ -222,6 +225,7 @@ function textLine(key: TextKey, args: string[], from: Effect | undefined, mon: n
     case 'fail':
     case 'noTarget': return std(0x47);
     case 'hitCount': return std(0x20, Number(a) || 1);
+    case 'fieldActivate': return a === 'Perish Song' ? std(0x77) : null;
     case 'singleTurn': {
       if (!has) return null;
       const id = SINGLE_TURN[a];
@@ -235,6 +239,8 @@ function textLine(key: TextKey, args: string[], from: Effect | undefined, mon: n
       if (a === 'confusion') return set(0x15c, mon);
       if (a === 'Substitute') return set(0x317, mon);
       if (a === 'Endure') return set(0x202, mon);
+      if (a === 'Wide Guard') return set(0x31d, mon);
+      if (a === 'Quick Guard') return set(0x320, mon);
       if (a === 'Trick' || a === 'Switcheroo') return set(0x2aa, mon);
       if (a === 'Pursuit') return SILENT; // the switch-out it catches shows the hit
       return null;
@@ -280,6 +286,7 @@ function textLine(key: TextKey, args: string[], from: Effect | undefined, mon: n
       if (a === 'Air Balloon') return set(0x19b, mon);
       if (a === 'Eject Button') return set(0x19e, mon);
       if (a === 'Focus Sash') return id ? set(0x3ef, mon, id) : null;
+      if (a === 'White Herb') return id ? set(0x3f2, mon, id) : null;
       if (args[1] === 'weaken') return id ? set(0xdb, mon, id) : null;
       if (args[1] === 'eat') return SILENT; // the berry's effect shows its own line
       return null;

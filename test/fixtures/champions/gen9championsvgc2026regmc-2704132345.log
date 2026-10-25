@@ -1,0 +1,214 @@
+|j|☆jonsolobot
+|j|☆MysteriousWind
+|t:|1792892193
+|gametype|doubles
+|player|p1|jonsolobot|supernerd|1643
+|player|p2|MysteriousWind|willem|1857
+|gen|9
+|tier|[Gen 9 Champions] VGC 2026 Reg M-C
+|rated|
+|rule|Species Clause: Limit one of each Pokemon
+|rule|Item Clause: Limit 1 of each item
+|clearpoke
+|poke|p1|Froslass, L50, F|
+|poke|p1|Raichu, L50, M|
+|poke|p1|Rillaboom, L50, F|
+|poke|p1|Kingambit, L50, M|
+|poke|p1|Sneasler, L50, F|
+|poke|p1|Arcanine-Hisui, L50, M|
+|poke|p2|Sneasler, L50, F|
+|poke|p2|Basculegion, L50, M|
+|poke|p2|Salamence, L50, M|
+|poke|p2|Kingambit, L50, M|
+|poke|p2|Whimsicott, L50, M|
+|poke|p2|Floette-Eternal, L50, F|
+|teampreview|4
+jonsolobot has agreed to open team sheets.
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by jonsolobot)
+MysteriousWind has agreed to open team sheets.
+|showteam|p1|Froslass||Froslassite|CursedBody|Blizzard,ShadowBall,AuroraVeil,Protect|Timid||F|||50|]Raichu||RaichuniteY|LightningRod|ZapCannon,FocusBlast,Encore,Protect|Timid||M|||50|]Rillaboom||SitrusBerry|GrassySurge|FakeOut,GrassyGlide,WoodHammer,HighHorsepower|Adamant||F|||50|]Kingambit||LifeOrb|Defiant|KowtowCleave,SuckerPunch,SwordsDance,Protect|Adamant||M|||50|]Sneasler||WhiteHerb|Unburden|CloseCombat,DireClaw,FakeOut,Protect|Jolly||F|||50|]Arcanine-Hisui||FocusSash|RockHead|FlareBlitz,HeadSmash,ExtremeSpeed,Protect|Jolly||M|||50|
+|showteam|p2|Sneasler||WhiteHerb|Unburden|CloseCombat,DireClaw,RockSlide,Protect|Adamant||F|||50|]Basculegion||ColburBerry|Adaptability|WaveCrash,AquaJet,LastRespects,Protect|Adamant||M|||50|]Salamence||Salamencite|Intimidate|HyperVoice,DracoMeteor,Flamethrower,Protect|Modest||M|||50|]Kingambit||ChopleBerry|Defiant|Protect,KowtowCleave,SuckerPunch,IronHead|Adamant||M|||50|]Whimsicott||FocusSash|Prankster|Moonblast,Tailwind,Encore,Protect|Timid||M|||50|]Floette-Eternal||Floettite|FlowerVeil|Moonblast,DazzlingGleam,CalmMind,Protect|Modest||F|||50|
+|
+|t:|1792892214
+|teamsize|p1|4
+|teamsize|p2|4
+|start
+|switch|p1a: Froslass|Froslass, L50, F|100/100
+|switch|p1b: Kingambit|Kingambit, L50, M|100/100
+|switch|p2a: Kingambit|Kingambit, L50, M|100/100
+|switch|p2b: Whimsicott|Whimsicott, L50, M|100/100
+|turn|1
+|c|☆jonsolobot|gl hf <3  :)
+|
+|t:|1792892226
+|detailschange|p1a: Froslass|Froslass-Mega, L50, F
+|-mega|p1a: Froslass|Froslass|Froslassite
+|-weather|Snowscape|[from] ability: Snow Warning|[of] p1a: Froslass
+|move|p1a: Froslass|Blizzard|p2b: Whimsicott|[spread] p2a,p2b
+|-resisted|p2a: Kingambit|1
+|-supereffective|p2b: Whimsicott|1
+|-damage|p2a: Kingambit|72/100
+|-enditem|p2b: Whimsicott|Focus Sash
+|-damage|p2b: Whimsicott|1/100
+|move|p2b: Whimsicott|Moonblast|p1b: Kingambit
+|-damage|p1b: Kingambit|63/100
+|move|p2a: Kingambit|Kowtow Cleave|p1a: Froslass
+|-supereffective|p1a: Froslass|1
+|-damage|p1a: Froslass|0 fnt
+|faint|p1a: Froslass
+|move|p1b: Kingambit|Swords Dance|p1b: Kingambit
+|-boost|p1b: Kingambit|atk|2
+|
+|-weather|Snowscape|[upkeep]
+|upkeep
+|
+|t:|1792892226
+|switch|p1a: Sneasler|Sneasler, L50, F|100/100
+|turn|2
+|
+|t:|1792892249
+|move|p2b: Whimsicott|Tailwind|p2b: Whimsicott
+|-sidestart|p2: MysteriousWind|move: Tailwind
+|move|p2a: Kingambit|Iron Head|p1a: Sneasler
+|-damage|p1a: Sneasler|17/100
+|move|p1a: Sneasler|Close Combat|p2a: Kingambit
+|-supereffective|p2a: Kingambit|2
+|-enditem|p2a: Kingambit|Chople Berry|[eat]
+|-enditem|p2a: Kingambit|Chople Berry|[weaken]
+|-damage|p2a: Kingambit|0 fnt
+|-unboost|p1a: Sneasler|def|1
+|-unboost|p1a: Sneasler|spd|1
+|faint|p2a: Kingambit
+|-enditem|p1a: Sneasler|White Herb
+|-clearnegativeboost|p1a: Sneasler|[silent]
+|move|p1b: Kingambit|Swords Dance|p1b: Kingambit
+|-boost|p1b: Kingambit|atk|2
+|
+|-weather|Snowscape|[upkeep]
+|upkeep
+|
+|t:|1792892251
+|switch|p2a: Sneasler|Sneasler, L50, F|100/100
+|turn|3
+|
+|t:|1792892262
+|switch|p1a: Rillaboom|Rillaboom, L50, F|100/100
+|-fieldstart|move: Grassy Terrain|[from] ability: Grassy Surge|[of] p1a: Rillaboom
+|move|p2b: Whimsicott|Protect|p2b: Whimsicott
+|-singleturn|p2b: Whimsicott|Protect
+|move|p2a: Sneasler|Protect|p2a: Sneasler
+|-singleturn|p2a: Sneasler|Protect
+|move|p1b: Kingambit|Sucker Punch||[still]
+|-fail|p1b: Kingambit
+|
+|-weather|Snowscape|[upkeep]
+|-heal|p2b: Whimsicott|6/100|[from] Grassy Terrain
+|-heal|p1b: Kingambit|69/100|[from] Grassy Terrain
+|upkeep
+|turn|4
+|
+|t:|1792892276
+|move|p2a: Sneasler|Protect||[still]
+|-fail|p2a: Sneasler
+|move|p1b: Kingambit|Sucker Punch||[still]
+|-fail|p1b: Kingambit
+|move|p2b: Whimsicott|Moonblast|p1b: Kingambit
+|-damage|p1b: Kingambit|33/100
+|move|p1a: Rillaboom|Wood Hammer|p2a: Sneasler
+|-resisted|p2a: Sneasler|1
+|-damage|p2a: Sneasler|26/100
+|-damage|p1a: Rillaboom|78/100|[from] Recoil
+|
+|-weather|Snowscape|[upkeep]
+|-heal|p2b: Whimsicott|12/100|[from] Grassy Terrain
+|-heal|p2a: Sneasler|32/100|[from] Grassy Terrain
+|-heal|p1a: Rillaboom|84/100|[from] Grassy Terrain
+|-heal|p1b: Kingambit|39/100|[from] Grassy Terrain
+|upkeep
+|turn|5
+|
+|t:|1792892288
+|move|p2a: Sneasler|Protect|p2a: Sneasler
+|-singleturn|p2a: Sneasler|Protect
+|move|p1a: Rillaboom|Grassy Glide|p2b: Whimsicott
+|-resisted|p2b: Whimsicott|1
+|-damage|p2b: Whimsicott|0 fnt
+|faint|p2b: Whimsicott
+|move|p1b: Kingambit|Sucker Punch||[still]
+|-fail|p1b: Kingambit
+|
+|-weather|none
+|-heal|p2a: Sneasler|38/100|[from] Grassy Terrain
+|-heal|p1a: Rillaboom|90/100|[from] Grassy Terrain
+|-heal|p1b: Kingambit|44/100|[from] Grassy Terrain
+|-sideend|p2: MysteriousWind|move: Tailwind
+|upkeep
+|
+|t:|1792892301
+|switch|p2b: Salamence|Salamence, L50, M|100/100
+|-ability|p2b: Salamence|Intimidate|boost
+|-unboost|p1a: Rillaboom|atk|1
+|-unboost|p1b: Kingambit|atk|1
+|-ability|p1b: Kingambit|Defiant|boost
+|-boost|p1b: Kingambit|atk|2
+|turn|6
+|
+|t:|1792892311
+|move|p1b: Kingambit|Sucker Punch|p2b: Salamence
+|-damage|p2b: Salamence|0 fnt
+|faint|p2b: Salamence
+|-damage|p1b: Kingambit|35/100|[from] item: Life Orb
+|move|p2a: Sneasler|Dire Claw|p1a: Rillaboom
+|-supereffective|p1a: Rillaboom|1
+|-damage|p1a: Rillaboom|1/100
+|-status|p1a: Rillaboom|par
+|-enditem|p1a: Rillaboom|Sitrus Berry|[eat]
+|-heal|p1a: Rillaboom|26/100 par|[from] item: Sitrus Berry
+|cant|p1a: Rillaboom|par
+|
+|-heal|p2a: Sneasler|43/100|[from] Grassy Terrain
+|-heal|p1b: Kingambit|41/100|[from] Grassy Terrain
+|-heal|p1a: Rillaboom|32/100 par|[from] Grassy Terrain
+|upkeep
+|turn|7
+|
+|t:|1792892324
+|switch|p1a: Sneasler|Sneasler, L50, F|17/100
+|move|p2a: Sneasler|Protect|p2a: Sneasler
+|-singleturn|p2a: Sneasler|Protect
+|move|p1b: Kingambit|Sucker Punch||[still]
+|-fail|p1b: Kingambit
+|
+|-heal|p1a: Sneasler|23/100|[from] Grassy Terrain
+|-heal|p2a: Sneasler|49/100|[from] Grassy Terrain
+|-heal|p1b: Kingambit|46/100|[from] Grassy Terrain
+|-fieldend|move: Grassy Terrain
+|upkeep
+|turn|8
+|
+|t:|1792892331
+|move|p2a: Sneasler|Protect|p2a: Sneasler
+|-singleturn|p2a: Sneasler|Protect
+|move|p1a: Sneasler|Fake Out|p2a: Sneasler
+|-activate|p2a: Sneasler|move: Protect
+|move|p1b: Kingambit|Kowtow Cleave|p2a: Sneasler
+|-activate|p2a: Sneasler|move: Protect
+|
+|upkeep
+|turn|9
+|
+|t:|1792892343
+|move|p2a: Sneasler|Protect||[still]
+|-fail|p2a: Sneasler
+|move|p1b: Kingambit|Sucker Punch||[still]
+|-fail|p1b: Kingambit
+|move|p1a: Sneasler|Close Combat|p2a: Sneasler
+|-resisted|p2a: Sneasler|1
+|-damage|p2a: Sneasler|0 fnt
+|-unboost|p1a: Sneasler|def|1
+|-unboost|p1a: Sneasler|spd|1
+|faint|p2a: Sneasler
+|
+|win|jonsolobot
+|raw|jonsolobot's rating: 1643 &rarr; <strong>1674</strong><br />(+31 for winning)
+|raw|MysteriousWind's rating: 1857 &rarr; <strong>1826</strong><br />(-31 for losing)

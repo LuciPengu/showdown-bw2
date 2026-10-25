@@ -1,0 +1,112 @@
+|j|☆Novastalgic
+|j|☆Jigglykong
+|html|<table width="100%"><tr><td align="left">Novastalgic</td><td align="right">Jigglykong</tr><tr><td align="left"><i class="fa fa-circle-o"></i> <i class="fa fa-circle-o"></i> </td><td align="right"><i class="fa fa-circle-o"></i> <i class="fa fa-circle"></i> </tr></table>
+|uhtml|bestof|<h2><strong>Game 2</strong> of <a href="/game-bestof3-gen9championsvgc2026regmb-2704118877">a best-of-3</a></h2>
+|t:|1792890128
+|gametype|doubles
+|player|p1|Novastalgic|cyclist|
+|player|p2|Jigglykong|wally-rse|
+|gen|9
+|tier|[Gen 9 Champions] VGC 2026 Reg M-B
+|rule|Species Clause: Limit one of each Pokemon
+|rule|Item Clause: Limit 1 of each item
+|raw|<div class="infobox"><details class="readmore" open><summary><strong>1 custom rule:</strong></summary> Best of = 3</details></div>
+|clearpoke
+|poke|p1|Aerodactyl, L50, M|
+|poke|p1|Scovillain, L50, F|
+|poke|p1|Houndstone, L50, F|
+|poke|p1|Azumarill, L50, F|
+|poke|p1|Infernape, L50, F|
+|poke|p1|Decidueye-Hisui, L50, F|
+|poke|p2|Arcanine-Hisui, L50, F|
+|poke|p2|Raichu-Alola, L50, M|
+|poke|p2|Scolipede, L50, M|
+|poke|p2|Delphox, L50, M|
+|poke|p2|Scizor, L50, F|
+|poke|p2|Primarina, L50, F|
+|teampreview|4
+|j| Cap'n Gekko
+Novastalgic rejected open team sheets.
+|c|☆Novastalgic|Gl hf
+|c|☆Jigglykong|u2 ty
+|
+|t:|1792890201
+|teamsize|p1|4
+|teamsize|p2|4
+|start
+|switch|p1a: EyeofFallenLeaves|Decidueye-Hisui, L50, F|100/100
+|switch|p1b: Scooby Doo|Scovillain, L50, F|100/100
+|switch|p2a: Caa-Caa-Caa-Caa|Raichu-Alola, L50, M|100/100
+|switch|p2b: Amputee|Scolipede, L50, M|100/100
+|turn|1
+|
+|t:|1792890228
+|move|p2a: Caa-Caa-Caa-Caa|Fake Out|p1a: EyeofFallenLeaves
+|-damage|p1a: EyeofFallenLeaves|88/100
+|cant|p1a: EyeofFallenLeaves|flinch
+|move|p2b: Amputee|Poison Jab|p1b: Scooby Doo
+|-supereffective|p1b: Scooby Doo|1
+|-damage|p1b: Scooby Doo|0 fnt
+|faint|p1b: Scooby Doo
+|-damage|p2b: Amputee|90/100|[from] item: Life Orb
+|
+|upkeep
+|
+|t:|1792890238
+|switch|p1b: Dog Rock|Houndstone, L50, F|100/100
+|turn|2
+|
+|t:|1792890248
+|move|p2b: Amputee|Protect|p2b: Amputee
+|-singleturn|p2b: Amputee|Protect
+|move|p1a: EyeofFallenLeaves|Brave Bird|p2b: Amputee
+|-activate|p2b: Amputee|move: Protect
+|move|p2a: Caa-Caa-Caa-Caa|Discharge|p1b: Dog Rock|[spread] p1a,p1b
+|-activate|p2b: Amputee|move: Protect
+|-resisted|p1a: EyeofFallenLeaves|1
+|-damage|p1a: EyeofFallenLeaves|75/100
+|-damage|p1b: Dog Rock|72/100
+|move|p1b: Dog Rock|Last Respects|p2a: Caa-Caa-Caa-Caa
+|-supereffective|p2a: Caa-Caa-Caa-Caa|1
+|-enditem|p2a: Caa-Caa-Caa-Caa|Focus Sash
+|-damage|p2a: Caa-Caa-Caa-Caa|1/100
+|
+|upkeep
+|turn|3
+|
+|t:|1792890285
+|switch|p1a: Hell|Infernape, L50, F|100/100
+|move|p2a: Caa-Caa-Caa-Caa|Discharge|p1a: Hell|[spread] p2b,p1a,p1b
+|-damage|p2b: Amputee|48/100
+|-damage|p1a: Hell|64/100
+|-damage|p1b: Dog Rock|46/100
+|move|p2b: Amputee|Poison Jab|p1a: Hell
+|-damage|p1a: Hell|0 fnt
+|faint|p1a: Hell
+|-damage|p2b: Amputee|39/100|[from] item: Life Orb
+|move|p1b: Dog Rock|Last Respects|p2a: Caa-Caa-Caa-Caa
+|-supereffective|p2a: Caa-Caa-Caa-Caa|1
+|-damage|p2a: Caa-Caa-Caa-Caa|0 fnt
+|faint|p2a: Caa-Caa-Caa-Caa
+|
+|upkeep
+|c|☆Novastalgic|Welp I overthought that one lol
+|
+|t:|1792890306
+|switch|p2a: Phuket|Delphox, L50, M|100/100
+|switch|p1a: EyeofFallenLeaves|Decidueye-Hisui, L50, F|75/100
+|turn|4
+|
+|t:|1792890356
+|detailschange|p2a: Phuket|Delphox-Mega, L50, M
+|-mega|p2a: Phuket|Delphox|Delphoxite
+|move|p2a: Phuket|Heat Wave|p1b: Dog Rock|[spread] p1a,p1b
+|-supereffective|p1a: EyeofFallenLeaves|1
+|-damage|p1a: EyeofFallenLeaves|0 fnt
+|-damage|p1b: Dog Rock|0 fnt
+|faint|p1a: EyeofFallenLeaves
+|faint|p1b: Dog Rock
+|
+|win|Jigglykong
+|c|☆Novastalgic|Yeah gg
+|c|☆Jigglykong|gg

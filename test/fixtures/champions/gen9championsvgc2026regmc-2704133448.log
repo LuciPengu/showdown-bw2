@@ -1,0 +1,104 @@
+|j|☆PoopSouthern
+|j|☆MysteriousWind
+|t:|1792892392
+|gametype|doubles
+|player|p1|PoopSouthern|sailor|1661
+|player|p2|MysteriousWind|willem|1826
+|gen|9
+|tier|[Gen 9 Champions] VGC 2026 Reg M-C
+|rated|
+|rule|Species Clause: Limit one of each Pokemon
+|rule|Item Clause: Limit 1 of each item
+|clearpoke
+|poke|p1|Floette-Eternal, L50, F|
+|poke|p1|Politoed, L50, F|
+|poke|p1|Sableye, L50, F|
+|poke|p1|Sinistcha, L50|
+|poke|p1|Slowking-Galar, L50, F|
+|poke|p1|Archaludon, L50, M|
+|poke|p2|Sneasler, L50, M|
+|poke|p2|Basculegion, L50, M|
+|poke|p2|Salamence, L50, M|
+|poke|p2|Kingambit, L50, M|
+|poke|p2|Whimsicott, L50, F|
+|poke|p2|Floette-Eternal, L50, F|
+|teampreview|4
+MysteriousWind has agreed to open team sheets.
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by PoopSouthern)
+|
+|t:|1792892423
+|teamsize|p1|4
+|teamsize|p2|4
+|start
+|switch|p1a: Politoed|Politoed, L50, F|100/100
+|switch|p1b: Sableye|Sableye, L50, F|100/100
+|switch|p2a: Kingambit|Kingambit, L50, M|100/100
+|switch|p2b: Floette|Floette-Eternal, L50, F|100/100
+|-weather|RainDance|[from] ability: Drizzle|[of] p1a: Politoed
+|turn|1
+|
+|t:|1792892443
+|detailschange|p2b: Floette|Floette-Mega, L50, F
+|-mega|p2b: Floette|Floette|Floettite
+|-ability|p2b: Floette|Fairy Aura
+|detailschange|p1b: Sableye|Sableye-Mega, L50, F
+|-mega|p1b: Sableye|Sableye|Sablenite
+|move|p1b: Sableye|Fake Out|p2b: Floette
+|-crit|p2b: Floette
+|-damage|p2b: Floette|84/100
+|move|p2a: Kingambit|Sucker Punch||[still]
+|-fail|p2a: Kingambit
+|cant|p2b: Floette|flinch
+|move|p1a: Politoed|Perish Song|p1a: Politoed
+|-start|p1a: Politoed|perish3|[silent]
+|-start|p1b: Sableye|perish3|[silent]
+|-start|p2a: Kingambit|perish3|[silent]
+|-start|p2b: Floette|perish3|[silent]
+|-fieldactivate|move: Perish Song
+|
+|-weather|RainDance|[upkeep]
+|-start|p2b: Floette|perish3
+|-start|p2a: Kingambit|perish3
+|-start|p1a: Politoed|perish3
+|-start|p1b: Sableye|perish3
+|upkeep
+|turn|2
+|j| ibnebatuta3
+|
+|t:|1792892467
+|switch|p2a: Sneasler|Sneasler, L50, M|100/100
+|switch|p1a: Slowking|Slowking-Galar, L50, F|100/100
+|move|p2b: Floette|Moonblast|p1b: Sableye
+|-supereffective|p1b: Sableye|1
+|-damage|p1b: Sableye|0 fnt
+|faint|p1b: Sableye
+|
+|-weather|RainDance|[upkeep]
+|-start|p2b: Floette|perish2
+|upkeep
+|
+|t:|1792892480
+|switch|p1b: Politoed|Politoed, L50, F|100/100
+|turn|3
+|
+|t:|1792892485
+|switch|p2b: Basculegion|Basculegion, L50, M|100/100
+|switch|p1b: Archaludon|Archaludon, L50, M|100/100
+|move|p2a: Sneasler|Close Combat|p1b: Archaludon
+|-supereffective|p1b: Archaludon|1
+|-damage|p1b: Archaludon|0 fnt
+|-unboost|p2a: Sneasler|def|1
+|-unboost|p2a: Sneasler|spd|1
+|faint|p1b: Archaludon
+|-enditem|p2a: Sneasler|White Herb
+|-clearnegativeboost|p2a: Sneasler|[silent]
+|move|p1a: Slowking|Trick Room|p1a: Slowking
+|-fieldstart|move: Trick Room|[of] p1a: Slowking
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|-message|PoopSouthern forfeited.
+|
+|win|MysteriousWind
+|raw|PoopSouthern's rating: 1661 &rarr; <strong>1650</strong><br />(-11 for losing)
+|raw|MysteriousWind's rating: 1826 &rarr; <strong>1837</strong><br />(+11 for winning)

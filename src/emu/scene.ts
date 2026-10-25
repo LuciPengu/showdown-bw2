@@ -4,7 +4,7 @@
 
 import type { Command, MonView, Side, Slot, Stat, Status, Weather } from '../bw/commands';
 import { type ServerCmd, SC } from '../bw/servercmd';
-import { describe, makeNamer } from '../bw/english';
+import { describe, makeNamer, megaName } from '../bw/english';
 import { toID } from '../showdown/protocol';
 import { type CartWork, type Dex, nativeDex } from './dex';
 import { MSG, type MsgRequest, type MsgResult, SILENT, textMessage } from './messages';
@@ -85,6 +85,11 @@ const SNOW_LINES: [number, string][] = [
 ];
 /** A sparkle (Cosmic Power's animation) for Terastallization. */
 const TERA_ANIMATION = 322;
+/** Light gathering on the Pokémon (Morning Sun's animation) as it Mega Evolves. */
+const MEGA_ANIMATION = 234;
+const MEGA = /-Mega(-[XY])?$/;
+/** Moves that guard the user's whole side for a turn; BW2 words them as side lines. */
+const GUARDS = new Set(['Wide Guard', 'Quick Guard']);
 /** About how many letters fit on a line of BW2's message box. */
 const LINE_LETTERS = 30;
 const RECALL_EFFECT = 0x26c; // what the server passes SC_RECALL for a switch
@@ -426,8 +431,25 @@ export class Scene {
       case 'formChange': {
         // BW2 can change a Pokémon's form, not its species: a form it doesn't have borrows another species' slot.
         const species = this.dex.species(cmd.mon.species);
-        if (species?.native) c.push([SC.CHANGE_FORM, this.monAt(cmd.slot), species.form]);
-        else this.gap(`form change: ${cmd.mon.species}`);
+        if (!species) return this.gap(`form change: ${cmd.mon.species}`);
+        const monId = this.monAt(cmd.slot);
+        if (species.native) return void c.push([SC.CHANGE_FORM, monId, species.form]);
+        // A borrowed species: the Pokémon's party record becomes it, and changing
+        // form redraws the Pokémon from that record (pokebw2's ChangeForm).
+        const side = this.sides[cmd.slot.side];
+        const now = side.hp.get(monId);
+        const spec = now && monSpec(cmd.mon, { hp: 1, maxHp: 1 }, this.statuses.get(monId) ?? null, this.dex);
+        if (!now || !spec) return this.gap(`form change: ${cmd.mon.species}`);
+        step.writes.push({ client: side.client, partyIndex: cmd.slot.pos, monId, mon: { ...spec, hp: now.hp, maxHp: now.maxHp } });
+        if (MEGA.test(cmd.mon.species)) c.push([SC.MOVE_ANIM, this.pos(cmd.slot), this.pos(cmd.slot), MEGA_ANIMATION, 0]);
+        c.push([SC.CHANGE_FORM, monId, 0]);
+        return;
+      }
+      case 'mega': {
+        const name = megaName(cmd.species);
+        const line = this.dex.line('set', `{nickname:0} has Mega\nEvolved into ${name}!`);
+        if (line === null) return this.gap(`mega: ${cmd.species}`);
+        c.push([SC.MSG_SET, line, this.monAt(cmd.slot)]);
         return;
       }
       case 'tera': {
@@ -457,6 +479,10 @@ export class Scene {
         );
         // Lines Showdown makes up itself ("X forfeited.") have nothing to match in BW2.
         if (cmd.key === 'message') return;
+        if (cmd.key === 'singleTurn' && cmd.slot && GUARDS.has(cmd.args[0])) {
+          const client = this.sides[cmd.slot.side].client;
+          return this.say(c, this.text({ kind: 'side', condition: cmd.args[0], active: true, side: cmd.slot.side, client }), `guard: ${cmd.args[0]}`);
+        }
         this.say(c, msg, cmd.args[0] ? `${cmd.key}: ${cmd.args[0]}` : cmd.key);
         return;
       }

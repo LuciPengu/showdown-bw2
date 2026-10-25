@@ -37,6 +37,21 @@ const CANT: Record<string, string> = {
   nopp: 'But there was no PP left for the move!',
 };
 
+/** First turns of two-turn moves after Gen 5, as the later games word them. */
+const LATER_CHARGE: Record<string, string> = {
+  'Electro Shot': '{0} absorbed electricity!',
+  'Meteor Beam': '{0} is overflowing with space power!',
+  Geomancy: '{0} is absorbing power!',
+};
+
+const sameSlot = (a: Slot | undefined, b: Slot) => !!a && a.side === b.side && a.pos === b.pos;
+
+/** "Charizard-Mega-Y" → "Mega Charizard Y". */
+export function megaName(species: string): string {
+  const m = /^(.+?)-Mega(?:-(\w+))?$/.exec(species);
+  return m ? `Mega ${m[1]}${m[2] ? ` ${m[2]}` : ''}` : species;
+}
+
 /** Names Pokémon the way BW2 does: "Heatran" on your side, "The foe's Heatran" on the other. */
 export type Namer = (slot: Slot | undefined, capital?: boolean) => string;
 
@@ -63,13 +78,14 @@ export function describe(cmd: Command, n: Namer, trainerName: (side: 0 | 1) => s
     case 'move':
       return cmd.announce ? `${n(cmd.user)} used ${cmd.move}!` : null;
     case 'charge':
-      return `${n(cmd.user)} is charging up ${cmd.move}!`;
+      return LATER_CHARGE[cmd.move] ? fill(LATER_CHARGE[cmd.move], n(cmd.user)) : `${n(cmd.user)} is charging up ${cmd.move}!`;
     case 'cant': {
       const t = CANT[cmd.reason] ?? CANT[cmd.reason.replace(/ /g, '_')];
       return fill(t ?? `${n(cmd.slot)} can't move! (${cmd.reason})`, n(cmd.slot), cmd.move ?? '');
     }
     case 'hp':
-      return hpText(cmd.from, cmd.change, n(cmd.slot), n(cmd.slot, false), n(cmd.of, false));
+      // Showdown names the Pokémon itself as [of] for some of its own abilities (Solar Power).
+      return hpText(cmd.from, cmd.change, n(cmd.slot), n(cmd.slot, false), sameSlot(cmd.of, cmd.slot) ? '' : n(cmd.of, false));
     case 'faint':
       return `${n(cmd.slot)} fainted!`;
     case 'status':
@@ -91,6 +107,8 @@ export function describe(cmd: Command, n: Namer, trainerName: (side: 0 | 1) => s
       return `${n(cmd.slot)} changed form!`;
     case 'tera':
       return `${n(cmd.slot)} terastallized into the ${cmd.type} type!`;
+    case 'mega':
+      return `${n(cmd.slot)} has Mega Evolved into ${megaName(cmd.species)}!`;
     case 'transform':
       return `${n(cmd.slot)} transformed into ${n(cmd.into, false).replace(/^the foe's /, '')}!`;
     case 'weather': {
@@ -192,13 +210,19 @@ function textLine(cmd: Extract<Command, { kind: 'text' }>, n: Namer): string | n
         return `The ${a === 'Protosynthesis' ? 'harsh sunlight' : 'Electric Terrain'} activated ${n(cmd.slot, false)}'s ${a}!`;
       }
       if (a === 'Supreme Overlord') return `${who} gained strength from the fallen!`;
+      if (a === 'Wide Guard' || a === 'Quick Guard') return `${a} protected ${n(cmd.slot, false)}!`;
       return a === 'Protect' ? `${who} protected itself!` : a === 'confusion' ? `${who} is confused!` : `${who}: ${a}!`;
-    case 'singleTurn': return a === 'Protect' ? `${who} protected itself!` : `${who}: ${a}!`;
+    case 'singleTurn':
+      if (a === 'Wide Guard' || a === 'Quick Guard') return `${a} protected ${cmd.slot?.side === 1 ? "the foe's team" : 'your team'}!`;
+      return a === 'Protect' ? `${who} protected itself!` : `${who}: ${a}!`;
     case 'singleMove': return `${who}: ${a}!`;
     case 'item': return cmd.from?.name === 'Harvest' ? `${who} harvested one ${a}!` : `${who} has ${a}!`;
-    case 'endItem': return cmd.from?.name === 'Knock Off' ? `${n(cmd.target)} knocked off ${n(cmd.slot, false)}'s ${a}!` : `${who}'s ${a} was used up!`;
+    case 'endItem':
+      if (a === 'White Herb') return `${who} restored its status using its White Herb!`;
+      return cmd.from?.name === 'Knock Off' ? `${n(cmd.target)} knocked off ${n(cmd.slot, false)}'s ${a}!` : `${who}'s ${a} was used up!`;
     case 'endAbility': return `${who}'s ${a} was suppressed!`;
     case 'cureTeam': return 'A bell chimed!';
+    case 'fieldActivate': return a === 'Perish Song' ? 'All Pokémon hearing the song will faint in three turns!' : `${a}!`;
     case 'message': return a;
   }
 }

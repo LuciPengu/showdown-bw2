@@ -1,0 +1,47 @@
+|j|☆pcrlbot12d159c39a
+|j|☆Kamish's struggle
+|t:|1792892371
+|gametype|doubles
+|player|p1|pcrlbot12d159c39a|265|1160
+|player|p2|Kamish's struggle|veteran|1258
+|gen|9
+|tier|[Gen 9 Champions] VGC 2026 Reg M-C
+|rated|
+|rule|Species Clause: Limit one of each Pokemon
+|rule|Item Clause: Limit 1 of each item
+|clearpoke
+|poke|p1|Golurk, L50|
+|poke|p1|Sylveon, L50, F|
+|poke|p1|Incineroar, L50, F|
+|poke|p1|Farigiraf, L50, F|
+|poke|p1|Sneasler, L50, M|
+|poke|p1|Torkoal, L50, F|
+|poke|p2|Delphox, L50, M|
+|poke|p2|Staraptor, L50, F|
+|poke|p2|Indeedee-F, L50, F|
+|poke|p2|Whimsicott, L50, F|
+|poke|p2|Garchomp, L50, M|
+|poke|p2|Primarina, L50, M|
+|teampreview|4
+|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by pcrlbot12d159c39a)
+|inactive|Kamish's struggle has 60 seconds left.
+|
+|t:|1792892409
+|teamsize|p1|4
+|teamsize|p2|4
+|start
+|switch|p1a: Incineroar|Incineroar, L50, F|100/100
+|switch|p1b: Sylveon|Sylveon, L50, F|100/100
+|switch|p2a: Delphox|Delphox, L50, M|100/100
+|switch|p2b: Indeedee|Indeedee-F, L50, F|100/100
+|-ability|p1a: Incineroar|Intimidate|boost
+|-unboost|p2a: Delphox|atk|1
+|-fail|p2b: Indeedee|unboost|atk|[from] ability: Own Tempo|[of] p2b: Indeedee
+|turn|1
+|-message|Kamish's struggle forfeited.
+|
+|win|pcrlbot12d159c39a
+|raw|pcrlbot12d159c39a's rating: 1160 &rarr; <strong>1192</strong><br />(+32 for winning)
+|raw|Kamish&apos;s struggle's rating: 1258 &rarr; <strong>1226</strong><br />(-32 for losing)
+|l|☆Kamish's struggle
+|player|p2|

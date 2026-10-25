@@ -43,8 +43,11 @@ the old version until you do.
 
 Good to know:
 
-- Only Gen 5 battles can be drawn faithfully, in singles and doubles. BW2 has no Fairy
-  type, Megas or later moves.
+- Gen 5 battles are drawn faithfully, in singles and doubles. Later battles work too,
+  including Gen 9 and Pokémon Champions VGC: later Pokémon, moves, abilities, items and
+  Megas borrow the places of things those battles never use, with Showdown's Gen 5-style
+  sprites and the closest Gen 5 animation, and lines BW2 doesn't have are shown in
+  English.
 - You need your own copy of the game; no ROM is included. The download includes
   savestates of Pokémon World Tournament battles, which BW2 needs to draw battles in.
 - Tested with Chrome on macOS and the "251 Edition" of US Black 2, whose battle code is the
@@ -153,7 +156,10 @@ web page and the extension.
   near. This also covers hidden battles that spectators can't join. Chrome may ask
   whether play.pokemonshowdown.com can reach devices on your local network; allow it.
 
-Only Gen 5 formats can be drawn faithfully. BW2 has no Fairy type, Megas or later moves.
+Gen 5 formats are drawn faithfully. Later ones (Gen 9, Pokémon Champions) borrow BW2's
+slots for what it lacks: later Pokémon and Megas get Showdown's Gen 5-style sprites, and a
+Mega Evolution rewrites the Pokémon's party record as its Mega's slot before BW2 changes
+its form, which redraws it from that record.
 
 ## How it works
 
@@ -180,7 +186,9 @@ Showdown messages ─▶ Session ─▶ Translator ─▶ Commands ─▶ Direct
 
 Tests run the translator and the BW2 scene over real Gen 5 OU and Doubles OU replays in
 `test/fixtures/`. `test/gaps.test.ts` keeps a list of anything BW2 can't show yet (it's
-empty now), and the app lists the same for the battle on screen.
+empty now), and the app lists the same for the battle on screen. `test/gen9.test.ts` and
+`test/champions.test.ts` do the same for Gen 9 and Pokémon Champions VGC replays, and list
+the lines shown in English.
 
 `scripts/` has tools for testing without a second person:
 

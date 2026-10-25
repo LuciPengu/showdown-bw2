@@ -9,6 +9,7 @@ const IGNORED = new Set([
   'uhtmlchange', 'error', 'bigerror', 'rule', 'rated', 'tier', 'seed', 'teampreview', 'clearpoke', 'inactive',
   'inactiveoff', 'upkeep', 'timestamp', 'badge', 'debug', 'sentchoice', 'noinit', 'deinit', 'expire', 'unlink',
   'updatepoke', 'poke', 'done', 'gen', '-hint', '-center', '-mustrecharge', '-waiting', '-ohko', 'message',
+  'showteam', // open team sheets (VGC)
 ]);
 
 const STATS = new Set<string>(['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion']);
@@ -210,6 +211,19 @@ export class Translator {
       }
       case '-endability':
         return this.text(out, 'endAbility', args[0], [stripPrefix(args[1] ?? '')], from);
+      case '-mega': {
+        const slot = this.slot(args[0]);
+        const a = slot && this.active.get(key(slot));
+        if (!slot || !a) break;
+        out.push({ kind: 'mega', slot, species: a.mon.species });
+        return;
+      }
+      case '-clearnegativeboost':
+        // White Herb: its -enditem line says so.
+        if ('silent' in kw) return;
+        break;
+      case '-fieldactivate':
+        return this.text(out, 'fieldActivate', undefined, [stripPrefix(args[0] ?? '')]);
       case '-terastallize': {
         const slot = this.slot(args[0]);
         if (!slot) break;
@@ -224,7 +238,8 @@ export class Translator {
         return;
       }
       case '-weather': {
-        const w = args[0];
+        // Gen 9's snow is Snowscape to Showdown.
+        const w = args[0] === 'Snowscape' ? 'Snow' : args[0];
         if (w !== 'none' && !WEATHERS.has(w)) break;
         out.push({ kind: 'weather', weather: w === 'none' ? null : (w as Weather), upkeep: 'upkeep' in kw, ...(from && { from }) });
         return;

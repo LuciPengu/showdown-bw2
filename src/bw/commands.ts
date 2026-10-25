@@ -72,6 +72,8 @@ export type TextKey =
   | 'endItem'
   | 'endAbility'
   | 'cureTeam'
+  /** A move acting on the whole field (Perish Song). */
+  | 'fieldActivate'
   | 'message';
 
 export type Command =
@@ -96,6 +98,8 @@ export type Command =
   | { kind: 'transform'; slot: Slot; into: Slot }
   /** Terastallization (Gen 9): the Pokémon takes on its Tera type. */
   | { kind: 'tera'; slot: Slot; type: string }
+  /** Mega Evolution, after the form change: `species` is the Mega's (Charizard-Mega-Y). */
+  | { kind: 'mega'; slot: Slot; species: string }
   | { kind: 'weather'; weather: Weather | null; upkeep: boolean; from?: Effect }
   /** `slot` is who started it, if Showdown says. */
   | { kind: 'field'; condition: string; active: boolean; slot?: Slot }

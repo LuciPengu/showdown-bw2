@@ -1,0 +1,179 @@
+|j|☆jeensoo
+|j|☆Blupixl
+|t:|1792888420
+|gametype|doubles
+|player|p1|jeensoo|policeman-gen4|
+|player|p2|Blupixl|medium|
+|gen|9
+|tier|[Gen 9 Champions] VGC 2026 Reg M-B
+|rule|Species Clause: Limit one of each Pokemon
+|rule|Item Clause: Limit 1 of each item
+|clearpoke
+|poke|p1|Charizard, L50, M|
+|poke|p1|Sableye, L50, F|
+|poke|p1|Heliolisk, L50, F|
+|poke|p1|Furfrou, L50, M|
+|poke|p1|Sandaconda, L50, M|
+|poke|p1|Vileplume, L50, M|
+|poke|p2|Farigiraf, L50, M|
+|poke|p2|Mawile, L50, F|
+|poke|p2|Araquanid, L50, M|
+|poke|p2|Skeledirge, L50, M|
+|poke|p2|Politoed, L50, M|
+|poke|p2|Machamp, L50, F|
+|teampreview|4
+jeensoo rejected open team sheets.
+|
+|t:|1792888437
+|teamsize|p1|4
+|teamsize|p2|4
+|start
+|switch|p1a: Charizard|Charizard, L50, M|100/100
+|switch|p1b: Vileplume|Vileplume, L50, M|100/100
+|switch|p2a: QB|Farigiraf, L50, M|100/100
+|switch|p2b: WR|Araquanid, L50, M|100/100
+|turn|1
+|
+|t:|1792888463
+|detailschange|p1a: Charizard|Charizard-Mega-Y, L50, M
+|-mega|p1a: Charizard|Charizard|Charizardite Y
+|-weather|SunnyDay|[from] ability: Drought|[of] p1a: Charizard
+|move|p1a: Charizard|Protect|p1a: Charizard
+|-singleturn|p1a: Charizard|Protect
+|move|p1b: Vileplume|Sleep Powder|p2a: QB
+|-status|p2a: QB|slp|[from] move: Sleep Powder
+|move|p2b: WR|Substitute|p2b: WR
+|-start|p2b: WR|Substitute
+|-damage|p2b: WR|75/100
+|cant|p2a: QB|slp
+|
+|-weather|SunnyDay|[upkeep]
+|upkeep
+|turn|2
+|
+|t:|1792888484
+|switch|p1b: Heliolisk|Heliolisk, L50, F|100/100
+|switch|p2a: Politoed|Politoed, L50, M|100/100
+|-weather|RainDance|[from] ability: Drizzle|[of] p2a: Politoed
+|move|p1a: Charizard|Weather Ball|p2b: WR
+|-resisted|p2b: WR|1
+|-crit|p2b: WR
+|-end|p2b: WR|Substitute
+|move|p2b: WR|Liquidation|p1a: Charizard
+|-supereffective|p1a: Charizard|1
+|-damage|p1a: Charizard|0 fnt
+|faint|p1a: Charizard
+|
+|-weather|RainDance|[upkeep]
+|upkeep
+|
+|t:|1792888496
+|switch|p1a: Vileplume|Vileplume, L50, M|100/100
+|turn|3
+|
+|t:|1792888509
+|move|p1b: Heliolisk|Thunderbolt|p2b: WR
+|-supereffective|p2b: WR|1
+|-damage|p2b: WR|0 fnt
+|faint|p2b: WR
+|-damage|p1b: Heliolisk|90/100|[from] item: Life Orb
+|move|p2a: Politoed|Ice Beam|p1b: Heliolisk
+|-damage|p1b: Heliolisk|54/100
+|move|p1a: Vileplume|Sunny Day|p1a: Vileplume
+|-weather|SunnyDay
+|
+|-weather|SunnyDay|[upkeep]
+|-damage|p1b: Heliolisk|41/100|[from] ability: Solar Power|[of] p1b: Heliolisk
+|upkeep
+|
+|t:|1792888513
+|switch|p2b: QB|Farigiraf, L50, M|100/100 slp
+|turn|4
+|
+|t:|1792888522
+|move|p1a: Vileplume|Pollen Puff|p1b: Heliolisk
+|-heal|p1b: Heliolisk|91/100
+|move|p1b: Heliolisk|Thunderbolt|p2a: Politoed
+|-supereffective|p2a: Politoed|1
+|-damage|p2a: Politoed|0 fnt
+|faint|p2a: Politoed
+|-damage|p1b: Heliolisk|82/100|[from] item: Life Orb
+|-curestatus|p2b: QB|slp|[msg]
+|move|p2b: QB|Dazzling Gleam|p1a: Vileplume|[spread] p1a,p1b
+|-resisted|p1a: Vileplume|1
+|-damage|p1a: Vileplume|93/100
+|-damage|p1b: Heliolisk|63/100
+|
+|-weather|SunnyDay|[upkeep]
+|-damage|p1b: Heliolisk|51/100|[from] ability: Solar Power|[of] p1b: Heliolisk
+|upkeep
+|
+|t:|1792888528
+|switch|p2a: Machamp|Machamp, L50, F|100/100
+|turn|5
+|
+|t:|1792888535
+|move|p1a: Vileplume|Sleep Powder|p2a: Machamp
+|-status|p2a: Machamp|slp|[from] move: Sleep Powder
+|move|p1b: Heliolisk|Dark Pulse|p2b: QB
+|-supereffective|p2b: QB|1
+|-damage|p2b: QB|29/100
+|-enditem|p2b: QB|Sitrus Berry|[eat]
+|-heal|p2b: QB|54/100|[from] item: Sitrus Berry
+|-damage|p1b: Heliolisk|41/100|[from] item: Life Orb
+|cant|p2a: Machamp|slp
+|move|p2b: QB|Psychic|p1a: Vileplume
+|-supereffective|p1a: Vileplume|1
+|-damage|p1a: Vileplume|39/100
+|
+|-weather|SunnyDay|[upkeep]
+|-damage|p1b: Heliolisk|29/100|[from] ability: Solar Power|[of] p1b: Heliolisk
+|upkeep
+|turn|6
+|
+|t:|1792888546
+|move|p1a: Vileplume|Pollen Puff|p1b: Heliolisk
+|-heal|p1b: Heliolisk|79/100
+|move|p1b: Heliolisk|Dark Pulse|p2b: QB
+|-supereffective|p2b: QB|1
+|-damage|p2b: QB|0 fnt
+|faint|p2b: QB
+|-damage|p1b: Heliolisk|70/100|[from] item: Life Orb
+|cant|p2a: Machamp|slp
+|
+|-weather|SunnyDay|[upkeep]
+|-damage|p1b: Heliolisk|58/100|[from] ability: Solar Power|[of] p1b: Heliolisk
+|upkeep
+|turn|7
+|
+|t:|1792888559
+|move|p1a: Vileplume|Strength Sap|p2a: Machamp
+|-unboost|p2a: Machamp|atk|1
+|-heal|p1a: Vileplume|100/100
+|move|p1b: Heliolisk|Thunderbolt|p2a: Machamp
+|-damage|p2a: Machamp|1/100 slp
+|-damage|p1b: Heliolisk|48/100|[from] item: Life Orb
+|-curestatus|p2a: Machamp|slp|[msg]
+|move|p2a: Machamp|Dynamic Punch|p1b: Heliolisk
+|-supereffective|p1b: Heliolisk|1
+|-damage|p1b: Heliolisk|0 fnt
+|faint|p1b: Heliolisk
+|
+|-weather|SunnyDay|[upkeep]
+|upkeep
+|
+|t:|1792888565
+|switch|p1b: Furfrou|Furfrou, L50, M|100/100
+|turn|8
+|
+|t:|1792888574
+|move|p1a: Vileplume|Pollen Puff|p2a: Machamp
+|-resisted|p2a: Machamp|1
+|-damage|p2a: Machamp|0 fnt
+|faint|p2a: Machamp
+|
+|win|jeensoo
+|c|☆Blupixl|gg
+|c|☆jeensoo|gg
+|l|☆Blupixl
+|player|p2|

@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`shows Champions VGC battles, borrowing what BW2 lacks > gaps 1`] = `[]`;
+
+exports[`shows Champions VGC battles, borrowing what BW2 lacks > lines in English 1`] = `
+[
+  "Archaludon absorbed electricity!",
+  "Grass grew to cover the battlefield!",
+  "Heliolisk was hurt by its Solar Power!",
+  "It started to snow!",
+  "Kingambit's HP was restored.",
+  "Rillaboom's HP was restored.",
+  "Sneasler's HP was restored.",
+  "The foe's Sneasler's HP was restored.",
+  "The foe's Whimsicott's HP was restored.",
+  "The grass disappeared from the battlefield.",
+  "The snow continues to fall.",
+  "The snow stopped.",
+]
+`;
+
+exports[`shows Champions VGC battles, borrowing what BW2 lacks > protocol not translated 1`] = `[]`;
