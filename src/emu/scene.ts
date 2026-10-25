@@ -5,7 +5,7 @@
 import type { Command, MonView, Side, Slot, Stat, Status, Weather } from '../bw/commands';
 import { type ServerCmd, SC } from '../bw/servercmd';
 import { describe, makeNamer, megaName } from '../bw/english';
-import { toID } from '../showdown/protocol';
+import { baseSpecies, toID } from '../showdown/protocol';
 import { type CartWork, type Dex, nativeDex } from './dex';
 import { MSG, type MsgRequest, type MsgResult, SILENT, textMessage } from './messages';
 
@@ -131,9 +131,9 @@ export function drawable(text: string): boolean {
   return /^[\u0020-\u00ff\u2018\u2019\u201c\u201d\u2026\u2642\u2640]+$/u.test(text);
 }
 
-/** The nickname, or the species name if the font can't draw it. */
+/** The nickname, or the species' name (without its form, as the games name Pokémon) if the font can't draw it or it's too long. */
 function printableName(mon: MonView): string {
-  return drawable(mon.name) && [...mon.name].length <= 10 ? mon.name : mon.species.slice(0, 10);
+  return drawable(mon.name) && [...mon.name].length <= 10 ? mon.name : baseSpecies(mon.species).slice(0, 10);
 }
 
 /** A percentage of `maxHp`, never rounding a living Pokémon down to 0. */

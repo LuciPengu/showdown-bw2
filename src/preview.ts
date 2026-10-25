@@ -22,7 +22,7 @@ interface Mon {
   el: HTMLElement;
 }
 
-const HYPHENATED = new Set(['porygonz', 'hooh']);
+const HYPHENATED = new Set(['porygonz', 'hooh', 'jangmoo', 'hakamoo', 'kommoo', 'chiyu', 'tinglu', 'wochien', 'chienpao']);
 
 /** Showdown sprite id: `Thundurus-Therian` → `thundurus-therian`, `Mr. Mime` → `mrmime`. */
 export function spriteId(species: string): string {

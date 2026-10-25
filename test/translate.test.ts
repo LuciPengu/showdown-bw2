@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { Command } from '../src/bw/commands';
 import { describe as describeCmd, makeNamer } from '../src/bw/english';
-import { parseDetails, parseHpStatus, parseLine, parseRef, splitMessage } from '../src/showdown/protocol';
+import { baseSpecies, parseDetails, parseHpStatus, parseLine, parseRef, splitMessage } from '../src/showdown/protocol';
 import { Session } from '../src/session';
 import { Translator } from '../src/translate';
 
@@ -10,6 +10,12 @@ const fixtures = new URL('./fixtures/', import.meta.url);
 const log = (name: string) => readFileSync(new URL(name, fixtures), 'utf8').split('\n');
 
 describe('protocol', () => {
+  it('names a species without its form, as the games do', () => {
+    expect(['Arcanine-Hisui', 'Charizard-Mega-Y', 'Tauros-Paldea-Aqua', 'Garchomp', 'Ho-Oh', 'Porygon-Z', 'Kommo-o-Totem', 'Chi-Yu'].map(baseSpecies)).toEqual([
+      'Arcanine', 'Charizard', 'Tauros', 'Garchomp', 'Ho-Oh', 'Porygon-Z', 'Kommo-o', 'Chi-Yu',
+    ]);
+  });
+
   it('splits args from tags', () => {
     expect(parseLine('|-damage|p2a: Amoonguss|88/100|[from] ability: Iron Barbs|[of] p1a: Ferrothorn')).toEqual({
       cmd: '-damage',

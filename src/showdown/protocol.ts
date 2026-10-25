@@ -92,6 +92,14 @@ export function parseHpStatus(s: string | undefined): HpStatus {
 }
 
 /** Showdown's `toID`: lowercase letters and digits only. */
+/** Species whose own names have a hyphen, which isn't a form's. */
+const HYPHENATED = /^(Porygon-Z|Ho-Oh|Jangmo-o|Hakamo-o|Kommo-o|Chi-Yu|Ting-Lu|Wo-Chien|Chien-Pao)(?=-|$)/;
+
+/** A species' name without its form: `Arcanine-Hisui` → `Arcanine`, `Kommo-o-Totem` → `Kommo-o`. */
+export function baseSpecies(species: string): string {
+  return HYPHENATED.exec(species)?.[1] ?? species.split('-')[0];
+}
+
 export function toID(s: string | undefined): string {
   return (s ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
 }
