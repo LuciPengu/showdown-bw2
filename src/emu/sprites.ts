@@ -1,8 +1,8 @@
 // Showdown's Gen 5-style sprites as BW2 sprites, for later Pokémon borrowing a
 // species' slot: fetched, then made into BW2's sprite files (pokegra.ts).
 
-import type { SpriteWriter } from './lender';
-import { type Picture, spriteFiles } from './pokegra';
+import { type SpriteWriter, iconIndex } from './lender';
+import { type Picture, iconFile, iconPaletteOf, iconPalettes, paletteColors, spriteFiles } from './pokegra';
 
 /** Where Showdown keeps a sprite: `gen5`, `gen5-back`, `gen5-shiny` or `gen5-back-shiny`, by sprite id. */
 export type SpriteUrl = (dir: string, id: string) => string;
@@ -36,7 +36,7 @@ function mirrored(p: Picture): Picture {
 /** Writes Showdown's sprites for a later Pokémon into the species slot it borrows. */
 export function showdownSprites(url: SpriteUrl = showdownSpriteUrl): SpriteWriter {
   const pictures = new Map<string, Promise<(Picture | null)[]>>();
-  return async (archive, work) => {
+  return async ({ sprites: archive, icons, setIcon }, work) => {
     const id = work.spriteId;
     let got = pictures.get(id);
     if (!got) {
@@ -54,5 +54,10 @@ export function showdownSprites(url: SpriteUrl = showdownSpriteUrl): SpriteWrite
     files.forEach((file, k) => {
       if (file !== donor[k]) archive.replace(first + k, file);
     });
+    // The icon keeps the donor's palette, which the game picks by species.
+    const donorIcon = icons.file(iconIndex(work.species));
+    const palettes = iconPalettes(icons.file(0));
+    const palette = palettes[iconPaletteOf(donorIcon, palettes, paletteColors(donor[18]))];
+    setIcon(work.species, iconFile(donorIcon, front, palette));
   };
 }

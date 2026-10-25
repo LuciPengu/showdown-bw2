@@ -22,7 +22,7 @@ export interface DexSpecies {
 
 /** What a borrowed slot needs on the cart before it shows. */
 export type CartWork =
-  | { kind: 'sprite'; species: number; spriteId: string }
+  | { kind: 'sprite'; species: number; spriteId: string; baseHp: number }
   | { kind: 'move'; move: number; name: string; type: number; category: number; pp: number; power: number; accuracy: number }
   | { kind: 'name'; what: 'ability' | 'item'; num: number; name: string };
 
@@ -102,7 +102,7 @@ export class BorrowingDex implements Dex {
     this.takenSpecies.add(num);
     const spec = { num, form: 0, baseHp, native: false };
     this.species_.set(id, spec);
-    this.work.push({ kind: 'sprite', species: num, spriteId });
+    this.work.push({ kind: 'sprite', species: num, spriteId, baseHp });
     return spec;
   }
 

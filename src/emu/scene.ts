@@ -19,6 +19,8 @@ export interface MonSpec {
   hp: number;
   maxHp: number;
   status: Status | null;
+  /** A later Pokémon's own base HP, which its borrowed slot is given; the game works out max HP from it. */
+  baseHp?: number;
 }
 
 export interface MonWrite {
@@ -102,7 +104,9 @@ export function monSpec(mon: MonView, hp: { hp: number; maxHp: number }, status:
   // Showdown gives exact HP for your own side, a percentage otherwise.
   const maxHp = hp.maxHp !== 100 ? hp.maxHp : estimateMaxHp(baseHp, mon.level);
   const value = hp.maxHp !== 100 ? hp.hp : scaleHp(hp.hp, maxHp);
-  return { species: num, form, level: mon.level, gender: mon.gender, shiny: mon.shiny, nickname: printableName(mon), hp: value, maxHp, status };
+  const spec: MonSpec = { species: num, form, level: mon.level, gender: mon.gender, shiny: mon.shiny, nickname: printableName(mon), hp: value, maxHp, status };
+  if (!species.native) spec.baseHp = baseHp;
+  return spec;
 }
 
 /** Whether the US games' font can draw `text`: it has Latin letters only. */

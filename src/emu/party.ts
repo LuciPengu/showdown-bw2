@@ -111,7 +111,7 @@ export function buildPk5(mon: MonSpec, personal: { baseHp: number; genderRatio: 
   b[0x14] = 70; // friendship
   b[0x15] = personal.ability;
   b[0x17] = 2; // English
-  const hp = hpInvestment(personal.baseHp, mon.level, mon.maxHp);
+  const hp = hpInvestment(mon.baseHp ?? personal.baseHp, mon.level, mon.maxHp);
   b[0x18] = hp.ev;
   // Block B: 31 IVs, nicknamed; gender and form.
   v.setUint32(0x38, ((0x3fffffff & ~0x1f) | hp.iv | (1 << 31)) >>> 0, true);

@@ -404,3 +404,129 @@ export function spriteFiles(pictures: SpritePictures, donor: Uint8Array[]): Uint
   out[19] = store(donor[19], paletteFile(contents(donor[19]), shiny));
   return out;
 }
+
+// Party icons (a/0/0/7): 32×64, two 32×32 frames, tiled 8×8 four tiles a row,
+// uncompressed; file 2 × species + 8. Icons share three 16-colour palettes
+// (file 0); which one a species uses isn't stored with it.
+
+type Rgb = [number, number, number];
+
+/** The icon palettes, from a/0/0/7's file 0. */
+export function iconPalettes(file: Uint8Array): Rgb[][] {
+  const pltt = block(file, 'PLTT');
+  const dataAt = pltt.at + u32(file, pltt.at + 12);
+  const count = u32(file, pltt.at + 8) / 32;
+  const palettes: Rgb[][] = [];
+  for (let p = 0; p < count; p++) {
+    const colors: Rgb[] = [];
+    for (let i = 0; i < 16; i++) {
+      const c = u16(file, dataAt + (p * 16 + i) * 2);
+      colors.push([(c & 31) << 3, ((c >> 5) & 31) << 3, ((c >> 10) & 31) << 3]);
+    }
+    palettes.push(colors);
+  }
+  return palettes;
+}
+
+/** An icon's palette indexes, row by row (32×64). */
+export function iconPixels(icon: Uint8Array): Uint8Array {
+  const char = block(icon, 'CHAR');
+  const data = icon.subarray(char.at + u32(icon, char.at + 20));
+  const out = new Uint8Array(32 * 64);
+  for (let n = 0; n < 32 * 64; n++) {
+    const t = n >> 6;
+    const r = n & 63;
+    out[((t >> 2) * 8 + (r >> 3)) * 32 + (t & 3) * 8 + (r & 7)] = (data[n >> 1] >> ((n & 1) * 4)) & 0xf;
+  }
+  return out;
+}
+
+const distance = (a: Rgb, b: Rgb) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
+
+/**
+ * Which icon palette a species uses: the one whose colours for its icon come
+ * closest to the colours of its sprite.
+ */
+export function iconPaletteOf(icon: Uint8Array, palettes: Rgb[][], spriteColors: Rgb[]): number {
+  const pixels = iconPixels(icon);
+  let best = 0;
+  let bestScore = Infinity;
+  palettes.forEach((palette, p) => {
+    let score = 0;
+    for (const v of pixels) if (v) score += Math.min(...spriteColors.map((c) => distance(palette[v], c)));
+    if (score < bestScore) {
+      bestScore = score;
+      best = p;
+    }
+  });
+  return best;
+}
+
+/** A sprite palette file's colours (NCLR, 16, the first see-through). */
+export function paletteColors(file: Uint8Array): Rgb[] {
+  const pltt = block(file, 'PLTT');
+  const dataAt = pltt.at + u32(file, pltt.at + 12);
+  const colors: Rgb[] = [];
+  for (let i = 1; i < 16; i++) {
+    const c = u16(file, dataAt + i * 2);
+    colors.push([(c & 31) << 3, ((c >> 5) & 31) << 3, ((c >> 10) & 31) << 3]);
+  }
+  return colors;
+}
+
+/**
+ * An icon like `template` made from a picture: its opaque part shrunk to fit
+ * 32×32, standing at the bottom, in `palette`'s colours; the second frame a
+ * pixel higher, for the hop icons do.
+ */
+export function iconFile(template: Uint8Array, pictureIn: Picture, palette: Rgb[]): Uint8Array {
+  const picture = fit(pictureIn);
+  let minX = SIZE;
+  let maxX = -1;
+  let minY = SIZE;
+  let maxY = -1;
+  for (let i = 0; i < SIZE * SIZE; i++) {
+    if (!opaque(picture, i)) continue;
+    minX = Math.min(minX, i % SIZE);
+    maxX = Math.max(maxX, i % SIZE);
+    minY = Math.min(minY, Math.floor(i / SIZE));
+    maxY = Math.max(maxY, Math.floor(i / SIZE));
+  }
+  const frame = new Uint8Array(32 * 32);
+  if (maxX >= 0) {
+    const w = maxX - minX + 1;
+    const h = maxY - minY + 1;
+    const scale = Math.max(w / 30, h / 30, 1);
+    const ow = Math.floor(w / scale);
+    const oh = Math.floor(h / scale);
+    const ox = Math.floor((32 - ow) / 2);
+    const oy = 31 - oh;
+    const nearest = new Map<number, number>();
+    for (let y = 0; y < oh; y++) {
+      for (let x = 0; x < ow; x++) {
+        // The most opaque pixel of the area this one shrinks, so thin outlines survive.
+        const sx = minX + Math.floor((x + 0.5) * scale);
+        const sy = minY + Math.floor((y + 0.5) * scale);
+        const i = sy * SIZE + sx;
+        if (!opaque(picture, i)) continue;
+        const rgb = rgbAt(picture, i);
+        const k = key(rgb);
+        let v = nearest.get(k);
+        if (v === undefined) {
+          v = 1;
+          for (let p = 2; p < 16; p++) if (distance(palette[p], rgb) < distance(palette[v], rgb)) v = p;
+          nearest.set(k, v);
+        }
+        frame[(oy + y) * 32 + ox + x] = v;
+      }
+    }
+  }
+  const pixels = new Uint8Array(32 * 64);
+  pixels.set(frame, 0);
+  pixels.set(frame.subarray(32), 32 * 32); // a pixel higher
+  const order: number[] = [];
+  for (let t = 0; t < 32; t++) {
+    for (let r = 0; r < 64; r++) order.push(pixels[((t >> 2) * 8 + (r >> 3)) * 32 + (t & 3) * 8 + (r & 7)]);
+  }
+  return withCharData(template, pack4(order));
+}

@@ -21,7 +21,7 @@ describe('the dex', () => {
     expect(meow).toMatchObject({ form: 0, baseHp: 76, native: false });
     expect(DONORS.species.either).toContain(meow.num);
     expect(dex.species('Meowscarada')).toEqual(meow);
-    expect(dex.takeWork()).toEqual([{ kind: 'sprite', species: meow.num, spriteId: 'meowscarada' }]);
+    expect(dex.takeWork()).toEqual([{ kind: 'sprite', species: meow.num, spriteId: 'meowscarada', baseHp: 76 }]);
     const tusk = dex.species('Great Tusk')!;
     expect(DONORS.species.genderless).toContain(tusk.num);
     expect(dex.species('Charizard-Mega-X')!.num).not.toBe(6); // BW2 has no Mega form
