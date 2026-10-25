@@ -78,7 +78,7 @@ describe('the cart while the game runs', () => {
     expect([...romFile(out, 'b')]).toEqual([9, 9, 9, 9]);
   });
 
-  it('replaces files in place, or in the room at the end, in every copy', () => {
+  it('replaces files in the room at the end, in every copy, and puts them back', () => {
     const rom = new Uint8Array(withScratch(makeRom().buffer as ArrayBuffer));
     const heap = new Uint8Array(rom.length * 2 + 0x100);
     heap.set(rom, 0);
@@ -92,6 +92,9 @@ describe('the cart while the game runs', () => {
     expect(sprites.fileRange(0)[0]).toBeGreaterThanOrEqual(rom.length - SCRATCH_BYTES);
     const second = heap.subarray(rom.length + 0x100);
     expect(second.every((b, i) => b === heap[i])).toBe(true);
+    sprites.restore();
+    expect([...sprites.file(0)]).toEqual([1, 2, 3, 4]);
+    expect([...sprites.file(1)]).toEqual([5, 6]);
   });
 
   it("stretches the archive in RAM's file table and in files the game holds open", () => {

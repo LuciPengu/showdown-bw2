@@ -93,3 +93,12 @@ export function loadPersonal(rom: Uint8Array): PersonalTable {
     return parse(base);
   };
 }
+
+/** How many forms BW2 has of each species (personal data byte 0x20; 1 for most). */
+export function loadFormCounts(rom: Uint8Array): (species: number) => number {
+  const files = narcFiles(romFile(rom, 'a/0/1/6'));
+  return (species) => {
+    const base = files[species];
+    return base && base.length > 0x20 ? Math.max(1, base[0x20]) : 1;
+  };
+}

@@ -81,4 +81,14 @@ describe('text banks', () => {
     expect(text(live.read(2))).toBe('Behemoth Bash');
     expect(text(live.read(3))).toBe('Moonblast');
   });
+
+  it('gives back the room a line took when it is written again', () => {
+    const { live } = liveBank(['Pound', 'Cut', 'Bind', 'Multitype', 'Flower Gift']);
+    live.lend([3, 4]);
+    for (const name of ['Supreme Overlord', 'Orichalcum Pulse', 'Supersweet Syrup', 'Protosynthesis', 'Poison Puppeteer']) {
+      expect(live.write(3, encodeText(name))).toBe(true);
+      expect(text(live.read(3))).toBe(name);
+    }
+    expect(text(live.read(2))).toBe('Bind');
+  });
 });

@@ -7,7 +7,9 @@ import { Bw2Battle } from './emu/bw2';
 import { Emulator, gameCode } from './emu/emulator';
 import { BattleParties } from './emu/party';
 import { EmulatorRenderer, type Lead } from './emu/renderer';
-import { type PersonalTable, loadPersonal } from './emu/rom';
+import { BorrowingDex, type CartWork } from './emu/dex';
+import { CartLender } from './emu/lender';
+import { type PersonalTable, loadFormCounts, loadPersonal } from './emu/rom';
 import { withScratch } from './emu/romimage';
 import { Scene, drawable } from './emu/scene';
 import { TrainerNames } from './emu/trainers';
@@ -53,12 +55,23 @@ export class Bw2Game {
   private hurry: (() => void) | null = null;
   /** Species data from the ROM, read before the emulator takes the ROM. */
   private personal: PersonalTable | null = null;
+  private formCounts: (species: number) => number = () => 1;
+  /** Showdown's Pokémon and moves as BW2 numbers, later ones borrowing slots. */
+  readonly dex = new BorrowingDex((species) => this.formCounts(species));
+  /** What the borrowed slots need on the cart. */
+  private lender: CartLender | null = null;
 
   constructor(private readonly host: GameHost) {
     this.renderer = new EmulatorRenderer(
       {
         battle: () => this.live(),
-        newScene: (screen) => new Scene(this.parties!.sides(), screen, this.battle!.winBgm, perSide(this.battle!.style)),
+        newScene: (screen) => new Scene(this.parties!.sides(), screen, this.battle!.winBgm, perSide(this.battle!.style), this.dex),
+        dex: this.dex,
+        borrow: (work) => this.borrow(work),
+        resetBorrowed: () => {
+          this.dex.reset();
+          this.lender?.reset();
+        },
         writeMon: (write) => this.parties!.write(write),
         sizePlayerParty: (size) => {
           this.parties!.resizeParty(0, size);
@@ -79,6 +92,15 @@ export class Bw2Game {
     );
   }
 
+  /** Does what borrowed slots need on the cart (see dex.ts). */
+  private borrow(work: CartWork[]): Promise<void> {
+    if (!work.length) return Promise.resolve();
+    const cart = this.emulator?.cart();
+    if (!cart) return Promise.resolve();
+    this.lender ??= new CartLender(cart, async () => {});
+    return this.lender.apply(work).catch((e) => this.host.note?.(`couldn't borrow a slot: ${(e as Error).message}`));
+  }
+
   /** The taken-over battle, if it's still the one in the game. */
   live(): Bw2Battle | null {
     return this.battle?.alive ? this.battle : null;
@@ -97,6 +119,7 @@ export class Bw2Game {
     const code = gameCode(rom);
     try {
       this.personal = loadPersonal(new Uint8Array(rom));
+      this.formCounts = loadFormCounts(new Uint8Array(rom));
     } catch (err) {
       this.status(`Couldn't read species data from the ROM: ${(err as Error).message}`, false);
       return null;
@@ -105,6 +128,8 @@ export class Bw2Game {
     this.emulator?.destroy();
     this.battle = null;
     this.parties = null;
+    this.lender = null;
+    this.dex.reset();
     const emu = Emulator.boot(
       container,
       withScratch(rom),

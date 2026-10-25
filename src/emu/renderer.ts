@@ -4,6 +4,7 @@ import type { Command, GameType } from '../bw/commands';
 import { SC, type ServerCmd, encodeBlock } from '../bw/servercmd';
 import type { Renderer } from '../director';
 import type { Bw2Battle } from './bw2';
+import type { CartWork, Dex } from './dex';
 import type { BattleMove } from './party';
 import { type Bw2Side, type MonSpec, type MonWrite, Scene, type Screen, monSpec, newScreen } from './scene';
 
@@ -19,6 +20,12 @@ export interface GameLink {
   battle(): Bw2Battle | null;
   /** A scene over the battle's current party data, continuing from what's on screen. */
   newScene(screen: Screen): Scene;
+  /** Showdown's Pokémon and moves as BW2 numbers; later ones borrow slots. */
+  dex: Dex;
+  /** Does on the cart what borrowed slots need. */
+  borrow(work: CartWork[]): Promise<void>;
+  /** A new battle: every borrowed slot goes back. */
+  resetBorrowed(): void;
   /** Rewrites a party slot's Pokémon. */
   writeMon(write: MonWrite): void;
   /** Gives the player `size` party slots (as many as it can) and returns their side, reread. */
@@ -79,6 +86,8 @@ export class EmulatorRenderer implements Renderer {
   private screen = newScreen();
   /** Leads BW2's intro sent out ("side:pos" → name), whose switch-ins are taken on, not played. */
   private introLeads = new Map<string, string>();
+  /** Cart work started outside a step (the player's team), which steps wait for. */
+  private work: Promise<void> = Promise.resolve();
 
   constructor(
     private readonly game: GameLink,
@@ -102,7 +111,20 @@ export class EmulatorRenderer implements Renderer {
   setTeam(team: TeamMember[]): boolean {
     this.team = team;
     this.teamWritten = false;
-    return this.writeTeam(team);
+    const written = this.writeTeam(team);
+    this.borrow();
+    return written;
+  }
+
+  get dex(): Dex {
+    return this.game.dex;
+  }
+
+  /** Does the cart work the dex has waiting (borrowed moves' names and data are written at once). */
+  borrow(): Promise<void> {
+    const work = this.game.dex.takeWork();
+    if (work.length) this.work = Promise.all([this.work, this.game.borrow(work)]).then(() => undefined);
+    return this.work;
   }
 
   private writeTeam(team: TeamMember[]): boolean {
@@ -134,6 +156,8 @@ export class EmulatorRenderer implements Renderer {
 
   /** A new battle starts from the game's party data as it is now. */
   reset(): void {
+    this.game.resetBorrowed();
+    this.work = Promise.resolve();
     this.scene = null;
     this.team = null;
     this.pendingTeam = null;
@@ -166,10 +190,11 @@ export class EmulatorRenderer implements Renderer {
     this.game.note(`battle start: intro with ${switchIns.map((s) => s.mon.species).join(', ')}`);
     const leads: Lead[] = [];
     for (const s of switchIns) {
-      const mon = monSpec(s.mon, s.hp, s.status);
+      const mon = monSpec(s.mon, s.hp, s.status, this.game.dex);
       if (!mon) return false;
       leads.push({ side: s.slot.side, pos: s.slot.pos, mon });
     }
+    await this.borrow();
     const names: [string, string] = [cmd.trainers[0].name, cmd.trainers[1].name];
     if (!(await this.game.intro(cmd.gameType, names, leads))) {
       this.game.note('battle start: the intro failed');
@@ -209,13 +234,16 @@ export class EmulatorRenderer implements Renderer {
     if (cmd.kind === 'switchIn' && this.introLeads.get(`${cmd.slot.side}:${cmd.slot.pos}`) === cmd.mon.name) {
       this.introLeads.delete(`${cmd.slot.side}:${cmd.slot.pos}`);
       this.scene ??= this.makeScene();
-      await this.enforceHp(this.scene.adoptLead(cmd), instant);
+      const step = this.scene.adoptLead(cmd);
+      await this.game.borrow(step.work);
+      await this.enforceHp(step, instant);
       return;
     }
     try {
       this.scene ??= this.makeScene();
       // History drawn instantly still updates the game's battle data; the scene leaves out what would animate.
       const step = this.scene.plan(cmd, instant);
+      await Promise.all([this.work, this.game.borrow(step.work)]);
       for (const write of step.writes) this.game.writeMon(write);
       for (const t of step.trainers) this.game.writeTrainer(t.client, t.name);
       if (!step.cmds.length) return;

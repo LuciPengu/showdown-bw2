@@ -117,6 +117,8 @@ export class LiveBank {
   private readonly lent = new Set<number>();
   /** Lines written, which keep their own room. */
   private readonly written = new Set<number>();
+  /** Room taken from lent lines, by the line written there. */
+  private readonly placed = new Map<number, Slot>();
 
   constructor(
     private readonly cart: Cart,
@@ -155,7 +157,11 @@ export class LiveBank {
       this.lent.add(line);
       this.free.push({ ...slot });
     }
-    // Lines lie one after another, so lent neighbours make one longer room.
+    this.mergeFree();
+  }
+
+  /** Lines lie one after another, so free neighbours make one longer room. */
+  private mergeFree(): void {
     this.free.sort((a, b) => a.at - b.at);
     this.free = this.free.reduce<Slot[]>((merged, slot) => {
       const last = merged[merged.length - 1];
@@ -169,6 +175,13 @@ export class LiveBank {
   write(line: number, units: number[]): boolean {
     const plain = [...units, END];
     const own = this.own[line];
+    // Room the line took from lent lines before is free again.
+    const before = this.placed.get(line);
+    if (before) {
+      this.placed.delete(line);
+      this.free.push(before);
+      this.mergeFree();
+    }
     let at: number;
     if (!this.lent.has(line) && plain.length <= own.units) at = own.at;
     else {
@@ -179,6 +192,7 @@ export class LiveBank {
       if (i < 0) return false;
       const slot = this.free[i];
       at = slot.at;
+      this.placed.set(line, { at, units: plain.length });
       slot.at += plain.length * 2;
       slot.units -= plain.length;
       if (!slot.units) this.free.splice(i, 1);
@@ -204,6 +218,7 @@ export class LiveBank {
     this.free = [];
     this.lent.clear();
     this.written.clear();
+    this.placed.clear();
   }
 
   private entryAt(line: number): number {

@@ -2,8 +2,8 @@
 // open, and the pick is sent back to Showdown as a /choose command.
 
 import type { Status } from './bw/commands';
-import { MOVE_NUMBERS } from './bw/moves';
 import type { Bw2Action, Bw2Battle } from './emu/bw2';
+import { type Dex, nativeDex } from './emu/dex';
 import type { BattleMove } from './emu/party';
 import type { EmulatorRenderer, TeamMember } from './emu/renderer';
 import { monSpec } from './emu/scene';
@@ -11,26 +11,24 @@ import type { ShowdownRequest } from './session';
 import { parseDetails, parseHpStatus, toID } from './showdown/protocol';
 
 /** BW2's move number for a request move id; Hidden Power comes as `hiddenpowerfire60`, Return as `return102`. */
-export function moveNumber(id: string): number | undefined {
-  const key = toID(id);
-  if (key.startsWith('hiddenpower')) return MOVE_NUMBERS.hiddenpower;
-  return MOVE_NUMBERS[key] ?? MOVE_NUMBERS[key.replace(/\d+$/, '')];
+export function moveNumber(id: string, dex: Dex = nativeDex): number | undefined {
+  return dex.move(id) ?? undefined;
 }
 
 const nameOf = (ident: string) => ident.replace(/^p\d[a-c]?: /, '');
 
 /** The player's team as the request lists it, ready to write into BW2's party. */
-export function teamFromRequest(req: ShowdownRequest): TeamMember[] {
+export function teamFromRequest(req: ShowdownRequest, dex: Dex = nativeDex): TeamMember[] {
   const team: TeamMember[] = [];
   for (const [i, p] of req.side.pokemon.entries()) {
     const name = nameOf(p.ident);
     const hs = parseHpStatus(p.condition);
-    const spec = monSpec({ name, ...parseDetails(p.details) }, { hp: hs.hp, maxHp: hs.maxHp || 1 }, hs.status as Status | null);
+    const spec = monSpec({ name, ...parseDetails(p.details) }, { hp: hs.hp, maxHp: hs.maxHp || 1 }, hs.status as Status | null, dex);
     if (!spec) continue;
     // The active Pokémon come first, in position order, matching `active`.
     const live = p.active ? req.active?.[i]?.moves : undefined;
     const moves: BattleMove[] = p.moves.flatMap((id) => {
-      const num = moveNumber(id);
+      const num = moveNumber(id, dex);
       if (!num) return [];
       const m = live?.find((x) => toID(x.id) === toID(id));
       // A move Showdown won't take this turn (Disable, Taunt, a Choice lock…) has no PP in BW2's
@@ -60,10 +58,11 @@ export function toChoice(
   req: ShowdownRequest,
   nameAt: (partyIndex: number) => string | undefined,
   position = 0,
+  dex: Dex = nativeDex,
 ): string | null {
   if (action.kind === 'fight') {
     const moves = req.active?.[position]?.moves ?? [];
-    let i = moves.findIndex((m) => moveNumber(m.id) === action.move);
+    let i = moves.findIndex((m) => moveNumber(m.id, dex) === action.move);
     if (i < 0 && moves.length === 1) i = 0; // Struggle and locked moves offer one choice
     if (i < 0) return null;
     const picked = (req.active?.length ?? 1) > 1 && PICKED_TARGETS.has(moves[i].target ?? '');
@@ -84,7 +83,12 @@ export function toChoice(
  * empty action for a fainted one); its forced-switch menu answers only for
  * the positions it asked about. Positions with nothing to choose pass.
  */
-export function toChoices(actions: Bw2Action[], req: ShowdownRequest, nameAt: (partyIndex: number) => string | undefined): string | null {
+export function toChoices(
+  actions: Bw2Action[],
+  req: ShowdownRequest,
+  nameAt: (partyIndex: number) => string | undefined,
+  dex: Dex = nativeDex,
+): string | null {
   const count = Math.max(req.active?.length ?? 0, req.forceSwitch?.length ?? 0, 1);
   const needs = (i: number) =>
     req.forceSwitch ? !!req.forceSwitch[i] : !!req.active?.[i] && !req.side.pokemon[i]?.condition.endsWith(' fnt');
@@ -97,7 +101,7 @@ export function toChoices(actions: Bw2Action[], req: ShowdownRequest, nameAt: (p
       parts.push('pass');
       continue;
     }
-    const part = toChoice(action, req, nameAt, i);
+    const part = toChoice(action, req, nameAt, i, dex);
     if (!part) return null;
     parts.push(part);
   }
@@ -144,7 +148,7 @@ export class ChoiceBridge {
     this.request = request;
     // The team goes into BW2's party once, from the first request after team preview.
     if (!request.teamPreview && !request.wait && this.teamRoom !== room) {
-      if (this.deps.renderer.setTeam(teamFromRequest(request))) this.teamRoom = room;
+      if (this.deps.renderer.setTeam(teamFromRequest(request, this.deps.renderer.dex))) this.teamRoom = room;
     }
     // A request that arrives while the menu is open replaces what it's for.
     this.asking?.abort();
@@ -177,16 +181,18 @@ export class ChoiceBridge {
       if (!forced) {
         req.side.pokemon.forEach((p, i) => {
           if (!p.active || !req.active?.[i] || this.deps.renderer.playerAt(i) !== nameOf(p.ident)) return;
-          const [member] = teamFromRequest({ ...req, active: [req.active[i]], side: { ...req.side, pokemon: [p] } });
+          const [member] = teamFromRequest({ ...req, active: [req.active[i]], side: { ...req.side, pokemon: [p] } }, this.deps.renderer.dex);
           if (member) this.deps.writeActiveMoves(i, member.moves);
         });
+        // Borrowed moves' names and data are on the cart before the menu reads them.
+        void this.deps.renderer.borrow();
       }
       this.deps.status(forced ? 'Choose a Pokémon to send in, in the game.' : 'Your move: choose in the game.', true);
       // A forced switch names the battle positions to fill: the player's are 0, 2, 4.
       const fainted = forced ? req.forceSwitch!.flatMap((f, i) => (f ? [i * 2] : [])) : null;
       const actions = await battle.ask(fainted, asking.signal);
       if (this.request !== req) return; // superseded while the menu was open
-      const choice = actions.length ? toChoices(actions, req, (i) => this.deps.renderer.playerAt(i)) : null;
+      const choice = actions.length ? toChoices(actions, req, (i) => this.deps.renderer.playerAt(i), this.deps.renderer.dex) : null;
       if (!choice) {
         this.deps.status("Showdown doesn't have that choice. Pick again.", false);
         return;

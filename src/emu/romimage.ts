@@ -164,6 +164,8 @@ export class CartArchive {
   /** Where the archive's file data starts in the ROM: offsets in the table count from here. */
   private readonly data: number;
   readonly count: number;
+  /** Table entries of files replaced, as they came. */
+  private readonly original = new Map<number, Uint8Array>();
 
   constructor(
     private readonly cart: Cart,
@@ -191,20 +193,22 @@ export class CartArchive {
     return [this.data + u32(rom, entry), this.data + u32(rom, entry + 4)];
   }
 
-  /** Replaces a file: in place when it fits, otherwise moved into the room at the end. */
+  /**
+   * Replaces a file, putting the new one in the room at the end. `restore`
+   * puts the archive back as it came.
+   */
   replace(index: number, bytes: Uint8Array): void {
-    const rom = this.cart.rom;
     const entry = this.entry(index);
-    const start = u32(rom, entry);
-    const end = u32(rom, entry + 4);
-    if (bytes.length <= end - start) {
-      this.cart.write(this.data + start, bytes);
-      this.cart.write32(entry + 4, start + bytes.length);
-      return;
-    }
+    if (!this.original.has(index)) this.original.set(index, this.cart.rom.slice(entry, entry + 8));
     const at = this.cart.place(bytes) - this.data;
     this.cart.write32(entry, at);
     this.cart.write32(entry + 4, at + bytes.length);
+  }
+
+  /** Puts back every file replaced. */
+  restore(): void {
+    for (const [index, entry] of this.original) this.cart.write(this.entry(index), entry);
+    this.original.clear();
   }
 
   private entry(index: number): number {

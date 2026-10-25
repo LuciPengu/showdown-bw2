@@ -7,10 +7,8 @@
 // btl_server_flow.c / btl_string.c.
 
 import type { Effect, Side, Status, TextKey, Weather } from '../bw/commands';
-import { ITEM_NUMBERS } from '../bw/items';
-import { MOVE_NUMBERS } from '../bw/moves';
 import { type ServerCmd, SC } from '../bw/servercmd';
-import { toID } from '../showdown/protocol';
+import { type Dex, nativeDex } from './dex';
 
 /** Set-bank IDs the scene uses directly. Arguments in comments. */
 export const MSG = {
@@ -98,8 +96,6 @@ const SINGLE_TURN: Record<string, number | typeof SILENT> = {
 
 const set = (id: number, ...args: number[]): ServerCmd => [SC.MSG_SET, id, ...args];
 const std = (id: number, ...args: number[]): ServerCmd => [SC.MSG_STD, id, ...args];
-const item = (name: string) => ITEM_NUMBERS[toID(name)];
-const move = (name: string) => MOVE_NUMBERS[toID(name)];
 
 export type MsgRequest =
   | { kind: 'hpFrom'; change: 'damage' | 'heal' | 'set'; from: Effect }
@@ -120,7 +116,7 @@ export type MsgResult = ServerCmd | typeof SILENT | null;
  * e.g. who drained HP), SILENT where BW2 rightly shows nothing, or null where
  * BW2 has no such line or it isn't mapped yet.
  */
-export function textMessage(req: MsgRequest, monId?: number, otherId?: number): MsgResult {
+export function textMessage(req: MsgRequest, monId?: number, otherId?: number, dex: Dex = nativeDex): MsgResult {
   const mon = monId ?? -1;
   const has = monId !== undefined;
   switch (req.kind) {
@@ -131,7 +127,7 @@ export function textMessage(req: MsgRequest, monId?: number, otherId?: number): 
       if (change === 'heal') {
         if (from.name === 'drain') return otherId !== undefined ? set(0x383, otherId) : null;
         if (from.kind === 'item') {
-          const id = item(from.name);
+          const id = dex.item(from.name);
           if (!id) return null;
           return set(from.name === 'Leftovers' || from.name === 'Black Sludge' ? 0x392 : 0x38c, mon, id);
         }
@@ -174,7 +170,7 @@ export function textMessage(req: MsgRequest, monId?: number, otherId?: number): 
     }
     case 'cant': {
       if (!has) return null;
-      const m = req.move ? move(req.move) : undefined;
+      const m = req.move ? dex.move(req.move) : undefined;
       switch (req.reason) {
         case 'par': return set(0x114, mon);
         case 'slp': return set(0x135, mon);
@@ -209,11 +205,11 @@ export function textMessage(req: MsgRequest, monId?: number, otherId?: number): 
     case 'dragged':
       return has ? set(0x34d, mon) : null;
     case 'text':
-      return textLine(req.key, req.args, req.from, mon, has, otherId);
+      return textLine(req.key, req.args, req.from, mon, has, otherId, dex);
   }
 }
 
-function textLine(key: TextKey, args: string[], from: Effect | undefined, mon: number, has: boolean, otherId?: number): MsgResult {
+function textLine(key: TextKey, args: string[], from: Effect | undefined, mon: number, has: boolean, otherId: number | undefined, dex: Dex): MsgResult {
   const a = args[0] ?? '';
   const other = otherId !== undefined;
   switch (key) {
@@ -247,7 +243,10 @@ function textLine(key: TextKey, args: string[], from: Effect | undefined, mon: n
       if (a === 'Substitute') return set(0x311, mon);
       if (a === 'confusion') return set(0x159, mon);
       if (a === 'Leech Seed') return set(0x25f, mon);
-      if (a === 'Disable') return move(args[1] ?? '') ? set(0x250, mon, move(args[1])) : null;
+      if (a === 'Disable') {
+        const disabled = dex.move(args[1] ?? '');
+        return disabled ? set(0x250, mon, disabled) : null;
+      }
       if (a === 'Curse') return other ? set(0x428, otherId, mon) : null;
       const perish = /^perish(\d)$/.exec(a);
       if (perish) return set(0x35c, mon, Number(perish[1]));
@@ -265,7 +264,7 @@ function textLine(key: TextKey, args: string[], from: Effect | undefined, mon: n
     }
     case 'item': {
       if (!has) return null;
-      const id = item(a);
+      const id = dex.item(a);
       if (!id) return null;
       const by = from?.name;
       if (by === 'Frisk') return other ? set(0x1b7, otherId, id) : null;
@@ -276,7 +275,7 @@ function textLine(key: TextKey, args: string[], from: Effect | undefined, mon: n
     }
     case 'endItem': {
       if (!has) return null;
-      const id = item(a);
+      const id = dex.item(a);
       if (from?.name === 'Knock Off') return other && id ? set(0x41a, otherId, mon, id) : null;
       if (a === 'Air Balloon') return set(0x19b, mon);
       if (a === 'Eject Button') return set(0x19e, mon);

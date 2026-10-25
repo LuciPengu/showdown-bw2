@@ -2,13 +2,11 @@
 // send, and the Pokémon to write into party slots first. Pure logic over a copy
 // of BW2's battle state, so it can be tested without the game.
 
-import { ABILITY_NUMBERS } from '../bw/abilities';
 import type { Command, MonView, Side, Slot, Stat, Status, Weather } from '../bw/commands';
-import { MOVE_NUMBERS } from '../bw/moves';
 import { type ServerCmd, SC } from '../bw/servercmd';
-import { SPECIES } from '../bw/species';
 import { toID } from '../showdown/protocol';
-import { MSG, type MsgResult, SILENT, textMessage } from './messages';
+import { type CartWork, type Dex, nativeDex } from './dex';
+import { MSG, type MsgRequest, type MsgResult, SILENT, textMessage } from './messages';
 
 /** A Pokémon to write into a party slot before it's sent out. */
 export interface MonSpec {
@@ -36,8 +34,10 @@ export interface TrainerWrite {
   name: string;
 }
 
-/** One step for the game: party slots and trainer names to rewrite, then a block of server commands. */
+/** One step for the game: cart work, party slots and trainer names to rewrite, then a block of server commands. */
 export interface Step {
+  /** What borrowed slots need on the cart before the rest. */
+  work: CartWork[];
   writes: MonWrite[];
   trainers: TrainerWrite[];
   cmds: ServerCmd[];
@@ -95,10 +95,10 @@ export function estimateMaxHp(baseHp: number, level: number): number {
   return Math.floor(((2 * baseHp + 31 + 21) * level) / 100) + level + 10;
 }
 
-export function monSpec(mon: MonView, hp: { hp: number; maxHp: number }, status: Status | null): MonSpec | null {
-  const species = SPECIES[toID(mon.species)];
+export function monSpec(mon: MonView, hp: { hp: number; maxHp: number }, status: Status | null, dex: Dex = nativeDex): MonSpec | null {
+  const species = dex.species(mon.species);
   if (!species) return null;
-  const [num, form, baseHp] = species;
+  const { num, form, baseHp } = species;
   // Showdown gives exact HP for your own side, a percentage otherwise.
   const maxHp = hp.maxHp !== 100 ? hp.maxHp : estimateMaxHp(baseHp, mon.level);
   const value = hp.maxHp !== 100 ? hp.hp : scaleHp(hp.hp, maxHp);
@@ -150,6 +150,7 @@ export class Scene {
     private readonly screen: Screen = newScreen(),
     private readonly winBgm = 0,
     private readonly perSide = 1,
+    private readonly dex: Dex = nativeDex,
   ) {
     this.nextBench = [perSide, perSide];
   }
@@ -159,8 +160,9 @@ export class Scene {
    * party slot beforehand): takes it on without sending it out again.
    */
   adoptLead(cmd: Extract<Command, { kind: 'switchIn' }>): Step {
-    const step: Step = { writes: [], trainers: [], cmds: [], hp: [] };
-    const spec = monSpec(cmd.mon, cmd.hp, cmd.status);
+    const step: Step = { work: [], writes: [], trainers: [], cmds: [], hp: [] };
+    const spec = monSpec(cmd.mon, cmd.hp, cmd.status, this.dex);
+    step.work = this.dex.takeWork();
     if (!spec) return step;
     const monId = this.monAt(cmd.slot);
     this.sides[cmd.slot.side].hp.set(monId, { hp: spec.hp, maxHp: spec.maxHp });
@@ -213,7 +215,7 @@ export class Scene {
    * command that animates.
    */
   plan(cmd: Command, instant = false): Step {
-    const step: Step = { writes: [], trainers: [], cmds: [], hp: [] };
+    const step: Step = { work: [], writes: [], trainers: [], cmds: [], hp: [] };
     if (!instant) this.refreshScreen(step);
     const screenBefore = [...this.screen.out];
     if (this.popupOut !== null && cmd.kind !== 'ability') {
@@ -221,6 +223,7 @@ export class Scene {
       this.popupOut = null;
     }
     this.add(cmd, step);
+    step.work = this.dex.takeWork();
     if (instant) {
       if (cmd.kind === 'switchIn') this.stale.add(cmd.slot.side * 4 + cmd.slot.pos);
       step.cmds = step.cmds.filter(([n]) => n < SC.MOVE_ANIM);
@@ -264,8 +267,8 @@ export class Scene {
           c.push([SC.OP_CLEAR_FOR_SWITCH, monId]);
           this.replaced.add(this.slotKey(cmd.slot));
         }
-        const spec = monSpec(cmd.mon, cmd.hp, cmd.status);
-        if (!spec) return;
+        const spec = monSpec(cmd.mon, cmd.hp, cmd.status, this.dex);
+        if (!spec) return this.gap(`species: ${cmd.mon.species}`);
         const bench = this.benchFor(cmd.slot, cmd.mon.name);
         const monId = side.order[bench];
         step.writes.push({ client: side.client, partyIndex: bench, monId, mon: spec });
@@ -287,13 +290,14 @@ export class Scene {
         return;
       }
       case 'move': {
-        const move = MOVE_NUMBERS[toID(cmd.move)];
-        if (!move) return this.gap(`move: ${cmd.move}`);
-        this.lastMove = move;
+        const move = this.dex.move(cmd.move);
+        const animation = this.dex.moveAnimation(cmd.move);
+        if (!move || !animation) return this.gap(`move: ${cmd.move}`);
+        this.lastMove = animation;
         if (cmd.announce) c.push([SC.MOVE_MSG, this.monAt(cmd.user), move]);
         if (cmd.animate) {
           const target = cmd.targets[0] ?? cmd.user;
-          c.push([SC.MOVE_ANIM, this.pos(cmd.user), this.pos(target), move, 0]);
+          c.push([SC.MOVE_ANIM, this.pos(cmd.user), this.pos(target), animation, 0]);
         }
         return;
       }
@@ -320,7 +324,7 @@ export class Scene {
           c.push([SC.UPDATE_HP_GAUGE, monId]);
         }
         if (cmd.from && !cmd.silent) {
-          const msg = textMessage({ kind: 'hpFrom', change: cmd.change, from: cmd.from }, monId, cmd.of && this.monAt(cmd.of));
+          const msg = this.text({ kind: 'hpFrom', change: cmd.change, from: cmd.from }, monId, cmd.of && this.monAt(cmd.of));
           this.say(c, msg, `${cmd.change} from ${cmd.from.name}`);
         }
         return;
@@ -349,7 +353,7 @@ export class Scene {
           c.push([SC.OP_CURE_CONDITION, monId], [SC.SET_GAUGE_STATUS, monId, 0]);
           this.statuses.delete(monId);
         }
-        const msg = textMessage({ kind: 'status', status: cmd.status, from: cmd.from, previous }, monId);
+        const msg = this.text({ kind: 'status', status: cmd.status, from: cmd.from, previous }, monId);
         this.say(c, msg, cmd.status ? `status: ${cmd.status}` : `cure: ${previous ?? '?'}`);
         return;
       }
@@ -372,13 +376,13 @@ export class Scene {
       case 'clearBoosts': {
         const slots = cmd.slot ? [cmd.slot] : this.activeSlots();
         for (const slot of slots) c.push([SC.OP_RESET_STAT_STAGES, this.monAt(slot)]);
-        const msg = textMessage({ kind: 'clearBoosts', all: !cmd.slot }, cmd.slot ? this.monAt(cmd.slot) : undefined);
+        const msg = this.text({ kind: 'clearBoosts', all: !cmd.slot }, cmd.slot ? this.monAt(cmd.slot) : undefined);
         this.say(c, msg, cmd.slot ? 'clearboost' : 'clearallboost');
         return;
       }
       case 'ability': {
         const monId = this.monAt(cmd.slot);
-        const ability = ABILITY_NUMBERS[toID(cmd.ability)];
+        const ability = this.dex.ability(cmd.ability);
         if (!ability) return this.gap(`ability: ${cmd.ability}`);
         if (this.popupOut !== null) c.push([SC.ABILITY_POPUP_OUT, this.popupOut]);
         c.push([SC.OP_CHANGE_ABILITY, monId, ability], [SC.ABILITY_POPUP_IN, monId]);
@@ -388,7 +392,7 @@ export class Scene {
       case 'weather': {
         if (cmd.weather && cmd.upkeep) {
           c.push([SC.EFFECT, WEATHER_EFFECTS[cmd.weather]]);
-          this.say(c, textMessage({ kind: 'weatherUpkeep', weather: cmd.weather }), `${cmd.weather} continues`);
+          this.say(c, this.text({ kind: 'weatherUpkeep', weather: cmd.weather }), `${cmd.weather} continues`);
         } else if (cmd.weather) {
           // Gen 5 weather from an ability lasts until replaced; from a move, 5 turns.
           c.push([SC.WEATHER_START, WEATHERS[cmd.weather], cmd.from?.kind === 'ability' ? 0xff : 5]);
@@ -399,8 +403,10 @@ export class Scene {
         return;
       }
       case 'formChange': {
-        const species = SPECIES[toID(cmd.mon.species)];
-        if (species) c.push([SC.CHANGE_FORM, this.monAt(cmd.slot), species[1]]);
+        // BW2 can change a Pokémon's form, not its species: a form it doesn't have borrows another species' slot.
+        const species = this.dex.species(cmd.mon.species);
+        if (species?.native) c.push([SC.CHANGE_FORM, this.monAt(cmd.slot), species.form]);
+        else this.gap(`form change: ${cmd.mon.species}`);
         return;
       }
       case 'transform': {
@@ -410,12 +416,12 @@ export class Scene {
       case 'cant': {
         const status = cmd.reason as Status;
         if (status in STATUS_EFFECTS) c.push([SC.EFFECT_BY_POS, this.pos(cmd.slot), STATUS_EFFECTS[status]]);
-        const msg = textMessage({ kind: 'cant', reason: cmd.reason, move: cmd.move }, this.monAt(cmd.slot));
+        const msg = this.text({ kind: 'cant', reason: cmd.reason, move: cmd.move }, this.monAt(cmd.slot));
         this.say(c, msg, `cant: ${cmd.reason}`);
         return;
       }
       case 'text': {
-        const msg = textMessage(
+        const msg = this.text(
           { kind: 'text', key: cmd.key, args: cmd.args, from: cmd.from },
           cmd.slot && this.monAt(cmd.slot),
           cmd.target && this.monAt(cmd.target),
@@ -427,7 +433,7 @@ export class Scene {
       }
       case 'sideCondition': {
         const client = this.sides[cmd.side].client;
-        const msg = textMessage({ kind: 'side', condition: cmd.condition, active: cmd.active, side: cmd.side, client });
+        const msg = this.text({ kind: 'side', condition: cmd.condition, active: cmd.active, side: cmd.side, client });
         this.say(c, msg, `side${cmd.active ? 'start' : 'end'}: ${cmd.condition}`);
         return;
       }
@@ -445,12 +451,16 @@ export class Scene {
         return;
       }
       case 'charge':
-        return this.say(c, textMessage({ kind: 'charge', move: cmd.move }, this.monAt(cmd.user)), `charge: ${cmd.move}`);
+        return this.say(c, this.text({ kind: 'charge', move: cmd.move }, this.monAt(cmd.user)), `charge: ${cmd.move}`);
       case 'field': {
-        const msg = textMessage({ kind: 'field', condition: cmd.condition, active: cmd.active }, cmd.slot && this.monAt(cmd.slot));
+        const msg = this.text({ kind: 'field', condition: cmd.condition, active: cmd.active }, cmd.slot && this.monAt(cmd.slot));
         return this.say(c, msg, `field${cmd.active ? 'start' : 'end'}: ${cmd.condition}`);
       }
     }
+  }
+
+  private text(req: MsgRequest, monId?: number, otherId?: number): MsgResult {
+    return textMessage(req, monId, otherId, this.dex);
   }
 
   private gap(what: string): void {
@@ -465,7 +475,7 @@ export class Scene {
   }
 
   private message(c: ServerCmd[], key: 'dragged', monId: number): void {
-    this.say(c, textMessage({ kind: key }, monId), key);
+    this.say(c, this.text({ kind: key }, monId), key);
   }
 
   /**
