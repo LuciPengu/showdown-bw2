@@ -17,6 +17,10 @@ export const MSG = {
   statFell: 0x5a, // mon, stat, stages
   statWontGoHigher: 0x99, // mon, stat
   statWontGoLower: 0xae, // mon, stat
+  critOn: 0x180, // mon: a spread move's crit on it
+  /** A spread move's effectiveness on one Pokémon, or two on the same side. */
+  superEffectiveOn: [0x6, 0x9],
+  resistedOn: [0xf, 0x12],
 } as const;
 
 /** Something BW2 shows no line for, on purpose (Gen 5 has none, or another line covers it). */

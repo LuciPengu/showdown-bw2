@@ -162,6 +162,17 @@ function put(w: Writer, cmd: number, a: number[]): void {
     w.u32(MSG_ARG_END);
     return;
   }
+  if (cmd === SC.DAMAGE_PLURAL) {
+    // ServerDisplay_Damage: count, effectiveness, move, then a byte per Pokémon hit
+    const [count, kind, move, ...monIds] = a;
+    if (monIds.length !== count) throw new Error(`DAMAGE_PLURAL names ${count} Pokémon, got ${monIds.length}`);
+    w.u16(cmd);
+    w.u8(count);
+    w.u8(kind);
+    w.u16(move);
+    for (const id of monIds) w.u8(id);
+    return;
+  }
   const format = FORMATS[cmd];
   if (format === undefined) throw new Error(`server command 0x${cmd.toString(16)} isn't supported`);
   const want = format === 'NONE' ? 0 : format.split('_').reduce((n, part) => n + (part.startsWith('U8X') ? Number(part.slice(3)) : 1), 0);

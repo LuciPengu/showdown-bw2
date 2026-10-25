@@ -86,6 +86,14 @@ export function describe(cmd: Command, n: Namer, trainerName: (side: 0 | 1) => s
     case 'hp':
       // Showdown names the Pokémon itself as [of] for some of its own abilities (Solar Power).
       return hpText(cmd.from, cmd.change, n(cmd.slot), n(cmd.slot, false), sameSlot(cmd.of, cmd.slot) ? '' : n(cmd.of, false));
+    case 'spreadHit': {
+      const lines = cmd.hits.filter((h) => h.hit.crit).map((h) => `A critical hit on ${n(h.slot, false)}!`);
+      for (const [kind, text] of [['super', "It's super effective on"], ['resisted', "It's not very effective on"]] as const) {
+        const on = cmd.hits.filter((h) => h.hit.effectiveness === kind).map((h) => n(h.slot, false));
+        if (on.length) lines.push(`${text} ${on.join(' and ')}${kind === 'super' ? '!' : '.'}`);
+      }
+      return lines.length ? lines.join(' ') : null;
+    }
     case 'faint':
       return `${n(cmd.slot)} fainted!`;
     case 'status':

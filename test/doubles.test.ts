@@ -77,10 +77,26 @@ describe('doubles scene', () => {
 
   it('animates from the user’s battle position to the target’s', () => {
     const steps = plan('gen5doublesou-2696807960.log');
-    const rockSlide = steps.find((s) => s.cmd.kind === 'move' && s.cmd.move === 'Rock Slide' && s.cmd.user.side === 1)!;
-    const anim = rockSlide.step.cmds.find(([n]) => n === SC.MOVE_ANIM)!;
+    const single = steps.find((s) => s.cmd.kind === 'move' && s.cmd.targets.length === 1 && s.cmd.user.side === 1 && s.cmd.targets[0].side === 0)!;
+    const anim = single.step.cmds.find(([n]) => n === SC.MOVE_ANIM)!;
+    const target = single.cmd.kind === 'move' ? single.cmd.targets[0] : null;
+    expect(anim.slice(1, 3)).toEqual([1 + 2 * (single.cmd.kind === 'move' ? single.cmd.user.pos : 0), 2 * target!.pos]);
+  });
+
+  it('shows a move that hits both at once, as BW2 does', () => {
+    const steps = plan('gen5doublesou-2696807960.log');
+    const i = steps.findIndex((s) => s.cmd.kind === 'move' && s.cmd.move === 'Rock Slide' && s.cmd.user.side === 1);
+    const rockSlide = steps[i];
     expect(rockSlide.cmd).toMatchObject({ user: { side: 1, pos: 0 }, targets: [{ side: 0, pos: 0 }, { side: 0, pos: 1 }] });
-    expect(anim.slice(1, 3)).toEqual([1, 0]); // p2a is position 1, p1a position 0
+    // Its animation shows on both: no target.
+    expect(rockSlide.step.cmds.find(([n]) => n === SC.MOVE_ANIM)!.slice(1, 3)).toEqual([1, 6]);
+    // Both HP drops, then one flash for both.
+    const hits = steps.slice(i + 1).find((s) => s.cmd.kind === 'spreadHit')!;
+    const cmds = hits.step.cmds.map(([n]) => n);
+    expect(cmds.slice(0, 3)).toEqual([SC.OP_SUBTRACT_HP, SC.OP_SUBTRACT_HP, SC.DAMAGE_PLURAL]);
+    const plural = hits.step.cmds.find(([n]) => n === SC.DAMAGE_PLURAL)!;
+    expect(plural[1]).toBe(2); // two Pokémon, named after the move
+    expect(plural.length).toBe(4 + 2);
   });
 });
 

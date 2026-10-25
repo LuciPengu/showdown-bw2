@@ -87,6 +87,8 @@ export type Command =
   /** `hit` is set on damage from a move hit, with what its text will say. */
   /** `silent` changes the HP with no line (the other half of Pain Split). */
   | { kind: 'hp'; slot: Slot; hp: Hp; change: 'damage' | 'heal' | 'set'; from?: Effect; of?: Slot; hit?: Hit; silent?: boolean }
+  /** A move's hits on more than one Pokémon at once (Earthquake, Heat Wave), shown together as BW2 does. */
+  | { kind: 'spreadHit'; hits: { slot: Slot; hp: Hp; hit: Hit }[] }
   | { kind: 'faint'; slot: Slot }
   | { kind: 'status'; slot: Slot; status: Status | null; from?: Effect }
   /** `absolute` sets the stage (Belly Drum) instead of changing it. */

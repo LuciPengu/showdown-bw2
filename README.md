@@ -351,8 +351,6 @@ was found out live, starting from the PWT savestates:
 Limits:
 - **Singles and doubles only.** There are no triples or rotation savestates.
 - **The opponent's sprite is still the PWT trainer's**, though the name is Showdown's.
-- **Spread moves** animate toward their first target, and each target's hit flashes in
-  turn rather than all at once.
 - **Some lines are missing.** Lines Gen 5 doesn't have show only in the preview; the app
   lists anything else BW2 couldn't show for the battle on screen.
 - **Unreadable names** (e.g. Chinese) show as the species name, or "Player"/"Opponent"

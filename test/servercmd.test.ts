@@ -31,6 +31,12 @@ describe('encodeBlock', () => {
     ]);
   });
 
+  it('packs a spread hit with a byte for each Pokémon hit', () => {
+    const block = encodeBlock([[SC.DAMAGE_PLURAL, 2, 2, 157, 12, 13]]);
+    expect([...block.subarray(0, 8)]).toEqual([0x00, 0x33, 2, 2, 0x00, 157, 12, 13]);
+    expect(() => encodeBlock([[SC.DAMAGE_PLURAL, 2, 1, 157, 12]])).toThrow();
+  });
+
   it('rejects the wrong number of arguments', () => {
     expect(() => encodeBlock([[SC.MOVE_ANIM, 0, 1, 85]])).toThrow(/takes 4 arguments/);
   });

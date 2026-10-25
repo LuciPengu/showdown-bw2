@@ -96,6 +96,14 @@ export class PreviewRenderer implements Renderer {
         }
         break;
       }
+      case 'spreadHit':
+        for (const hit of cmd.hits) {
+          const m = this.mons.get(key(hit.slot));
+          if (!m) continue;
+          m.hp = hit.hp;
+          this.drawMon(m);
+        }
+        break;
       case 'faint': {
         const m = this.mons.get(key(cmd.slot));
         if (m) {

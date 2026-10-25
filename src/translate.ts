@@ -14,6 +14,8 @@ const IGNORED = new Set([
 
 const STATS = new Set<string>(['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion']);
 const WEATHERS = new Set<string>(['RainDance', 'SunnyDay', 'Sandstorm', 'Hail', 'Snow']);
+/** Lines after which a spread move's hits are over: the next action, a faint, the turn's end. */
+const SPREAD_ENDS = new Set(['move', 'switch', 'drag', 'faint', 'turn', 'upkeep', '', 'win', 'tie', 'cant']);
 const HIT_TEXT: Record<string, TextKey> = { '-crit': 'crit', '-supereffective': 'superEffective', '-resisted': 'resisted' };
 
 export interface TranslatorOptions {
@@ -42,6 +44,11 @@ export class Translator {
   private active = new Map<string, Active>();
   /** Crit and effectiveness text waits for the hit's HP change: BW2 shows the HP bar drop first. */
   private pendingHits: Extract<Command, { kind: 'text' }>[] = [];
+  /** The targets of a move that hit more than one ("side:pos"), whose hits are shown together. */
+  private spread: Set<string> | null = null;
+  private spreadHits: Extract<Command, { kind: 'spreadHit' }>['hits'] = [];
+  /** What comes between a spread move's hits (a Focus Sash holding on), shown after them, as in BW2. */
+  private afterSpread: Command[] = [];
   private lastAbility = '';
 
   constructor(private readonly opts: TranslatorOptions = {}) {}
@@ -52,6 +59,14 @@ export class Translator {
     if (!l) return [];
     const out: Command[] = [];
     const isHit = l.cmd in HIT_TEXT || (l.cmd === '-damage' && !('from' in l.kw));
+    if (!isHit && this.spreadHits.length) {
+      if (!SPREAD_ENDS.has(l.cmd)) {
+        this.abilityFrom(l, this.afterSpread);
+        this.handle(l, this.afterSpread);
+        return out;
+      }
+      this.endSpread(out);
+    }
     if (!isHit) this.flushHits(out);
     if (l.cmd === 'move' || l.cmd === 'switch' || l.cmd === 'turn') this.lastAbility = '';
     this.abilityFrom(l, out);
@@ -62,8 +77,28 @@ export class Translator {
   /** Translates a batch of lines and flushes anything still waiting. */
   lines(raws: string[]): Command[] {
     const out = raws.flatMap((r) => this.line(r));
+    this.endSpread(out);
     this.flushHits(out);
     return out;
+  }
+
+  /** Emits a spread move's hits: together if there were several, then what came between them. */
+  private endSpread(out: Command[]): void {
+    const hits = this.spreadHits;
+    this.spread = null;
+    this.spreadHits = [];
+    if (hits.length === 1) {
+      const [{ slot, hp, hit }] = hits;
+      out.push({ kind: 'hp', slot, hp, change: 'damage', hit });
+      this.flushHits(out, slot);
+    } else if (hits.length > 1) {
+      out.push({ kind: 'spreadHit', hits });
+      // Their crit and effectiveness text is part of the hits.
+      const hit = new Set(hits.map((h) => key(h.slot)));
+      this.pendingHits = this.pendingHits.filter((t) => !t.slot || !hit.has(key(t.slot)));
+    }
+    out.push(...this.afterSpread);
+    this.afterSpread = [];
   }
 
   private handle(l: Line, out: Command[]): void {
@@ -137,6 +172,7 @@ export class Translator {
         // `[miss]` picks the miss animation; the text comes from the `-miss` line that follows.
         const missed = 'miss' in kw;
         out.push({ kind: 'move', user, move: args[1] ?? '', targets, animate: !('still' in kw), announce, missed, ...(from && { from }) });
+        this.spread = announce && targets.length > 1 ? new Set(targets.map(key)) : null;
         if ('notarget' in kw) out.push({ kind: 'text', key: 'noTarget', slot: user, args: [] });
         return;
       }
@@ -164,6 +200,10 @@ export class Translator {
         const change = l.cmd === '-damage' ? 'damage' : l.cmd === '-heal' ? 'heal' : 'set';
         const of = this.slot(kw.of);
         const hit = change === 'damage' && !from ? this.hitOn(slot) : undefined;
+        if (hit && this.spread?.has(key(slot))) {
+          this.spreadHits.push({ slot, hp, hit });
+          return;
+        }
         const silent = 'silent' in kw;
         out.push({ kind: 'hp', slot, hp, change, ...(from && { from }), ...(of && { of }), ...(hit && { hit }), ...(silent && { silent }) });
         if (hit) this.flushHits(out, slot);

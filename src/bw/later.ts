@@ -1567,3 +1567,10 @@ export const DONORS = {
   abilities: [121, 131],
   abilityRoom: [121, 122, 131, 132],
 };
+
+/**
+ * Gen 5 moves that hit every adjacent foe, or every adjacent Pokémon: their
+ * animations show on all of them when the target is none (6), as BW2 sends
+ * them when they hit more than one.
+ */
+export const SPREAD_ANIMATIONS = new Set([13,39,43,45,51,57,59,75,81,89,120,129,139,145,153,157,181,196,222,230,239,257,284,298,304,314,323,330,377,435,436,445,464,482,485,510,522,523,527,545,547,549,555]);

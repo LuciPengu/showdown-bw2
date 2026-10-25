@@ -6,6 +6,7 @@ import type { Command, MonView, Side, Slot, Stat, Status, Weather } from '../bw/
 import { type ServerCmd, SC } from '../bw/servercmd';
 import { describe, makeNamer, megaName } from '../bw/english';
 import { baseSpecies, toID } from '../showdown/protocol';
+import { SPREAD_ANIMATIONS } from '../bw/later';
 import { type CartWork, type Dex, nativeDex } from './dex';
 import { MSG, type MsgRequest, type MsgResult, SILENT, textMessage } from './messages';
 
@@ -85,6 +86,8 @@ const SNOW_LINES: [number, string][] = [
 ];
 /** A sparkle (Cosmic Power's animation) for Terastallization. */
 const TERA_ANIMATION = 322;
+/** No battle position: a move's animation target when it hits more than one. */
+const NO_POS = 6;
 /** Light gathering on the Pokémon (Morning Sun's animation) as it Mega Evolves. */
 const MEGA_ANIMATION = 234;
 const MEGA = /-Mega(-[XY])?$/;
@@ -321,8 +324,35 @@ export class Scene {
         this.lastMove = animation;
         if (cmd.announce) c.push([SC.MOVE_MSG, this.monAt(cmd.user), move]);
         if (cmd.animate) {
-          const target = cmd.targets[0] ?? cmd.user;
-          c.push([SC.MOVE_ANIM, this.pos(cmd.user), this.pos(target), animation, 0]);
+          // On more than one, a spread move's own animation shows on all of them, given no target (BattleMoveEffectState_SetTargets).
+          const target = cmd.targets.length > 1 && SPREAD_ANIMATIONS.has(animation) ? NO_POS : this.pos(cmd.targets[0] ?? cmd.user);
+          c.push([SC.MOVE_ANIM, this.pos(cmd.user), target, animation, 0]);
+        }
+        return;
+      }
+      case 'spreadHit': {
+        // ServerDisplay_Damage: each HP drop, then every Pokémon hit flashes at once with one sound.
+        const hit: { monId: number; slot: Slot; crit: boolean; effectiveness: string }[] = [];
+        for (const h of cmd.hits) {
+          const monId = this.monAt(h.slot);
+          const now = this.sides[h.slot.side].hp.get(monId);
+          if (!now) continue;
+          const target = h.hp.maxHp === now.maxHp ? h.hp.hp : scaleHp((h.hp.hp / h.hp.maxHp) * 100, now.maxHp);
+          if (target < now.hp) c.push([SC.OP_SUBTRACT_HP, monId, now.hp - target]);
+          now.hp = target;
+          step.hp.push({ monId, hp: target, maxHp: now.maxHp });
+          hit.push({ monId, slot: h.slot, ...h.hit });
+        }
+        if (!hit.length) return;
+        const sound = hit.some((h) => h.effectiveness === 'super') ? 2 : hit.some((h) => h.effectiveness === 'resisted') ? 3 : 1;
+        c.push([SC.DAMAGE_PLURAL, hit.length, sound, this.lastMove, ...hit.map((h) => h.monId)]);
+        for (const h of hit) if (h.crit) c.push([SC.MSG_SET, MSG.critOn, h.monId]);
+        // "It's super effective on X (and Y)!": a line for each side's Pokémon.
+        for (const [kind, ids] of [['super', MSG.superEffectiveOn], ['resisted', MSG.resistedOn]] as const) {
+          for (const side of [0, 1]) {
+            const on = hit.filter((h) => h.effectiveness === kind && h.slot.side === side).map((h) => h.monId);
+            if (on.length) c.push([SC.MSG_SET, on.length === 1 ? ids[0] : ids[1], ...on.slice(0, 2)]);
+          }
         }
         return;
       }
