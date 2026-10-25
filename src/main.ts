@@ -148,8 +148,11 @@ $('rom-form').addEventListener('submit', async (e) => {
     return { save, state };
   });
   if (!emu) return;
-  // For the console: window.bw.ram, .battle, .parties, .trainers follow the game.
+  // For the console: window.bw.ram, .battle, .parties, .trainers, .bagButton follow the game.
   (window as any).bw = {
+    get bagButton() {
+      return game.bagButton;
+    },
     emulator: emu,
     SC,
     encodeBlock,

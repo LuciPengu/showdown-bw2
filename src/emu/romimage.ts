@@ -138,6 +138,34 @@ export class Cart {
     this.write(at, b);
   }
 
+  /**
+   * Where `pattern` is in the emulator's memory outside the ROM: melonDS's own
+   * copies of what the game has loaded from the cart (its video memory), on
+   * 4-byte boundaries.
+   */
+  findLoaded(pattern: Uint8Array): number[] {
+    const heap = this.heap();
+    const found: number[] = [];
+    const inRom = (at: number) => this.copies.some((base) => at >= base && at < base + this.size);
+    outer: for (let at = 0; at + pattern.length <= heap.length; at += 4) {
+      if (heap[at] !== pattern[0] || heap[at + pattern.length - 1] !== pattern[pattern.length - 1]) continue;
+      for (let i = 1; i < pattern.length; i++) if (heap[at + i] !== pattern[i]) continue outer;
+      if (!inRom(at)) found.push(at);
+    }
+    return found;
+  }
+
+  /** Whether `pattern` is still at `at`, as `findLoaded` found it. */
+  isLoaded(at: number, pattern: Uint8Array): boolean {
+    const heap = this.heap();
+    return pattern.every((b, i) => heap[at + i] === b);
+  }
+
+  /** Writes to what `findLoaded` found. */
+  writeLoaded(at: number, data: Uint8Array): void {
+    this.heap().set(data, at);
+  }
+
   /** Puts `data` in the room at the end and returns where. */
   place(data: Uint8Array): number {
     const at = this.free;

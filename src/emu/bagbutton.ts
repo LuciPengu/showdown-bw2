@@ -7,7 +7,9 @@
 // cart each time the menu opens, the tiles each time the touch screen is set
 // up (a battle's start, and after the Pokémon menu or the bag). So MEGA and
 // TERA are lettered into unused tiles once, and the Bag button's label cells
-// are pointed at them before the menu opens.
+// are pointed at them before the menu opens. A battle taken over from a
+// savestate has its touch screen set up already, so the tiles are also written
+// into melonDS's copies of the video memory, found by BAG's own tiles.
 //
 // With the client's bagMode 1, BattleClient_ActionSelectRoot answers Bag by
 // resetting the touch screen and opening the menu again, without the bag; a
@@ -184,6 +186,12 @@ interface MapLabel {
 interface FileSet {
   /** The first tile of each variant's 2 × LABEL_COLS tiles. */
   first: Record<Exclude<Label, 'bag'>, number>;
+  /** Every variant's tiles, from the first variant's first tile on. */
+  tiles: Uint8Array;
+  /** BAG's own tiles (from its B) and their place among the tiles, to find them in video memory. */
+  bag: { bytes: Uint8Array; at: number };
+  /** Where they were found last. */
+  vram?: number[];
   palette: number;
   maps: MapLabel[];
 }
@@ -244,18 +252,37 @@ export class BagLabels {
       }
       if (!background || !maps.length) continue;
       const first = {} as FileSet['first'];
+      const all = new Uint8Array(VARIANTS.length * LABEL_COLS * 2 * 32);
       VARIANTS.forEach((variant, i) => {
         const gimmick = variant.replace('On', '') as Gimmick;
         first[variant] = base + i * LABEL_COLS * 2;
-        const packed = packTiles(letter(background!, TEXT[gimmick], variant.endsWith('On')));
-        cart.write(tilesStart + data + first[variant] * 32, packed);
+        all.set(packTiles(letter(background!, TEXT[gimmick], variant.endsWith('On'))), i * LABEL_COLS * 2 * 32);
       });
-      this.sets.push({ first, palette, maps });
+      cart.write(tilesStart + data + base * 32, all);
+      const bag = { bytes: tiles.slice(data + bTile * 32, data + (bTile + 4) * 32), at: bTile * 32 };
+      this.sets.push({ first, palette, maps, tiles: all, bag });
     }
   }
 
   get ready(): boolean {
     return this.sets.length > 0;
+  }
+
+  /**
+   * Writes the labels' tiles into a touch screen already set up, wherever
+   * melonDS keeps its tiles. The number of copies written (0 if none is set up).
+   */
+  intoVram(): number {
+    let written = 0;
+    for (const set of this.sets) {
+      // melonDS's video memory stays put: look again only when it's not where it was.
+      if (!set.vram?.length || !set.vram.every((at) => this.cart.isLoaded(at, set.bag.bytes))) set.vram = this.cart.findLoaded(set.bag.bytes);
+      for (const at of set.vram) {
+        this.cart.writeLoaded(at - set.bag.at + set.first[VARIANTS[0]] * 32, set.tiles);
+        written++;
+      }
+    }
+    return written;
   }
 
   /** Has the menu show `label` on the Bag button the next time it opens. */

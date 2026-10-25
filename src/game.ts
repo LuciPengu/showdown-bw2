@@ -70,6 +70,7 @@ export class Bw2Game {
   private fairyLabel = false;
   /** The Bag button as a Mega and Tera button (bagbutton.ts), once its labels are on the cart. */
   bagButton: BagButton | null = null;
+  private bagLabels: BagLabels | null = null;
 
   constructor(private readonly host: GameHost) {
     this.renderer = new EmulatorRenderer(
@@ -111,6 +112,9 @@ export class Bw2Game {
     }
     fairyInRam(ram);
     this.patchTouchScreen(ram);
+    // A touch screen set up before the labels were on the cart (a savestate's) gets them now.
+    const copies = this.bagLabels?.intoVram() ?? 0;
+    this.host.note?.(`Bag button labels: ${copies} copies of the touch screen's tiles updated`);
   }
 
   /**
@@ -127,6 +131,7 @@ export class Bw2Game {
     if (!labels.ready) return void this.host.note?.("the touch screen's Bag button wasn't found on the cart");
     const button = new BagButton(ram, labels);
     this.bagButton = button;
+    this.bagLabels = labels;
     emu.onFrame = () => {
       const battle = this.live();
       if (battle) button.frame(battle.client);
@@ -172,6 +177,7 @@ export class Bw2Game {
     this.lender = null;
     this.fairyLabel = false;
     this.bagButton = null;
+    this.bagLabels = null;
     this.dex.reset();
     const emu = Emulator.boot(
       container,
